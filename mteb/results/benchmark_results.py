@@ -21,7 +21,7 @@ from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.models.model_meta import _has_meaningful_value
 
 from .model_result import ModelResult, _aggregate_and_pivot
-from .task_result import TaskResult
+from .task_result import _parse_mteb_version_min
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
@@ -107,7 +107,7 @@ def _parse_version_cached(version_str: str | None) -> Version | None:
     if version_str is None:
         return None
     try:
-        return TaskResult._parse_mteb_version_min(version_str)
+        return _parse_mteb_version_min(version_str)
     except TypeError:
         return None
 
