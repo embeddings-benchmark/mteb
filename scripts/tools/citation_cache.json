@@ -11690,6 +11690,16 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "lac2026neomme||2609.01657|neomme: a single-tower multimodal-native multilingual foundation encoder for efficient fine-tuning and inference|2026": {
+            "stored_at": 1795384355.0227911,
+            "value": {
+                "verdict": "OK",
+                "found_title": "NeoMME: A Single-Tower Multimodal-Native Multilingual Foundation Encoder for Efficient Fine-Tuning and Inference",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
         }
     }
 }
