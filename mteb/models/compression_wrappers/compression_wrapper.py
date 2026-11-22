@@ -180,6 +180,8 @@ class CompressionWrapper:
                 embeddings = torch.clip(embeddings, cutoffs[0], cutoffs[1])
             mins, maxs = self._get_min_max_per_dim(embeddings)
             steps = (maxs - mins) / (2**num_bits - 1)
+            # Constant dimensions map to the lowest code without dividing by zero.
+            steps = torch.where(steps == 0, 1, steps)
             subtract = (
                 0
                 if self._quantization_level in [OutputDType.UINT8, OutputDType.UINT4]  # noqa: PLR6201
