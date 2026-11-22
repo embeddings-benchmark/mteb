@@ -103,6 +103,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         timer: TimingStack,
         **kwargs: Any,
     ) -> FullMultilabelClassificationMetrics:
+        self._reset_rng()
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
 
@@ -120,14 +121,11 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             "Running multilabel classification task - Sampling training data..."
         )
         scores = []
-        # a new generator for each subset, so the samples do not depend on what this
-        # task object evaluated before (other subsets, other models, earlier calls)
-        rng = np.random.default_rng(self.seed)
         # Bootstrap sample indices from training set for each experiment
         train_samples = []
         for _ in range(self.n_experiments):
             sample_indices, _ = self._undersample_data_indices(
-                train_split[self.label_column_name], self.samples_per_label, rng=rng
+                train_split[self.label_column_name], self.samples_per_label, None
             )
             train_samples.append(sample_indices)
         # Encode all unique sentences at the indices
@@ -271,13 +269,8 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
             hamming=hamming,
         )
 
-    def _undersample_data_indices(  # noqa: PLR6301
-        self,
-        y: list[list[int]],
-        samples_per_label: int,
-        idxs: list[int] | None = None,
-        *,
-        rng: np.random.Generator,
+    def _undersample_data_indices(
+        self, y: list[list[int]], samples_per_label: int, idxs: list[int] | None = None
     ) -> tuple[list[int], list[int]]:
         """Undersample data to have samples_per_label samples of each label.
 
@@ -291,7 +284,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         sample_indices = []
         if idxs is None:
             idxs = list(np.arange(len(y)))
-        rng.shuffle(idxs)
+        self.np_rng.shuffle(idxs)
         label_counter: dict[int, int] = defaultdict(int)
         for i in idxs:
             if any((label_counter[label] < samples_per_label) for label in y[i]):

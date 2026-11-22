@@ -155,7 +155,7 @@ class AbsTaskClustering(AbsTask):
             return {self.input_column_name: self.modalities[0]}
         return {column: column for column in self.input_column_name}
 
-    def _evaluate_subset(  # noqa: PLR0914
+    def _evaluate_subset(
         self,
         model: MTEBModels,
         data_split: Dataset,
@@ -168,6 +168,7 @@ class AbsTaskClustering(AbsTask):
         timer: TimingStack,
         **kwargs: Any,
     ) -> ScoresDict:
+        self._reset_rng()
         if not isinstance(model, EncoderProtocol):
             raise TypeError(
                 "Expected encoder model to be an instance of EncoderProtocol."
@@ -181,9 +182,6 @@ class AbsTaskClustering(AbsTask):
             )
 
         logger.info("Running clustering - Preparing data...")
-        # a new generator for each subset and split, so the samples do not depend on what
-        # this task object evaluated before (other subsets, other models, earlier calls)
-        rng_state = random.Random(self.seed)
         if (
             self.max_document_to_embed is None
             and self.max_fraction_of_documents_to_embed is None
@@ -198,7 +196,7 @@ class AbsTaskClustering(AbsTask):
                 max_documents_to_embed = cast("int", self.max_document_to_embed)
 
             max_documents_to_embed = min(len(data_split), max_documents_to_embed)
-            example_indices = rng_state.sample(
+            example_indices = self.rng_state.sample(
                 range(len(data_split)), k=max_documents_to_embed
             )
             downsampled_dataset = data_split.select(example_indices)
@@ -260,7 +258,7 @@ class AbsTaskClustering(AbsTask):
                 cluster_size=self.max_documents_per_cluster,
                 kmean_batch_size=self.k_mean_batch_size,
                 max_depth=self.max_depth,
-                rng_state=rng_state,
+                rng_state=self.rng_state,
                 seed=self.seed,
             )
 
