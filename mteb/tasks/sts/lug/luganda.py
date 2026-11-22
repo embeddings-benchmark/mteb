@@ -33,7 +33,6 @@ class LugandaSTS(AbsTaskSTS):
         date=("2026-08-22", "2026-11-14"),
         sample_creation="human-translated and localized",
         adapted_from=["STSBenchmark"],
-        contributed_by="Caleb Matovu",
         is_public=True,
         bibtex_citation=r"""
 @inproceedings{cer-etal-2017-semeval,
