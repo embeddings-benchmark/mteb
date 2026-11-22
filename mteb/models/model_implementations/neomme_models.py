@@ -42,8 +42,9 @@ class NeoMMERetrieverWrapper(AbsEncoder):
     Args:
         vector_type: "multi_vector" (128-d token vectors scored with MaxSim) or
             "single_vector" (one 1024-d vector scored with cosine).
-        embed_dim: Only checked against the head's size. Leave it unset with
-            the dense head, since MTEB checks it against the default head's 128.
+        embed_dim: Must match vector_type if given. Leave it unset with
+            "single_vector": ModelMeta.load_model checks it against the
+            registered 128.
         max_text_tokens: Text is cut to this many tokens before the chat template
             is applied, as in the paper. Image pages are not truncated.
         max_batch_tokens: Upper bound on padded tokens per text batch.
@@ -183,9 +184,6 @@ class NeoMMERetrieverWrapper(AbsEncoder):
         n_rows = len(batch.get("text") or batch["image"])
         texts = batch.get("text", [""] * n_rows)
         images = batch.get("image", [None] * n_rows)
-        # The chat template raises an error when text contains the image token
-        # "<img>", which marks where a page image goes. Some CQADupStack posts
-        # contain a bare "<img>" HTML tag, so it is escaped to "&lt;img&gt;".
         image_token = self.processor.image_token
         text_contents: dict[int, str] = {}
         image_contents: dict[int, list[dict[str, Any]]] = {}
@@ -197,6 +195,10 @@ class NeoMMERetrieverWrapper(AbsEncoder):
             # MTEB's collator rejects None in text columns, so rows with only an
             # image have "" as text.
             if text or image is None:
+                # The chat template raises an error when text contains the image
+                # token "<img>", which marks where a page image goes. Some
+                # CQADupStack posts contain a bare "<img>" HTML tag, so it is
+                # escaped to "&lt;img&gt;".
                 text_contents[index] = text.replace(
                     image_token, html.escape(image_token)
                 )
@@ -225,7 +227,7 @@ class NeoMMERetrieverWrapper(AbsEncoder):
         """Encode texts in batches of at most max_batch_tokens padded tokens."""
         if not texts:
             return {}
-        indices = list(texts)
+        row_indices = list(texts)
         # Truncating the templated sequence would drop the trailing query
         # expansion tokens, so the text is cut before the template is applied.
         truncated, lengths = self._truncate_texts(list(texts.values()))
@@ -239,10 +241,12 @@ class NeoMMERetrieverWrapper(AbsEncoder):
             )["input_ids"][0]
         )
         embeddings: dict[int, torch.Tensor] = {}
-        for batch in _token_budget_chunks(
+        for positions in _token_budget_chunks(
             [length + overhead for length in lengths], self.max_batch_tokens
         ):
-            batch_texts = {indices[position]: truncated[position] for position in batch}
+            batch_texts = {
+                row_indices[position]: truncated[position] for position in positions
+            }
             embeddings.update(self._encode_contents(batch_texts, task))
         return embeddings
 
