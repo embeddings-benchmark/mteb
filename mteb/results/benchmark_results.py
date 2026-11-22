@@ -11,7 +11,6 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 import pandas as pd
 import polars as pl
 from datasets import Dataset, load_dataset
-from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 from tqdm.auto import tqdm
 
@@ -22,12 +21,14 @@ from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.models.model_meta import _has_meaningful_value
 
 from .model_result import ModelResult, _aggregate_and_pivot
+from .task_result import TaskResult
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
     from typing import Self
 
     import datasets
+    from packaging.version import Version
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import (
@@ -102,12 +103,12 @@ def _get_cached_model_metas() -> dict[str, str | None]:
 
 @functools.lru_cache(maxsize=10000)
 def _parse_version_cached(version_str: str | None) -> Version | None:
-    """Cache version parsing to avoid repeated parsing."""
+    """Cache version parsing to avoid repeated parsing. A version range is parsed as its lowest version."""
     if version_str is None:
         return None
     try:
-        return Version(version_str)
-    except (InvalidVersion, TypeError):
+        return TaskResult._parse_mteb_version_min(version_str)
+    except TypeError:
         return None
 
 
