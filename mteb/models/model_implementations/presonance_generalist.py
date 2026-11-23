@@ -1,10 +1,7 @@
-"""Checksum-pinned benchmark wrapper for the separately licensed reference encoder."""
+"""Transformers wrapper for the separately licensed fixed image encoder."""
 
 from __future__ import annotations
 
-import hashlib
-import importlib.util
-from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from typing_extensions import override
@@ -19,9 +16,7 @@ if TYPE_CHECKING:
     from mteb.types import Array, BatchedInput
 
 MODEL_REPO = "saa938/presonance-generalist-vision-v1"
-MODEL_REVISION = "e2c798553cc653a2c38e8daa22ac93669cbaf9af"
-ENCODER_SHA256 = "94baaaa35a6a3c8e29856875c0f06930f5a5e8dc1696cdeccd3e29788e4c89e2"
-CONFIG_SHA256 = "f57cc22417736f6e1704ccbcbf602eb120beef31c69b1600bc265c65b10bbe96"
+MODEL_REVISION = "73399519ea350e346ef6ff7ee4ba831c0d8bd5fc"
 
 
 def _numpy_matrix(values: Array) -> np.ndarray:
@@ -34,7 +29,7 @@ def _numpy_matrix(values: Array) -> np.ndarray:
 
 
 class PresonanceGeneralistVisionEncoder(AbsEncoder):
-    """Load the fixed, source-verified image encoder."""
+    """Load the fixed image encoder through Transformers."""
 
     def __init__(
         self,
@@ -45,33 +40,15 @@ class PresonanceGeneralistVisionEncoder(AbsEncoder):
         cache_dir: str | None = None,
         **kwargs: Any,
     ) -> None:
-        from huggingface_hub import snapshot_download
+        from transformers import AutoModel
 
-        root = Path(
-            snapshot_download(
-                model_name,
-                revision=revision,
-                allow_patterns=["config.json", "encoder.py"],
-                cache_dir=cache_dir,
-            )
-        )
-        for name, expected in [
-            ("encoder.py", ENCODER_SHA256),
-            ("config.json", CONFIG_SHA256),
-        ]:
-            if hashlib.sha256((root / name).read_bytes()).hexdigest() != expected:
-                raise ValueError("The reference encoder or configuration differs")
-        # The reference implementation retains its own research license. Keep
-        # this integration separate and load only its exact reviewed bytes.
-        spec = importlib.util.spec_from_file_location(
-            "presonance_generalist_reference", root / "encoder.py"
-        )
-        if spec is None or spec.loader is None:
-            raise ValueError("Cannot load the pinned reference implementation")
-        module = importlib.util.module_from_spec(spec)
-        spec.loader.exec_module(module)
-        self.model = module.PresonanceGeneralistEncoder(
-            root / "config.json", device=device or "cuda", cache_dir=cache_dir
+        self.model = AutoModel.from_pretrained(
+            model_name,
+            revision=revision,
+            code_revision=revision,
+            trust_remote_code=True,
+            device=device or "cuda",
+            cache_dir=cache_dir,
         )
 
     def encode(
@@ -111,7 +88,7 @@ presonance_generalist_vision_v1 = ModelMeta(
     open_weights=True,
     public_training_code=None,
     public_training_data=None,
-    framework=["PyTorch"],
+    framework=["Transformers", "PyTorch"],
     reference="https://huggingface.co/" + MODEL_REPO,
     similarity_fn_name=ScoringFunction.DOT_PRODUCT,
     use_instructions=False,
