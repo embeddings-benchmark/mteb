@@ -256,10 +256,14 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
     def join_revisions(self) -> BenchmarkResults:
         """Join revisions of the same model.
 
-        In case of conflicts, the following rules are applied:
-        1) If the main revision is present, it is kept. The main revision is the defined in the models ModelMeta object.
-        2) If there is multiple revisions and some of them are None or na, they are filtered out.
-        3) If there is no main revision, we prefer the one run using the latest mteb version.
+        Results without scores are ignored. For each model, experiment, and task,
+        conflicting results are selected in the following order of priority:
+        1) Prefer the main revision defined in the model's ModelMeta object.
+        2) Prefer results with a parseable mteb version.
+        3) Prefer an explicit revision over a missing revision or "external".
+        4) Prefer the latest mteb version. Version ranges are compared by their
+           minimum version, so a partially older run does not outrank a run
+           evaluated entirely with a newer version.
 
         Returns:
             A new BenchmarkResults object with the revisions joined.
