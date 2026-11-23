@@ -98,7 +98,7 @@ class PresonanceGeneralistVisionEncoder(AbsEncoder):
 presonance_generalist_vision_v1 = ModelMeta(
     loader=PresonanceGeneralistVisionEncoder,
     extra_requirements_groups=["presonance-generalist-vision"],
-    name=MODEL_REPO,
+    name="saa938/presonance-generalist-vision-v1",
     revision=MODEL_REVISION,
     release_date="2026-11-23",
     languages=["eng-Latn"],
