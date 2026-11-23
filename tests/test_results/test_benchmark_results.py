@@ -12,7 +12,7 @@ import mteb
 from mteb import Benchmark
 from mteb.cache import ResultCache
 from mteb.cli.generate_model_card import generate_model_card
-from mteb.results import BenchmarkResults, ModelResult
+from mteb.results import BenchmarkResults, ModelResult, TaskResult
 
 _POLARS_TOO_OLD = Version(pl.__version__) < Version("1.40.0")
 
@@ -258,6 +258,53 @@ def test_benchmark_results_model_filters_keep_benchmark(cache_path: Path) -> Non
         df = filtered.get_benchmark_result()
         assert df.shape[0] == 1
         assert df.loc[0, "Mean (Task)"] == pytest.approx(0.616616)
+
+
+@pytest.mark.parametrize(
+    ("other_version", "expected_revision"),
+    [
+        ("1.0.0", "resumed"),  # the range is newer
+        ("2.25.0", "other"),  # part of the range is older
+    ],
+)
+def test_join_revisions_compares_version_ranges(
+    other_version: str, expected_revision: str
+) -> None:
+    """A run resumed with a newer mteb stores a version range, which has to be compared like a single version."""
+
+    def _model_result(revision: str, version: str) -> ModelResult:
+        task_result = TaskResult(
+            dataset_revision="1",
+            task_name="NFCorpus",
+            mteb_version=version,
+            scores={
+                "test": [
+                    {
+                        "hf_subset": "default",
+                        "languages": ["eng-Latn"],
+                        "main_score": 0.5,
+                        "mteb_version": version.rsplit("-", maxsplit=1)[-1],
+                    }
+                ]
+            },
+            evaluation_time=1.0,
+        )
+        return ModelResult(
+            model_name="org/model-not-in-registry",
+            model_revision=revision,
+            task_results=[task_result],
+        )
+
+    results = BenchmarkResults(
+        model_results=[
+            _model_result("other", other_version),
+            _model_result("resumed", "2.20.0-2.27.0"),
+        ]
+    )
+
+    joined = results.join_revisions()
+
+    assert [m.model_revision for m in joined.model_results] == [expected_revision]
 
 
 @pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
