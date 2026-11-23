@@ -13,7 +13,8 @@ if TYPE_CHECKING:
 # Both checkpoints were saved with transformers 4.57, which names the language model's
 # weights `language_model.model.*`. transformers 5 only renames these for its own Gemma3
 # classes: without this mapping `ColGemma3` leaves the language model randomly initialized
-# and `BiGemma3` fails to load (colpali-engine 0.3.18, transformers 5.20.2).
+# and `BiGemma3` fails to load (colpali-engine 0.3.18, transformers 5.20.2). The
+# `netraembed` extra pins transformers to the range this was tested on.
 _KEY_MAPPING = {r"^language_model\.model": "language_model"}
 
 # Queries keep the shared wrapper's ten `<eos>` augmentation tokens. colpali-engine's
@@ -154,7 +155,7 @@ colnetraembed = ModelMeta(
     training_datasets=NETRAEMBED_TRAINING_DATA,
     adapted_from="google/gemma-3-4b-it",
     citation=NETRAEMBED_CITATION,
-    extra_requirements_groups=["colpali_engine"],
+    extra_requirements_groups=["netraembed"],
 )
 
 netraembed = ModelMeta(
@@ -185,5 +186,5 @@ netraembed = ModelMeta(
     training_datasets=NETRAEMBED_TRAINING_DATA,
     adapted_from="google/gemma-3-4b-it",
     citation=NETRAEMBED_CITATION,
-    extra_requirements_groups=["colpali_engine"],
+    extra_requirements_groups=["netraembed"],
 )
