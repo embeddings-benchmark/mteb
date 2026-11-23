@@ -93,6 +93,7 @@ from .mmarco_retrieval import MMarcoRetrievalMultilingual
 from .mr_tidy_retrieval import MrTidyRetrieval
 from .multi30k_retrieval import Multi30kI2TRetrieval, Multi30kT2IRetrieval
 from .multi_long_doc_retrieval import MultiLongDocRetrieval
+from .multivent2_retrieval import MultiVENT2T2VARetrieval, MultiVENT2T2VRetrieval
 from .mupler_retrieval import MuPLeRRetrieval
 from .nanobeir_multilingual import (
     MultilingualNanoArguAnaRetrieval,
@@ -268,6 +269,8 @@ __all__ = [
     "Multi30kI2TRetrieval",
     "Multi30kT2IRetrieval",
     "MultiLongDocRetrieval",
+    "MultiVENT2T2VARetrieval",
+    "MultiVENT2T2VRetrieval",
     "MultilingualNanoArguAnaRetrieval",
     "MultilingualNanoClimateFeverRetrieval",
     "MultilingualNanoDBPediaRetrieval",
