@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import logging
 import unicodedata
 from typing import TYPE_CHECKING, Any, Literal
@@ -25,6 +26,30 @@ if TYPE_CHECKING:
     )
 
 logger = logging.getLogger(__name__)
+
+
+@functools.cache
+def _token_pattern() -> str:
+    r"""bm25s's default token pattern with combining marks counted as word characters.
+
+    bm25s splits on ``\b\w\w+\b`` and Python's ``\w`` does not match combining marks
+    (Unicode Mn, Mc, Me). Brahmic scripts write vowel signs and viramas as marks, so
+    Hindi, Bengali, Tamil, Telugu and similar words were cut at every vowel sign and
+    the one-character pieces dropped. Text without combining marks is tokenized
+    exactly as by the default pattern.
+    """
+    ranges: list[tuple[int, int]] = []
+    for cp in range(0x110000):
+        if unicodedata.category(chr(cp))[0] != "M":
+            continue
+        if ranges and ranges[-1][1] == cp - 1:
+            ranges[-1] = (ranges[-1][0], cp)
+        else:
+            ranges.append((cp, cp))
+    marks = "".join(
+        f"\\U{a:08x}" if a == b else f"\\U{a:08x}-\\U{b:08x}" for a, b in ranges
+    )
+    return rf"(?u)[\w{marks}]{{2,}}"
 
 
 def _unicode_tokenize(text: str) -> list[str]:
@@ -259,11 +284,19 @@ class BM25Tokenizer:
             self._combined_stops = named_stops
             self._combined_list = list(named_stops) if named_stops else None
             return bm25s.tokenize(
-                corpus_texts, stopwords=self._combined_list, stemmer=self.stemmer
+                corpus_texts,
+                stopwords=self._combined_list,
+                stemmer=self.stemmer,
+                token_pattern=_token_pattern(),
             )
 
         # Slow path: no named stopword list — compute freq-based stops from corpus.
-        raw = bm25s.tokenize(corpus_texts, stopwords=None, stemmer=self.stemmer)
+        raw = bm25s.tokenize(
+            corpus_texts,
+            stopwords=None,
+            stemmer=self.stemmer,
+            token_pattern=_token_pattern(),
+        )
 
         id_to_token = {v: k for k, v in raw.vocab.items()}
         n = len(corpus_texts)
@@ -291,7 +324,10 @@ class BM25Tokenizer:
         import bm25s
 
         return bm25s.tokenize(
-            texts, stopwords=self._combined_list, stemmer=self.stemmer
+            texts,
+            stopwords=self._combined_list,
+            stemmer=self.stemmer,
+            token_pattern=_token_pattern(),
         )
 
     def _fit_transform_custom(self, corpus_texts: list[str]) -> Tokenized:

@@ -58,3 +58,34 @@ def test_bm25_reranking_keeps_candidates_outside_corpus_top_k(model_name):
 
     # An empty candidate mapping still requests reranking, not full retrieval.
     assert model.search(queries, top_k=2, top_ranked={}, **kwargs) == {"q1": {}}
+
+
+def test_bm25_tokenizer_keeps_words_with_combining_marks():
+    pytest.importorskip("bm25s", reason="bm25s not installed")
+    from mteb.models.model_implementations.bm25 import BM25Tokenizer
+
+    # Vowel signs and viramas are combining marks; the bm25s default pattern split
+    # words at each one, so these words came out as fragments or not at all.
+    texts = ["हिन्दी विकिपीडिया एक ज्ञानकोश है", "తెలుగు వికీపీడియా", "বাংলা উইকিপিডিয়া"]
+    tokenizer = BM25Tokenizer(language=None, freq_threshold=0)
+    vocab = set(tokenizer.fit_transform(texts).vocab)
+
+    assert {"हिन्दी", "विकिपीडिया", "ज्ञानकोश", "తెలుగు", "వికీపీడియా", "বাংলা"} <= vocab
+
+
+def test_bm25_token_pattern_unchanged_without_combining_marks():
+    bm25s = pytest.importorskip("bm25s", reason="bm25s not installed")
+    from mteb.models.model_implementations.bm25 import _token_pattern
+
+    text = "The café's well-known résumé, version 2 of a_b, isn't it? x"
+    default = bm25s.tokenize(
+        text, stopwords=None, return_ids=False, show_progress=False
+    )
+    patched = bm25s.tokenize(
+        text,
+        stopwords=None,
+        return_ids=False,
+        show_progress=False,
+        token_pattern=_token_pattern(),
+    )
+    assert patched == default
