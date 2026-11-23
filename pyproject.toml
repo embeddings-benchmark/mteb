@@ -592,6 +592,7 @@ conflicts = [
         { extra = "videoprism" }, # needs transformers>=5.13.0
         { extra = "neomme" }, # needs transformers>=5.17.0
         { extra = "ps3" }, # ps3-torch pins transformers<=4.49.0
+        { extra = "presonance-generalist-vision" },
         # { extra = "omnivinci" },
         { extra = "embeddinggemma" },
         # { extra = "ebind" },
