@@ -7,7 +7,7 @@ from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _DATASET_PATH = "mteb/FoleyBench"
-_DATASET_REVISION = "__REVISION__"
+_DATASET_REVISION = "6b1d330111e85cbd637bc31b1a89534ebc2639e3"
 _REFERENCE = "https://arxiv.org/abs/2511.13219"
 _BIBTEX = r"""
 @inproceedings{dixit2026foleybench,
