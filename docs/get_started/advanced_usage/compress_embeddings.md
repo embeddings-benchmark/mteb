@@ -44,3 +44,17 @@ model_with_compression = CompressionWrapper(
     model, output_dtype=OutputDType.INT8, clipping_margin=(0.025, 0.975)
 )
 ```
+
+## Pooling multivector tokens
+`MultiVectorWrapper` supports Sentence Transformers' `HierarchicalTokenPooling` with `sentence-transformers >= 6.1.0`. Pooling merges similar document token vectors, reducing the number of vectors stored and scored during retrieval. Queries remain unpooled by default.
+
+```python
+import mteb
+
+model = mteb.get_model(
+    "perplexity-ai/pplx-embed-v2-late-0.6b",
+    token_pooling={"pool_factor": 2},
+)
+```
+
+The dictionary accepts `HierarchicalTokenPooling` constructor arguments. For example, with sentence-transformers >= 6.3, use `{"max_tokens": 32}` for a fixed token cap instead of a pooling factor. Pooling applies only to documents by default. Include `"tasks": ["query", "document"]` in the pooling dictionary to pool both. The pooling configuration is saved in experiment metadata. Evaluate the resulting model with `mteb.evaluate` as usual.

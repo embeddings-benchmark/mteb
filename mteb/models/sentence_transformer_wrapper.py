@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import logging
 import warnings
+from functools import partial
 from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
@@ -1173,6 +1174,7 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
         model_prompts: dict[str, str] | None = None,
         corpus_chunk_size: int = 50_000,
         *,
+        token_pooling: dict[str, Any] | None = None,
         fps: float | None = None,
         max_frames: int | None = None,
         num_frames: int | None = None,
@@ -1189,6 +1191,7 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
             model_prompts: A dictionary mapping task names to prompt names.
             corpus_chunk_size: Number of corpus documents to encode and score against the queries at
                 once, during a full-corpus search.
+            token_pooling: Dictionary of HierarchicalTokenPooling constructor arguments.
             fps: Target frames per second for video sampling (multimodal inputs only).
             max_frames: Safety cap on frames per video for FPS mode (multimodal inputs only).
             num_frames: If set, use fixed-sample mode instead of FPS-based (multimodal inputs only).
@@ -1207,6 +1210,20 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
             )
         from sentence_transformers import MultiVectorEncoder
 
+        self.token_pooling = None
+        if token_pooling is not None:
+            if not isinstance(token_pooling, dict):
+                raise TypeError("token_pooling must be a configuration dictionary.")
+            if Version(sentence_transformers.__version__).release < (6, 1, 0):
+                raise ImportError(
+                    "Token pooling requires sentence-transformers >= 6.1.0."
+                )
+            from sentence_transformers.multi_vector_encoder.modules import (
+                HierarchicalTokenPooling,
+            )
+
+            self.token_pooling = HierarchicalTokenPooling(**token_pooling)
+
         if isinstance(model, str):
             self.model = MultiVectorEncoder(
                 model, revision=revision, device=device, **kwargs
@@ -1223,6 +1240,17 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
         else:
             self.model = model
             self.mteb_model_meta = ModelMeta.from_multi_vector_encoder_model(self.model)
+
+        if token_pooling is not None:
+            self.mteb_model_meta = self.mteb_model_meta.model_copy(
+                deep=True,
+                update={
+                    "experiment_kwargs": {
+                        **(self.mteb_model_meta.experiment_kwargs or {}),
+                        "token_pooling": token_pooling.copy(),
+                    }
+                },
+            )
 
         self.model_prompts = _resolve_model_prompts(self.model, model_prompts)  # type: ignore[arg-type]
         self.corpus_chunk_size = corpus_chunk_size
@@ -1334,6 +1362,9 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
             max_samples=self.max_samples,
         )
         encode_function = _select_encode_function(self.model, prompt_type)
+
+        if self.token_pooling is not None:
+            encode_function = partial(encode_function, token_pooling=self.token_pooling)
 
         return _encode_batches(
             inputs,
