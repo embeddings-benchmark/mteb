@@ -26,4 +26,5 @@ class DutchColaClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         prompt="Classificeer de gegeven zin als grammaticaal aanvaardbaar of niet aanvaardbaar",
+        bibtex_citation=None,
     )

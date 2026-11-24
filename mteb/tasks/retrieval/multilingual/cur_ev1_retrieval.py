@@ -63,6 +63,7 @@ class CUREv1Retrieval(AbsTaskRetrieval):
         prompt={
             "query": "Given a question by a medical professional, retrieve relevant passages that best answer the question",
         },
+        bibtex_citation=None,
     )
 
     def _load_corpus(self, split: str) -> Dataset:

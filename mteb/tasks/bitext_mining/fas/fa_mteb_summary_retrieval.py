@@ -24,6 +24,7 @@ class SAMSumFa(AbsTaskBitextMining):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="machine-translated",
+        bibtex_citation=None,
     )
 
     def dataset_transform(
@@ -57,6 +58,7 @@ class SynPerChatbotSumSRetrieval(AbsTaskBitextMining):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="LM-generated and verified",
+        bibtex_citation=None,
     )
 
     def dataset_transform(
@@ -90,6 +92,7 @@ class SynPerChatbotRAGSumSRetrieval(AbsTaskBitextMining):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="LM-generated and verified",
+        bibtex_citation=None,
     )
 
     def dataset_transform(

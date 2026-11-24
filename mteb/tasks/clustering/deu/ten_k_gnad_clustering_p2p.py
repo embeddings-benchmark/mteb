@@ -31,6 +31,7 @@ class TenKGnadClusteringP2P(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         superseded_by="TenKGnadClusteringP2P.v2",
+        bibtex_citation=None,
     )
 
 
@@ -63,6 +64,7 @@ class TenKGnadClusteringP2PFast(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         adapted_from=["TenKGnadClusteringP2P"],
+        bibtex_citation=None,
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:

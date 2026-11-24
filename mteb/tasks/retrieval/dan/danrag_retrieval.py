@@ -91,7 +91,7 @@ _COMMON_METADATA = {
     "dialect": [],
     "modalities": ["text", "image"],
     "sample_creation": "LM-generated and verified",
-    "bibtex_citation": "",
+    "bibtex_citation": None,
 }
 
 

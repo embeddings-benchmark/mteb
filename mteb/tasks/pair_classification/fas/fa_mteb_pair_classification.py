@@ -80,6 +80,7 @@ class SynPerChatbotRAGFAQPC(AbsTaskPairClassification):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="LM-generated and verified",
+        bibtex_citation=None,
     )
 
     def dataset_transform(
@@ -120,6 +121,7 @@ class FarsiParaphraseDetection(AbsTaskPairClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
+        bibtex_citation=None,
     )
 
     def dataset_transform(
@@ -160,6 +162,7 @@ class SynPerTextKeywordsPC(AbsTaskPairClassification):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="LM-generated and verified",
+        bibtex_citation=None,
     )
 
     def dataset_transform(
@@ -200,6 +203,7 @@ class SynPerQAPC(AbsTaskPairClassification):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="LM-generated and verified",
+        bibtex_citation=None,
     )
 
     def dataset_transform(

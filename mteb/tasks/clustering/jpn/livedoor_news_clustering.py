@@ -28,6 +28,7 @@ class LivedoorNewsClusteringv2(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         adapted_from=["LivedoorNewsClustering"],
+        bibtex_citation=None,
     )
 
 
@@ -57,4 +58,5 @@ class LivedoorNewsClustering(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         superseded_by="LivedoorNewsClustering.v2",
+        bibtex_citation=None,
     )

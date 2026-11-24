@@ -29,6 +29,7 @@ class RuSciBenchOECDClusteringP2P(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         prompt="Identify the category of scientific papers based on the titles and abstracts",
+        bibtex_citation=None,
     )
 
     def dataset_transform(

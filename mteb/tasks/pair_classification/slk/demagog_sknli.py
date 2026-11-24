@@ -35,6 +35,7 @@ class DemagogSKNLI(AbsTaskPairClassification):
         dialect=[],
         sample_creation="found",
         prompt="Given a fact-checker's analysis (evidence), determine if it supports or refutes the political claim",
+        bibtex_citation=None,
     )
 
     def dataset_transform(self, **kwargs: Any):

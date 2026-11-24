@@ -30,6 +30,7 @@ class BiorxivClusteringP2PFast(AbsTaskClustering):
         sample_creation="created",
         prompt="Identify the main category of Biorxiv papers based on the titles and abstracts",
         adapted_from=["BiorxivClusteringP2P"],
+        bibtex_citation=None,
     )
 
     def dataset_transform(
@@ -64,4 +65,5 @@ class BiorxivClusteringP2P(AbsTaskClusteringLegacy):
         sample_creation="created",
         prompt="Identify the main category of Biorxiv papers based on the titles and abstracts",
         superseded_by="BiorxivClusteringP2P.v2",
+        bibtex_citation=None,
     )

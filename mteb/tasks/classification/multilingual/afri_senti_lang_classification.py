@@ -37,6 +37,7 @@ class AfriSentiLangClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
+        bibtex_citation=None,
     )
 
     samples_per_label = 32

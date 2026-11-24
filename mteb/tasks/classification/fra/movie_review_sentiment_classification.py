@@ -25,6 +25,7 @@ class MovieReviewSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         superseded_by="MovieReviewSentimentClassification.v2",
+        bibtex_citation=None,
     )
 
     def dataset_transform(
@@ -60,6 +61,7 @@ class MovieReviewSentimentClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         adapted_from=["MovieReviewSentimentClassification"],
+        bibtex_citation=None,
     )
 
     def dataset_transform(

@@ -32,6 +32,7 @@ class SlovakPharmacyDrMaxReranking(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
+        bibtex_citation=None,
     )
 
 
@@ -65,4 +66,5 @@ class SlovakPharmacyMojaLekarenReranking(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
+        bibtex_citation=None,
     )

@@ -33,4 +33,5 @@ class SpanishWikiClusteringP2P(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         prompt="Agrupa los pasajes enciclopédicos en español según el asunto tratado.",
+        bibtex_citation=None,
     )

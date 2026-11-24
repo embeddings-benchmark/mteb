@@ -3,7 +3,7 @@ import pytest
 from bibtexparser.writer import BibtexFormat
 
 import mteb
-from mteb.abstasks import AbsTask
+from mteb.abstasks import AbsTask, NoBibtexSpecified
 from mteb.benchmarks.benchmark import Benchmark
 
 pytestmark = pytest.mark.core
@@ -33,8 +33,15 @@ def test_task_bibtex(task: AbsTask):
     task_name = task.metadata.name
     bibtex_citation = task.metadata.bibtex_citation
 
-    if not bibtex_citation or not bibtex_citation.strip():
-        pytest.skip(f"Task {task_name} has no bibtex_citation")
+    assert bibtex_citation is not NoBibtexSpecified, (
+        f"Check the citation for task {task_name}; set bibtex_citation=None if none exists."
+    )
+    if bibtex_citation is None:
+        return
+    assert isinstance(bibtex_citation, str)
+    assert bibtex_citation.strip(), (
+        f"Task {task_name}: use None instead of an empty citation after checking."
+    )
     bibtex_citation = bibtex_citation.strip()
 
     formatted_bibtex = format_bibtex(bibtex_citation)

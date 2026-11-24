@@ -39,4 +39,5 @@ class ElasticKBRetrieval(AbsTaskRetrieval):
         },
         sample_creation="multiple",  # see description
         contributed_by="Jina by Elastic",
+        bibtex_citation=None,
     )

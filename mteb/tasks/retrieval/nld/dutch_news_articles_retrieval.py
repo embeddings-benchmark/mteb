@@ -29,4 +29,5 @@ class DutchNewsArticlesRetrieval(AbsTaskRetrieval):
         prompt={
             "query": "Gegeven een titel, haal het nieuwsartikel op dat het beste bij de titel past"
         },
+        bibtex_citation=None,
     )

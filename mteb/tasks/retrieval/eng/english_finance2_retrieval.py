@@ -26,4 +26,5 @@ class EnglishFinance2Retrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_public=False,
         contributed_by="Voyage AI",
+        bibtex_citation=None,
     )

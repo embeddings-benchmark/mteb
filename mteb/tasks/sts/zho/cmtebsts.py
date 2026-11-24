@@ -288,6 +288,7 @@ class QBQTC(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        bibtex_citation=None,
     )
 
     min_score = 0

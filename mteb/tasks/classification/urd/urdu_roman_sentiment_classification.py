@@ -25,6 +25,7 @@ class UrduRomanSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         superseded_by="UrduRomanSentimentClassification.v2",
+        bibtex_citation=None,
     )
 
 
@@ -51,4 +52,5 @@ class UrduRomanSentimentClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         adapted_from=["UrduRomanSentimentClassification"],
+        bibtex_citation=None,
     )

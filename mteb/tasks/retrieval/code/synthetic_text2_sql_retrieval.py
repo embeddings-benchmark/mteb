@@ -26,4 +26,5 @@ class SyntheticText2SQLRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
+        bibtex_citation=None,
     )

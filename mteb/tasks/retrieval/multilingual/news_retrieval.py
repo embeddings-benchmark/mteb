@@ -36,6 +36,7 @@ class GlobalNewsRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_public=False,
         contributed_by="Jina by Elastic",
+        bibtex_citation=None,
     )
 
 
@@ -65,4 +66,5 @@ class PublicNewsRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         is_public=False,
         contributed_by="Jina by Elastic",
+        bibtex_citation=None,
     )

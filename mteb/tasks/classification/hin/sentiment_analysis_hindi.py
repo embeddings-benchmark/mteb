@@ -25,6 +25,7 @@ class SentimentAnalysisHindi(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         superseded_by="SentimentAnalysisHindi.v2",
+        bibtex_citation=None,
     )
 
 
@@ -51,4 +52,5 @@ class SentimentAnalysisHindiV2(AbsTaskClassification):
         annotations_creators="derived",
         sample_creation="found",
         adapted_from=["SentimentAnalysisHindi"],
+        bibtex_citation=None,
     )

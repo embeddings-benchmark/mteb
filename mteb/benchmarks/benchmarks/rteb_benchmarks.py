@@ -4,7 +4,15 @@
 from mteb.benchmarks.benchmark import RtebBenchmark
 from mteb.get_tasks import MTEBTasks, get_task, get_tasks
 
-RTEB_CITATION = ""  # in-review
+RTEB_CITATION = r"""
+@inproceedings{verma2026rteb,
+  author = {Sahil Verma and Minghan Li and Andrew Gaut and Yujie Qian and Kaidi Cao and Zhenmei Shi and Kenneth Enevoldsen and Roman Solomatin and Isaac Chung and Tom Aarsen and Apoorva Joshi and Emilia Garcia-Casademont and Michael G{\"u}nther and Niklas Muennighoff and Yevhen Kostiuk and F{\H{o}}di Zolt{\'a}n and Tengyu Ma and Frank Liu},
+  booktitle = {The Fortieth Annual Conference on Neural Information Processing Systems Evaluations and Datasets Track},
+  title = {{RTEB}: An Overfitting-Resistant Benchmark for Embedding Model Evaluation},
+  url = {https://openreview.net/forum?id=ktfYzbgPfX},
+  year = {2026},
+}
+"""
 
 removal_note = "\n\nNote: We have temporarily removed the 'Private' column to read more about this decision out the [announcement](https://github.com/embeddings-benchmark/mteb/issues/3934)."
 

@@ -32,4 +32,5 @@ class HUMEWikipediaRerankingMultilingual(AbsTaskRetrieval):
         sample_creation="found",
         prompt="Given a query, rerank the Wikipedia passages by their relevance to the query",
         adapted_from=["WikipediaRerankingMultilingual"],
+        bibtex_citation=None,
     )

@@ -25,4 +25,5 @@ class HUMEWikiCitiesClustering(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="found",
         adapted_from=["WikiCitiesClustering"],
+        bibtex_citation=None,
     )

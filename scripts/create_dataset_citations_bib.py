@@ -14,7 +14,10 @@ def extract_bibtex_to_file(tasks: list[mteb.AbsTask]) -> None:
     titles = []
     bibtex = []
     for task in tasks:
-        library = bibtexparser.parse_string(task.metadata.bibtex_citation)
+        citation = task.metadata.bibtex_citation
+        if not isinstance(citation, str):
+            continue
+        library = bibtexparser.parse_string(citation)
         try:
             # extract titles to remove duplicate citations.
             title = library.entries[0].key
@@ -72,7 +75,8 @@ def task_to_tex_row(task: mteb.AbsTask) -> str:
         else ""
     )
 
-    library = bibtexparser.parse_string(task.metadata.bibtex_citation)
+    citation = task.metadata.bibtex_citation
+    library = bibtexparser.parse_string(citation if isinstance(citation, str) else "")
     try:
         cite_key = library.entries[0].key
         cite_key = "\\cite{" + cite_key + "}"

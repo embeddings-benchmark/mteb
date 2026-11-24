@@ -324,6 +324,7 @@ class MultilingualSentiment(AbsTaskClassification):
         sample_creation="found",
         prompt="Classify sentiment of the customer review into positive, neutral, or negative",
         superseded_by="MultilingualSentiment.v2",
+        bibtex_citation=None,
     )
 
     samples_per_label = 32
@@ -353,6 +354,7 @@ class MultilingualSentimentV2(AbsTaskClassification):
         sample_creation="found",
         prompt="Classify sentiment of the customer review into positive, neutral, or negative",
         adapted_from=["MultilingualSentiment"],
+        bibtex_citation=None,
     )
 
     samples_per_label = 32

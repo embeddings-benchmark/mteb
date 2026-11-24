@@ -28,4 +28,5 @@ class GermanSTSBenchmarkSTS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="machine-translated",
+        bibtex_citation=None,
     )

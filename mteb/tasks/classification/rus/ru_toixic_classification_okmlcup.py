@@ -25,6 +25,7 @@ class RuToxicOKMLCUPClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         superseded_by="RuToxicOKMLCUPClassification.v2",
+        bibtex_citation=None,
     )
 
     def dataset_transform(
@@ -57,4 +58,5 @@ class RuToxicOKMLCUPClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         adapted_from=["RuToxicOKMLCUPClassification"],
+        bibtex_citation=None,
     )

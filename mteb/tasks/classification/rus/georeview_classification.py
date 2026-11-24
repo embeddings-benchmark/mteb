@@ -26,6 +26,7 @@ class GeoreviewClassification(AbsTaskClassification):
         sample_creation="found",
         prompt="Classify the organization rating based on the reviews",
         superseded_by="GeoreviewClassification.v2",
+        bibtex_citation=None,
     )
 
 
@@ -53,6 +54,7 @@ class GeoreviewClassificationV2(AbsTaskClassification):
         sample_creation="found",
         prompt="Classify the organization rating based on the reviews",
         adapted_from=["GeoreviewClassification"],
+        bibtex_citation=None,
     )
 
     def dataset_transform(

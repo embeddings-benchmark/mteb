@@ -24,6 +24,7 @@ class FSDD(AbsTaskClassification):
         dialect=[],
         modalities=["audio"],
         sample_creation="created",
+        bibtex_citation=None,
     )
 
     input_column_name: str = "audio"

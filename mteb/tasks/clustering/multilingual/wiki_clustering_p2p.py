@@ -43,6 +43,7 @@ class WikiClusteringP2P(AbsTaskClusteringLegacy):
         dialect=[],
         sample_creation="created",
         superseded_by="WikiClusteringP2P.v2",
+        bibtex_citation=None,
     )
 
 
@@ -72,4 +73,5 @@ class WikiClusteringFastP2P(AbsTaskClustering):
         dialect=[],
         sample_creation="created",
         adapted_from=["WikiClusteringP2P"],
+        bibtex_citation=None,
     )

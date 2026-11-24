@@ -28,6 +28,7 @@ class RuSciBenchGRNTIClassification(AbsTaskClassification):
         sample_creation="found",
         prompt="Classify the category of scientific papers based on the titles and abstracts",
         superseded_by="RuSciBenchGRNTIClassification.v2",
+        bibtex_citation=None,
     )
 
     def dataset_transform(

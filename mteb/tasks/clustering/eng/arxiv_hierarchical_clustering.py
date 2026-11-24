@@ -35,6 +35,7 @@ class ArXivHierarchicalClusteringP2P(AbsTaskClustering):
         annotations_creators="derived",
         dialect=["Thematic clustering"],
         sample_creation="found",
+        bibtex_citation=None,
     )
 
     def dataset_transform(
@@ -77,6 +78,7 @@ class ArXivHierarchicalClusteringS2S(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
+        bibtex_citation=None,
     )
 
     def dataset_transform(

@@ -25,6 +25,7 @@ class SwedishSentimentClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         superseded_by="SwedishSentimentClassification.v2",
+        bibtex_citation=None,
     )
 
 
@@ -51,4 +52,5 @@ class SwedishSentimentClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         adapted_from=["SwedishSentimentClassification"],
+        bibtex_citation=None,
     )

@@ -33,4 +33,5 @@ class LexRetrievalv1(AbsTaskRetrieval):
         adapted_from=None,
         is_public=False,
         contributed_by="Aarhus University & Lex.dk",
+        bibtex_citation=None,
     )

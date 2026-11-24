@@ -25,6 +25,7 @@ class OnlineStoreReviewSentimentClassification(AbsTaskClassification):
         dialect=["ara-Arab-SA"],
         sample_creation="found",
         superseded_by="OnlineStoreReviewSentimentClassification.v2",
+        bibtex_citation=None,
     )
 
     def dataset_transform(
@@ -58,4 +59,5 @@ class OnlineStoreReviewSentimentClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         dialect=["ara-Arab-SA"],
         sample_creation="found",
+        bibtex_citation=None,
     )

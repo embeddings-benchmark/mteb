@@ -24,6 +24,7 @@ class FalseFriendsDeEnPC(AbsTaskPairClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
+        bibtex_citation=None,
     )
 
     def dataset_transform(

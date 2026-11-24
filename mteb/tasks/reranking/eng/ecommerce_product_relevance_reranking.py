@@ -34,4 +34,5 @@ class ERESSReranking(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",  # Real-world queries
         prompt="Rerank products by relevance to the e-commerce query",
+        bibtex_citation=None,
     )

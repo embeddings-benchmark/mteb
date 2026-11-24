@@ -27,6 +27,7 @@ class DutchSarcasticHeadlinesClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="found",
         prompt="Classificeer de gegeven krantenkop als sarcastisch of niet sarcastisch",
+        bibtex_citation=None,
     )
 
     def dataset_transform(

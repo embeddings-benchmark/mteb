@@ -34,6 +34,7 @@ class PravdaSKTagClustering(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         prompt="Identify the topic or theme of the given text.",
+        bibtex_citation=None,
     )
 
     def dataset_transform(self, **kwargs: Any) -> None:
@@ -82,6 +83,7 @@ class PravdaSKURLClustering(AbsTaskClustering):
         dialect=[],
         sample_creation="found",
         prompt="Identify the topic or theme of the given text.",
+        bibtex_citation=None,
     )
 
     def dataset_transform(self, **kwargs: Any) -> None:

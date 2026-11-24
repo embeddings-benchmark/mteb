@@ -29,4 +29,5 @@ class CrossLingualSemanticDiscriminationWMT19(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="LM-generated and verified",
+        bibtex_citation=None,
     )
