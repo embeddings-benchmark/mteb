@@ -455,6 +455,45 @@ potion_code_16m_v2 = ModelMeta(
     ),
 )
 
+blink_code_16m = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="minishlab/blink-code-16M",
+    model_type=["dense"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="0a07cdda43248eb21100b34aefa15958a1e5ac17",
+    release_date="2026-11-24",
+    n_parameters=16_000_000,
+    n_embedding_parameters=16_000_000,
+    memory_usage_mb=61,
+    max_tokens=np.inf,
+    embed_dim=256,
+    license="mit",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["NumPy", "Sentence Transformers", "safetensors"],
+    reference="https://huggingface.co/minishlab/blink-code-16M",
+    use_instructions=False,
+    adapted_from="nomic-ai/CodeRankEmbed",
+    superseded_by=None,
+    # Contrastive training uses the train splits of these CoIR tasks (StackOverflowQA has none), with every test
+    # query and relevant test document removed, plus CoRNStack.
+    training_datasets={
+        "CoRNStack",
+        "AppsRetrieval",
+        "CodeFeedbackMT",
+        "CodeFeedbackST",
+        "CodeSearchNetCCRetrieval",
+        "CodeTransOceanContest",
+        "CodeTransOceanDL",
+        "CosQA",
+        "COIRCodeSearchNetRetrieval",
+        "SyntheticText2SQL",
+    },
+    public_training_code=None,
+    public_training_data="https://huggingface.co/minishlab/blink-code-16M#training",
+    citation=MODEL2VEC_CITATION,
+)
+
 # Distilled from bge-base-en-v1.5, then trained on LightOn's data. The hard-negative data
 # (lightonai/embeddings-fine-tuning-filtered-en) contains FiQA, NQ, HotpotQA, MS MARCO, FEVER, SQuAD v2,
 # TriviaQA, MIRACL and MLDR. From the contrastive pairs (lightonai/embeddings-pre-training-curated),
