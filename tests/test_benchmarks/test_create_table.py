@@ -33,6 +33,7 @@ PARTIAL_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
 POEM = "PoemSentimentClassification.v2"
 BANKING77 = "Banking77Classification"
 CATALONIA = "CataloniaTweetClassification"
+BORNHOLM = "BornholmBitextMining"
 
 
 def _task_frame(mock_mteb_cache: ResultCache, task_names: list[str]) -> pl.DataFrame:
@@ -152,6 +153,29 @@ def test_create_summary_table_nulls_mean_on_partial_split_coverage(
     assert rows[PARTIAL_MODEL]["Classification"] is None
     assert rows[PARTIAL_MODEL]["Mean (Task)"] is None
     assert rows[PARTIAL_MODEL]["Mean (TaskType)"] is None
+
+
+@_skip_if_datasets_too_old
+def test_create_summary_table_nulls_mean_subset_on_missing_task(
+    mock_mteb_cache: ResultCache,
+):
+    pl_df = _task_frame(mock_mteb_cache, [BORNHOLM, BANKING77])
+    summary = _create_summary_table(
+        pl_df,
+        aggregations=(
+            BenchmarkAggregation.MEAN_SUBSET,
+            BenchmarkAggregation.TASK_TYPES,
+        ),
+    )
+    rows = {r["Model"]: r for r in summary.df.to_dicts()}
+
+    # Only PARTIAL_MODEL has a Bornholm result, so FULL_MODEL has no score for
+    # that (task, subset) pair and its Mean (Subset) must not be its Banking77
+    # score alone.
+    assert rows[PARTIAL_MODEL]["Mean (Subset)"] == pytest.approx(
+        (0.296813 + 0.800422) / 2
+    )
+    assert rows[FULL_MODEL]["Mean (Subset)"] is None
 
 
 @_skip_if_datasets_too_old
