@@ -31,11 +31,15 @@ class NeuCLIR2022Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{lawrie2023overview,
+@inproceedings{lawrie2023overview,
+  archiveprefix = {arXiv},
   author = {Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
-  journal = {arXiv preprint arXiv:2304.12367},
+  booktitle = {Proceedings of the Thirty-First Text REtrieval Conference, {TREC} 2022},
+  eprint = {2304.12367},
+  publisher = {National Institute of Standards and Technology (NIST)},
   title = {Overview of the TREC 2022 NeuCLIR track},
-  year = {2023},
+  url = {https://trec.nist.gov/pubs/trec31/papers/Overview_neuclir.pdf},
+  year = {2022},
 }
 """,
     )
@@ -64,11 +68,15 @@ class NeuCLIR2022RetrievalHardNegatives(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{lawrie2023overview,
+@inproceedings{lawrie2023overview,
+  archiveprefix = {arXiv},
   author = {Lawrie, Dawn and MacAvaney, Sean and Mayfield, James and McNamee, Paul and Oard, Douglas W and Soldaini, Luca and Yang, Eugene},
-  journal = {arXiv preprint arXiv:2304.12367},
+  booktitle = {Proceedings of the Thirty-First Text REtrieval Conference, {TREC} 2022},
+  eprint = {2304.12367},
+  publisher = {National Institute of Standards and Technology (NIST)},
   title = {Overview of the TREC 2022 NeuCLIR track},
-  year = {2023},
+  url = {https://trec.nist.gov/pubs/trec31/papers/Overview_neuclir.pdf},
+  year = {2022},
 }
 """,
         adapted_from=["NeuCLIR2022Retrieval"],

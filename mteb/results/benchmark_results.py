@@ -11,7 +11,6 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 import pandas as pd
 import polars as pl
 from datasets import Dataset, load_dataset
-from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 from tqdm.auto import tqdm
 
@@ -22,12 +21,14 @@ from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.models.model_meta import _has_meaningful_value
 
 from .model_result import ModelResult, _aggregate_and_pivot
+from .task_result import _parse_mteb_version_min
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
     from typing import Self
 
     import datasets
+    from packaging.version import Version
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import (
@@ -102,12 +103,12 @@ def _get_cached_model_metas() -> dict[str, str | None]:
 
 @functools.lru_cache(maxsize=10000)
 def _parse_version_cached(version_str: str | None) -> Version | None:
-    """Cache version parsing to avoid repeated parsing."""
+    """Cache version parsing to avoid repeated parsing. A version range is parsed as its lowest version."""
     if version_str is None:
         return None
     try:
-        return Version(version_str)
-    except (InvalidVersion, TypeError):
+        return _parse_mteb_version_min(version_str)
+    except TypeError:
         return None
 
 
@@ -255,10 +256,14 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
     def join_revisions(self) -> BenchmarkResults:
         """Join revisions of the same model.
 
-        In case of conflicts, the following rules are applied:
-        1) If the main revision is present, it is kept. The main revision is the defined in the models ModelMeta object.
-        2) If there is multiple revisions and some of them are None or na, they are filtered out.
-        3) If there is no main revision, we prefer the one run using the latest mteb version.
+        Results without scores are ignored. For each model, experiment, and task,
+        conflicting results are selected in the following order of priority:
+        1) Prefer the main revision defined in the model's ModelMeta object.
+        2) Prefer results with a parseable mteb version.
+        3) Prefer an explicit revision over a missing revision or "external".
+        4) Prefer the latest mteb version. Version ranges are compared by their
+           minimum version, so a partially older run does not outrank a run
+           evaluated entirely with a newer version.
 
         Returns:
             A new BenchmarkResults object with the revisions joined.

@@ -45,5 +45,4 @@ Linq_Embed_Mistral = ModelMeta(
     public_training_data=None,
     adapted_from="intfloat/e5-mistral-7b-instruct",
     training_datasets=E5_MISTRAL_TRAINING_DATA,
-    output_dtypes=OutputDType.BF16,
 )

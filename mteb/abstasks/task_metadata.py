@@ -463,9 +463,10 @@ class TaskMetadata(BaseModel):
         sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
-        bibtex_citation: The BibTeX citation for the dataset. As non-existing citations can cause authors citing the work to be penalized,
-            leave it out if the dataset has no article to cite, rather than citing e.g. the dataset's website. It is allowed to cite multiple articles.
-        adapted_from: Datasets adapted (translated, sampled from, etc.) from other datasets.
+        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available. As non-existing citations can
+            cause authors citing the work to be penalized, we recommend to use an empty string if no citation is available. Similarly, if no article
+            exist, we recommend to use an empty string instead of citing e.g. the dataset's website. It is allowed to cite multiple articles.
+        adapted_from: Registered MTEB task names this task is adapted (translated, sampled, etc.) from.
         is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
         contributed_by: The name of the organization or individual who contributed the dataset. This is especially useful for private datasets
             where it may be harder to gather information about the source.
@@ -619,7 +620,7 @@ class TaskMetadata(BaseModel):
     def intext_citation(self, include_cite: bool = True) -> str:
         """Create an in-text citation for the dataset."""
         cite = ""
-        if self.bibtex_citation:
+        if self.bibtex_citation and self.bibtex_citation.strip():
             cite = f"{self.bibtex_citation.split(',')[0].split('{')[1]}"
         if include_cite and cite:
             # check for whitespace in the citation
@@ -811,10 +812,24 @@ class TaskMetadata(BaseModel):
 
     @staticmethod
     def _extract_bibtex_title(bibtex_citation: str) -> str | None:
-        """Extract the title from a BibTeX citation string."""
-        match = re.search(r"title\s*=\s*\{([^}]+)\}", bibtex_citation)
-        if match:
-            return match.group(1).strip()
+        """Extract the title from a BibTeX citation string.
+
+        Only the `title` field matches, not fields such as `booktitle`. Inner braces,
+        as in `{S}em{E}val`, are removed and whitespace is collapsed.
+        """
+        match = re.search(r"\btitle\s*=\s*\{", bibtex_citation, flags=re.IGNORECASE)
+        if match is None:
+            return None
+        start = match.end()
+        depth = 1  # count nested braces to find the one that closes the title
+        for i, char in enumerate(bibtex_citation[start:], start):
+            if char == "{":
+                depth += 1
+            elif char == "}":
+                depth -= 1
+                if depth == 0:
+                    title = bibtex_citation[start:i].replace("{", "").replace("}", "")
+                    return " ".join(title.split()) or None
         return None
 
     def _format_reference(self) -> str | None:
@@ -981,6 +996,7 @@ class TaskMetadata(BaseModel):
             "MultilabelClassification": ["text-classification"],
             "Clustering": ["text-classification"],
             "PairClassification": ["text-classification"],
+            "Regression": ["text-classification"],
             "Reranking": ["text-ranking"],
             "Retrieval": ["text-retrieval"],
             "STS": ["sentence-similarity"],
@@ -1008,6 +1024,10 @@ class TaskMetadata(BaseModel):
             "AudioPairClassification": ["audio-classification"],
             # video
             "VideoCentricQA": ["visual-question-answering"],
+            "VideoClassification": ["video-classification"],
+            "VideoMultilabelClassification": ["video-classification"],
+            "VideoClustering": ["video-classification"],
+            "VideoPairClassification": ["video-classification"],
             "VideoZeroshotClassification": ["video-classification"],
         }
         if self.type == "ZeroShotClassification":

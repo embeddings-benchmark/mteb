@@ -5,16 +5,22 @@ from typing import TYPE_CHECKING, Any
 import numpy as np
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import AudioCollator, VideoCollator
+from mteb.models.modality_collators import (
+    AudioCollator,
+    VideoCollator,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.types import PromptType
 
 if TYPE_CHECKING:
+    import torch
     from torch.utils.data import DataLoader
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, EncodeKwargs
+    from mteb.types._encoder_io import VideoMetadata
 
 
 from .bidirlm_models import (
@@ -94,10 +100,10 @@ class BidirLMOmniEncoder(AbsEncoder):
         # 64 is an mteb cap; the checkpoint's video config has max_frames=768
         max_frames: int | None = 64,
         num_frames: int | None = None,
-        # 30 s: an mteb cap at chunk_length=30; the processor itself sets
-        # truncation=False, so upstream does not cut
+        # None: the processor sets truncation=False and the audio encoder runs in
+        # windows, so the full clip is used, as in the authors' wrapper (#4370)
         # https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/main/processing_bidirlm_omni.py
-        max_samples: int | None = 30 * 16_000,
+        max_samples: int | None = None,
         **kwargs: Any,
     ) -> None:
         import torch
@@ -177,6 +183,27 @@ class BidirLMOmniEncoder(AbsEncoder):
 
         return None
 
+    def _video_input(
+        self, frames: torch.Tensor, metadata: VideoMetadata
+    ) -> dict[str, Any]:
+        """Frames and their timing in sentence-transformers' video format.
+
+        Without the timing the processor assumes 24 fps for the timestamps it writes
+        into the prompt.
+        https://huggingface.co/BidirLM/BidirLM-Omni-2.5B-Embedding/blob/4d8a7d34095ef8c4ab760744015825b809756dfe/processing_bidirlm_omni.py#L230-L238
+        """
+        import torch
+
+        if len(frames) < self.temporal_patch_size:
+            # the Qwen3-VL video processor needs temporal_patch_size frames; repeat
+            # the last one, as it already does for an odd frame count
+            # https://github.com/huggingface/transformers/blob/v5.19.0/src/transformers/models/qwen3_vl/video_processing_qwen3_vl.py#L236-L238
+            pad = self.temporal_patch_size - len(frames)
+            frames = torch.cat([frames, frames[-1:].repeat(pad, 1, 1, 1)])
+            indices = list(metadata["frames_indices"])
+            metadata = {**metadata, "frames_indices": indices + indices[-1:] * pad}
+        return {"array": frames, "video_metadata": metadata}
+
     def encode(
         self,
         inputs: DataLoader[BatchedInput],
@@ -215,6 +242,10 @@ class BidirLMOmniEncoder(AbsEncoder):
                 target_sampling_rate=self.sampling_rate,
                 max_samples=self.max_samples,
             )
+        if has_audio:
+            inputs = single_clip_dataloader(
+                inputs, "batched audio embeddings change with their batch-mates"
+            )
         instruction = self._get_instruction(task_metadata, prompt_type)
 
         # Truncate only when the schema is pure text; for multimodal schemas
@@ -235,13 +266,9 @@ class BidirLMOmniEncoder(AbsEncoder):
                     for key in modality_keys
                     if key in batch and batch[key][i] is not None
                 }
-                if "video" in row and len(row["video"]) < self.temporal_patch_size:
-                    # the Qwen3-VL video processor needs temporal_patch_size frames; repeat
-                    # the last one, as it already does for an odd frame count
-                    # https://github.com/huggingface/transformers/blob/v5.19.0/src/transformers/models/qwen3_vl/video_processing_qwen3_vl.py#L236-L238
-                    pad = self.temporal_patch_size - len(row["video"])
-                    row["video"] = torch.cat(
-                        [row["video"], row["video"][-1:].repeat(pad, 1, 1, 1)]
+                if "video" in row:
+                    row["video"] = self._video_input(
+                        row["video"], batch["video_metadata"][i]
                     )
                 batch_inputs.append(row)
 

@@ -26,7 +26,11 @@ from .human_eval_retrieval import HumanEvalRetrieval
 from .japanese_code1_retrieval import JapaneseCode1Retrieval
 from .mbpp_retrieval import MBPPRetrieval
 from .stack_overflow_qa_retrieval import StackOverflowQARetrieval
+from .swe_polybench_retrieval import SWEPolyBenchRetrieval
 from .swebench_code_retrieval import SWEbenchCodeRetrieval
+from .swebench_live_retrieval import SWEBenchLiveRetrieval
+from .swebench_plus_plus_retrieval import SWEBenchPlusPlusRetrieval
+from .swing_bench_retrieval import SwingBenchRetrieval
 from .synthetic_text2_sql_retrieval import SyntheticText2SQLRetrieval
 from .wiki_sql_retrieval import WikiSQLRetrieval
 
@@ -54,8 +58,12 @@ __all__ = [
     "HumanEvalRetrieval",
     "JapaneseCode1Retrieval",
     "MBPPRetrieval",
+    "SWEBenchLiveRetrieval",
+    "SWEBenchPlusPlusRetrieval",
+    "SWEPolyBenchRetrieval",
     "SWEbenchCodeRetrieval",
     "StackOverflowQARetrieval",
+    "SwingBenchRetrieval",
     "SyntheticText2SQLRetrieval",
     "WikiSQLRetrieval",
 ]

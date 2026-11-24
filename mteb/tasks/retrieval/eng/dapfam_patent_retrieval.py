@@ -7,14 +7,18 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 HF_REPO = "datalyes/DAPFAM_patent"
 REFERENCE = "https://arxiv.org/abs/2506.22141"
-BIBTEX = r"""@misc{ayaou2025dapfamdomainawarefamilyleveldataset,
-  archiveprefix = {arXiv},
-  author = {Iliass Ayaou and Denis Cavallucci and Hicham Chibane},
-  eprint = {2506.22141},
-  primaryclass = {cs.CL},
+BIBTEX = r"""@article{ayaou2025dapfamdomainawarefamilyleveldataset,
+  author = {Ayaou, Iliass and Cavallucci, Denis and Chibane, Hicham},
+  doi = {10.1016/j.array.2026.100720},
+  issn = {2590-0056},
+  journal = {Array},
+  month = {Mar},
+  pages = {100720},
+  publisher = {Elsevier BV},
   title = {DAPFAM: A Domain-Aware Family-level Dataset to benchmark cross domain patent retrieval},
-  url = {https://arxiv.org/abs/2506.22141},
-  year = {2025},
+  url = {https://doi.org/10.1016/j.array.2026.100720},
+  volume = {29},
+  year = {2026},
 }"""
 
 _SHARED_METADATA = dict(

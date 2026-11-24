@@ -25,10 +25,17 @@ class SpartQA(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{mirzaee2021spartqa,
-  author = {Mirzaee, Roshanak and Faghihi, Hossein Rajaby and Ning, Qiang and Kordjmashidi, Parisa},
-  journal = {arXiv preprint arXiv:2104.05832},
-  title = {Spartqa:: A textual question answering benchmark for spatial reasoning},
+@inproceedings{mirzaee2021spartqa,
+  address = {Online},
+  author = {Mirzaee, Roshanak and Rajaby Faghihi, Hossein and Ning, Qiang and Kordjamshidi, Parisa},
+  booktitle = {Proceedings of the 2021 Conference of the {N}orth {A}merican Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies},
+  doi = {10.18653/v1/2021.naacl-main.364},
+  editor = {Toutanova, Kristina and Rumshisky, Anna and Zettlemoyer, Luke and Hakkani-Tur, Dilek and Beltagy, Iz and Bethard, Steven and Cotterell, Ryan and Chakraborty, Tanmoy and Zhou, Yichao},
+  month = {jun},
+  pages = {4582--4598},
+  publisher = {Association for Computational Linguistics},
+  title = {{SPARTQA}: A Textual Question Answering Benchmark for Spatial Reasoning},
+  url = {https://aclanthology.org/2021.naacl-main.364/},
   year = {2021},
 }
 

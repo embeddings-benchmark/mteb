@@ -1,8 +1,10 @@
 import json
 import logging
+import shutil
 from copy import copy
 from pathlib import Path
 from typing import Any
+from unittest.mock import Mock
 
 import pytest
 from datasets.exceptions import DatasetNotFoundError
@@ -73,6 +75,15 @@ def test_evaluate(model: EncoderProtocol, task: AbsTask, expected_score: float):
 def test_evaluate_w_multiple_tasks(model: EncoderProtocol, tasks: list[AbsTask]):
     results = mteb.evaluate(model, tasks, cache=None, co2_tracker=False)
     assert len(results) == len(tasks), "should return exactly one result per task"
+
+
+def test_evaluate_w_no_tasks():
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    results = mteb.evaluate(model, [], cache=None)
+
+    assert results.task_results == []
+    assert results.model_name == model.mteb_model_meta.name
+    assert results.model_revision == model.mteb_model_meta.revision
 
 
 @pytest.mark.parametrize(
@@ -249,6 +260,80 @@ def test_evaluate_w_missing_subset(
     )
 
 
+def test_evaluate_cached_results_filtered_to_task(tmp_path: Path):
+    model = MockSentenceTransformer()
+    cache = ResultCache(tmp_path)
+    full_task = MockMultilingualRetrievalTask()
+    mteb.evaluate(model, full_task, cache=cache, co2_tracker=False)
+
+    task = MockMultilingualRetrievalTask().filter_eval_splits(["test"])
+    task.hf_subsets = full_task.hf_subsets[:1]
+    result = mteb.evaluate(model, task, cache=cache, co2_tracker=False)[0]
+
+    assert set(result.eval_splits) == {"test"}
+    assert set(result.hf_subsets) == set(task.hf_subsets)
+
+
+def test_evaluate_merged_results_filtered_to_task(tmp_path: Path):
+    model = MockSentenceTransformer()
+    cache = ResultCache(tmp_path)
+    mteb.evaluate(
+        model,
+        MockMultilingualRetrievalTask().filter_eval_splits(["val"]),
+        cache=cache,
+        co2_tracker=False,
+    )
+
+    task = MockMultilingualRetrievalTask().filter_eval_splits(["test"])
+    result = mteb.evaluate(model, task, cache=cache, co2_tracker=False)[0]
+
+    assert set(result.eval_splits) == {"test"}
+    # the cache still holds both splits, so the full task loads without rerunning
+    full_task = MockMultilingualRetrievalTask().filter_eval_splits(["val", "test"])
+    cached = mteb.evaluate(
+        model,
+        full_task,
+        cache=cache,
+        overwrite_strategy="only-cache",
+        co2_tracker=False,
+    )
+    assert set(cached[0].eval_splits) == {"val", "test"}
+
+
+def test_evaluate_aggregate_ignores_extra_cached_subtask_subsets(tmp_path: Path):
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    cache = ResultCache(tmp_path / "cache")
+    mteb.evaluate(model, task.metadata.tasks, cache=cache, co2_tracker=False)
+    shutil.copytree(tmp_path / "cache", tmp_path / "clean")
+    expected = mteb.evaluate(
+        model,
+        task,
+        cache=ResultCache(tmp_path / "clean"),
+        overwrite_strategy="only-cache",
+        co2_tracker=False,
+    )[0].get_score()
+
+    # a subtask's cache file holds a subset the aggregate does not use
+    subtask = task.metadata.tasks[0]
+    path = cache.get_task_result_path(
+        subtask.metadata.name,
+        model.mteb_model_meta.model_name_as_path(),
+        model.mteb_model_meta.revision,
+    )
+    cached = json.loads(path.read_text())
+    split = task.eval_splits[0]
+    extra = {**cached["scores"][split][0], "hf_subset": "extra", "main_score": 0.0}
+    cached["scores"][split].append(extra)
+    path.write_text(json.dumps(cached))
+
+    result = mteb.evaluate(
+        model, task, cache=cache, overwrite_strategy="only-cache", co2_tracker=False
+    )[0]
+
+    assert result.get_score() == pytest.approx(expected)
+
+
 @pytest.mark.parametrize(
     ("model", "task", "expected_score", "splits"),
     [(*mock_classification, ["train"])],
@@ -294,6 +379,90 @@ def test_evaluate_aggregated_task():
     model = mteb.get_model("mteb/baseline-random-encoder")
     task = MockAggregatedTask()
     mteb.evaluate(model, task, cache=None)
+
+
+def _aggregate_result_path(model, task: MockAggregatedTask, cache: ResultCache) -> Path:
+    return cache.get_task_result_path(
+        task.metadata.name,
+        model.mteb_model_meta.model_name_as_path(),
+        model.mteb_model_meta.revision,
+    )
+
+
+def _evaluate_with_failed_subtask(
+    model,
+    task: MockAggregatedTask,
+    cache: ResultCache,
+    monkeypatch: pytest.MonkeyPatch,
+    overwrite_strategy: str = "only-missing",
+):
+    with monkeypatch.context() as patch:
+        patch.setattr(
+            type(task.metadata.tasks[0]),
+            "evaluate",
+            Mock(side_effect=RuntimeError("subtask failed")),
+        )
+        return mteb.evaluate(
+            model,
+            task,
+            cache=cache,
+            raise_error=False,
+            overwrite_strategy=overwrite_strategy,
+            co2_tracker=False,
+        )
+
+
+def test_evaluate_aggregate_does_not_cache_failed_subtask(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """Without all subtasks the aggregate has no score, so a rerun has to compute it instead of loading None."""
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    cache = ResultCache(tmp_path)
+
+    failed = _evaluate_with_failed_subtask(model, task, cache, monkeypatch)
+    assert failed.exceptions
+    assert not _aggregate_result_path(model, task, cache).exists()
+
+    result = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+    assert not result.exceptions
+    assert result[0].scores[task.eval_splits[0]][0]["main_score"] is not None
+
+
+def test_evaluate_aggregate_failed_subtask_keeps_cached_score(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+):
+    """A failed rerun must not replace a finished aggregate result with None."""
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    cache = ResultCache(tmp_path)
+    mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+    path = _aggregate_result_path(model, task, cache)
+    expected = path.read_text()
+
+    _evaluate_with_failed_subtask(
+        model, task, cache, monkeypatch, overwrite_strategy="always"
+    )
+
+    assert path.read_text() == expected
+
+
+def test_evaluate_aggregate_recomputes_cached_none_score(tmp_path: Path):
+    """Result files already saved with a None score are treated as missing."""
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    task = MockAggregatedTask()
+    cache = ResultCache(tmp_path)
+    expected = mteb.evaluate(model, task, cache=cache, co2_tracker=False)[0].get_score()
+
+    path = _aggregate_result_path(model, task, cache)
+    cached = json.loads(path.read_text())
+    scores = cached["scores"][task.eval_splits[0]][0]
+    scores["main_score"] = None
+    scores[task.metadata.main_score] = None
+    path.write_text(json.dumps(cached))
+
+    result = mteb.evaluate(model, task, cache=cache, co2_tracker=False)
+    assert result[0].get_score() == expected
 
 
 def test_evaluate_aggregated_task_with_cache(tmp_path: Path):
@@ -404,6 +573,26 @@ def test_run_list_with_error():
     results = mteb.evaluate(model, [error_task, task], cache=None, raise_error=False)
     assert len(results.task_results) == 1
     assert len(results.exceptions) == 1
+
+
+def test_evaluate_model_meta_load_error():
+    """Test that model loading errors are suppressed when raise_error=False"""
+    task = MockClassificationTask()
+
+    def failing_loader(*args: Any, **kwargs: Any):
+        raise RuntimeError("Failed to download model weights")
+
+    meta = mteb.get_model_meta("mteb/baseline-random-encoder").model_copy(
+        update={"loader": failing_loader}
+    )
+
+    with pytest.raises(RuntimeError, match="Failed to download model weights"):
+        mteb.evaluate(meta, task, cache=None)
+
+    results = mteb.evaluate(meta, task, cache=None, raise_error=False)
+    assert len(results.task_results) == 0
+    assert len(results.exceptions) == 1
+    assert "Failed to download model weights" in str(results.exceptions[0].exception)
 
 
 def test_evaluate_unloads_data_when_not_preloaded():

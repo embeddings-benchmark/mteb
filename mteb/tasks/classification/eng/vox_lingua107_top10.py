@@ -25,14 +25,16 @@ class VoxLingua107Top10(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",  # from youtube
         bibtex_citation=r"""
-@misc{valk2020voxlingua107datasetspokenlanguage,
-  archiveprefix = {arXiv},
-  author = {Jörgen Valk and Tanel Alumäe},
-  eprint = {2011.12998},
-  primaryclass = {eess.AS},
-  title = {VoxLingua107: a Dataset for Spoken Language Recognition},
-  url = {https://arxiv.org/abs/2011.12998},
-  year = {2020},
+@inproceedings{valk2020voxlingua107datasetspokenlanguage,
+  author = {Valk, Jorgen and Alumae, Tanel},
+  booktitle = {2021 IEEE Spoken Language Technology Workshop (SLT)},
+  doi = {10.1109/slt48900.2021.9383459},
+  month = {Jan},
+  pages = {652–658},
+  publisher = {IEEE},
+  title = {VOXLINGUA107: A Dataset for Spoken Language Recognition},
+  url = {https://doi.org/10.1109/slt48900.2021.9383459},
+  year = {2021},
 }
 """,
     )

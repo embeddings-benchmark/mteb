@@ -6,7 +6,7 @@ class Ocnli(AbsTaskPairClassification):
     metadata = TaskMetadata(
         name="Ocnli",
         description="Original Chinese Natural Language Inference dataset",
-        reference="https://arxiv.org/abs/2010.05444",
+        reference="https://aclanthology.org/2020.findings-emnlp.314/",
         dataset={
             "path": "C-MTEB/OCNLI",
             "revision": "66e76a618a34d6d565d5538088562851e6daa7ec",
@@ -25,12 +25,17 @@ class Ocnli(AbsTaskPairClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{hu2020ocnli,
-  archiveprefix = {arXiv},
-  author = {Hai Hu and Kyle Richardson and Liang Xu and Lu Li and Sandra Kuebler and Lawrence S. Moss},
-  eprint = {2010.05444},
-  primaryclass = {cs.CL},
-  title = {OCNLI: Original Chinese Natural Language Inference},
+@inproceedings{hu2020ocnli,
+  address = {Online},
+  author = {Hu, Hai and Richardson, Kyle and Xu, Liang and Li, Lu and K{\"u}bler, Sandra and Moss, Lawrence},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2020},
+  doi = {10.18653/v1/2020.findings-emnlp.314},
+  editor = {Cohn, Trevor and He, Yulan and Liu, Yang},
+  month = {nov},
+  pages = {3512--3526},
+  publisher = {Association for Computational Linguistics},
+  title = {{OCNLI}: {O}riginal {C}hinese {N}atural {Language} {I}nference},
+  url = {https://aclanthology.org/2020.findings-emnlp.314/},
   year = {2020},
 }
 """,

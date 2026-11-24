@@ -90,6 +90,8 @@ class AbsTaskBitextMining(AbsTask):
                 model,
                 self.dataset[split],
                 parallel=True,
+                # Use only requested pairs so cache resumes do not recompute cached subsets
+                parallel_hf_subsets=hf_subsets,
                 hf_split=split,
                 hf_subset="parallel",
                 encode_kwargs=encode_kwargs,
@@ -130,13 +132,17 @@ class AbsTaskBitextMining(AbsTask):
             for column in pair
         }
 
-    def _get_pairs(self, parallel: bool) -> list[tuple[str, str]]:
+    def _get_pairs(
+        self, parallel: bool, hf_subsets: list[HFSubset] | None = None
+    ) -> list[tuple[str, str]]:
         pairs = self._DEFAULT_PAIR
         if parallel:
-            pairs = [langpair.split("-") for langpair in self.hf_subsets]  # type: ignore[misc]
+            # each subset of a parallel task is a language pair, e.g. "eng_Latn-fra_Latn"
+            subsets = self.hf_subsets if hf_subsets is None else hf_subsets
+            pairs = [langpair.split("-") for langpair in subsets]  # type: ignore[misc]
         return pairs
 
-    def _evaluate_subset(  # type: ignore[override]
+    def _evaluate_subset(  # type: ignore[override]  # noqa: PLR0913
         self,
         model: EncoderProtocol,
         data_split: Dataset,
@@ -146,11 +152,12 @@ class AbsTaskBitextMining(AbsTask):
         encode_kwargs: EncodeKwargs,
         prediction_folder: Path | None = None,
         parallel: bool = False,
+        parallel_hf_subsets: list[HFSubset] | None = None,
         num_proc: int | None = None,
         timer: TimingStack,
         **kwargs: Any,
     ) -> BitextMiningMetrics | dict[str, BitextMiningMetrics]:
-        pairs = self._get_pairs(parallel)
+        pairs = self._get_pairs(parallel, parallel_hf_subsets)
 
         evaluator = BitextMiningEvaluator(
             data_split,

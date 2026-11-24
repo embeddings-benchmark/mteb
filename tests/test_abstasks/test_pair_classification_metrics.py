@@ -50,3 +50,38 @@ def test_scores_without_ties_are_unchanged():
     )
     assert metrics["accuracy"] == 1.0
     assert metrics["f1"] == 1.0
+
+
+@pytest.mark.parametrize("high_score_more_similar", [True, False])
+def test_all_positive_threshold_is_considered(high_score_more_similar: bool):
+    # every pair is positive, so predicting all of them as positive is the best threshold
+    scores = [0.9, 0.5, 0.1]
+    if not high_score_more_similar:
+        scores = [-s for s in scores]
+    task = MockPairClassificationTask()
+    metrics = task._compute_metrics_values(
+        scores, np.array([1, 1, 1]), high_score_more_similar
+    )
+    assert metrics["accuracy"] == 1.0
+    assert metrics["f1"] == 1.0
+    assert metrics["recall"] == 1.0
+
+
+def test_all_negative_threshold_is_considered():
+    # the lowest scored pair is the only positive, so predicting every pair as negative
+    # gives the best accuracy, and predicting every pair as positive gives the best f1
+    task = MockPairClassificationTask()
+    metrics = task._compute_metrics_values(
+        [0.9, 0.8, 0.7, 0.1], np.array([0, 0, 0, 1]), True
+    )
+    assert metrics["accuracy"] == pytest.approx(0.75)
+    assert metrics["f1"] == pytest.approx(0.4)
+
+
+def test_constant_scores_use_the_all_positive_threshold():
+    task = MockPairClassificationTask()
+    metrics = task._compute_metrics_values(
+        [0.5, 0.5, 0.5, 0.5], np.array([1, 1, 1, 0]), True
+    )
+    assert metrics["accuracy"] == pytest.approx(0.75)
+    assert metrics["f1"] == pytest.approx(6 / 7)

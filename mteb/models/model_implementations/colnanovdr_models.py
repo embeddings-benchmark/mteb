@@ -14,11 +14,15 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-COLNANOVDR_CITATION = """@article{nanovdr2026,
-  title={NanoVDR: Distilling a 2B Vision-Language Retriever into a 70M Text-Only Encoder for Visual Document Retrieval},
-  author={Liu, Zhuchenyang and Zhang, Yao and Xiao, Yu},
-  journal={arXiv preprint arXiv:2603.12824},
-  year={2026}
+COLNANOVDR_CITATION = """@inproceedings{nanovdr2026,
+  author = {Liu, Zhuchenyang and Zhang, Yao and Xiao, Yu},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.71},
+  pages = {1631–1648},
+  publisher = {Association for Computational Linguistics},
+  title = {NanoVDR: Distilling a 2B Vision-Language Retriever into a 70M Text-Only Encoder for Visual Document Retrieval},
+  url = {https://doi.org/10.18653/2026.emnlp-main.71},
+  year = {2026},
 }"""
 
 # Train splits of these ViDoRe v1 sources are in the distillation data, through the
@@ -140,8 +144,8 @@ colnanovdr_colvec_4b = ModelMeta(
     revision="7c816c0ef9a351f085a2e4138716ea40c77721f5",
     release_date="2026-09-20",
     modalities=["text", "image"],
-    n_parameters=149_506_561,
-    n_embedding_parameters=38_682_624,
+    n_parameters=149_506_561 + 4540904576,
+    n_embedding_parameters=38_682_624 + 1639040,
     memory_usage_mb=601,
     embed_dim=640,
     license="https://huggingface.co/webAI-Official/webAI-ColVec1.1-4b/blob/main/LICENSE.md",
@@ -167,8 +171,8 @@ colnanovdr_colvec_8b = ModelMeta(
     revision="cc7671cb72d455d02a4885d3b0e9b2512a82cb4f",
     release_date="2026-09-20",
     modalities=["text", "image"],
-    n_parameters=149_506_561,
-    n_embedding_parameters=38_682_624,
+    n_parameters=149_506_561 + 8395317104,
+    n_embedding_parameters=38_682_624 + 2622080,
     memory_usage_mb=601,
     embed_dim=640,
     license="https://huggingface.co/webAI-Official/webAI-ColVec1.1-8b/blob/main/LICENSE.md",

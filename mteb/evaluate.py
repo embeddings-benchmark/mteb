@@ -340,7 +340,12 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                         date=datetime.datetime.now(tz=datetime.UTC),
                         evaluation_phases=timer.phases if timer.phases else None,
                     )
-                    cache.save_to_cache(new_result, model_meta)
+                    cache.save_to_cache(
+                        new_result,
+                        model_meta,
+                        encode_kwargs=encode_kwargs,
+                        evaluated_splits={split: list(res)},
+                    )
 
         duration = general_timer.phases[0]["end"] - general_timer.phases[0]["start"]
 
@@ -693,7 +698,7 @@ def _evaluate_resolved(  # noqa: PLR0913
             return ModelResult(
                 model_name=model_name,
                 model_revision=model_revision,
-                task_results=[existing_results],
+                task_results=[existing_results.validate_and_filter_scores(tasks)],
             )
 
         results = _evaluate_resolved(
@@ -715,15 +720,21 @@ def _evaluate_resolved(  # noqa: PLR0913
         )
         combined_results = tasks.combine_task_results(results.task_results)
 
-        if existing_results:
-            combined_results = existing_results.merge(combined_results)
+        # without all subtasks there is no score, so don't save it as a finished result
+        if not results.exceptions:
+            if existing_results:
+                combined_results = existing_results.merge(combined_results)
 
-        if cache:
-            cache.save_to_cache(
-                combined_results,
-                meta,
-                encode_kwargs=encode_kwargs,
-            )
+            if cache:
+                cache.save_to_cache(
+                    combined_results,
+                    meta,
+                    encode_kwargs=encode_kwargs,
+                )
+
+            if existing_results:
+                # the cache may hold more splits/subsets than the task asks for
+                combined_results = combined_results.validate_and_filter_scores(tasks)
 
         return ModelResult(
             model_name=results.model_name,
@@ -765,8 +776,8 @@ def _evaluate_resolved(  # noqa: PLR0913
             if _res.exceptions:
                 exceptions.extend(_res.exceptions)
         return ModelResult(
-            model_name=_res.model_name,
-            model_revision=_res.model_revision,
+            model_name=model_name,
+            model_revision=model_revision,
             task_results=evaluate_results,
             exceptions=exceptions,
         )
@@ -785,22 +796,22 @@ def _evaluate_resolved(  # noqa: PLR0913
         return ModelResult(
             model_name=model_name,
             model_revision=model_revision,
-            task_results=[existing_results],
+            task_results=[existing_results.validate_and_filter_scores(task)],
         )
     if existing_results:
         logger.info(
             f"Found existing results for {task.metadata.name}, only running missing splits (subsets): {missing_eval}"
         )
 
-    if isinstance(model, ModelMeta):
-        logger.info(
-            f"Loading model {model_name} with revision {model_revision} from ModelMeta."
-        )
-        model = model.load_model()
-        logger.info("✓ Model loaded")
-
     if raise_error is False:
         try:
+            if isinstance(model, ModelMeta):
+                logger.info(
+                    f"Loading model {model_name} with revision {model_revision} from ModelMeta."
+                )
+                model = model.load_model()
+                logger.info("✓ Model loaded")
+
             result = _evaluate_task(
                 model=model,
                 splits=missing_eval,
@@ -820,6 +831,13 @@ def _evaluate_resolved(  # noqa: PLR0913
             )
             result = TaskError(task_name=task.metadata.name, exception=str(e))
     else:
+        if isinstance(model, ModelMeta):
+            logger.info(
+                f"Loading model {model_name} with revision {model_revision} from ModelMeta."
+            )
+            model = model.load_model()
+            logger.info("✓ Model loaded")
+
         result = _evaluate_task(
             model=model,
             splits=missing_eval,
@@ -844,11 +862,17 @@ def _evaluate_resolved(  # noqa: PLR0913
         )
 
     if cache:
+        # Intermediate saves already recorded settings for every evaluated subset.
         cache.save_to_cache(
             result,
             meta,
             encode_kwargs=encode_kwargs,
+            evaluated_splits={},
         )
+
+    if existing_results:
+        # the cache may hold more splits/subsets than the task asks for
+        result = result.validate_and_filter_scores(task)
 
     return ModelResult(
         model_name=model_name,

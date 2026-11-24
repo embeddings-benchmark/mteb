@@ -28,14 +28,14 @@ class SWEbenchMultilingualRR(AbsTaskRetrieval):
             "query": "Given a github issue, identify the code that needs to be changed to fix the issue."
         },
         bibtex_citation=r"""
-@misc{yang2025swesmith,
+@inproceedings{yang2025swesmith,
   archiveprefix = {arXiv},
-  author = {John Yang and Kilian Lieret and Carlos E. Jimenez and Alexander Wettig and Kabir Khandpur and Yanzhe Zhang and Binyuan Hui and Ofir Press and Ludwig Schmidt and Diyi Yang},
+  author = {John Yang and Kilian Lieret and Carlos E Jimenez and Alexander Wettig and Kabir Khandpur and Yanzhe Zhang and Binyuan Hui and Ofir Press and Ludwig Schmidt and Diyi Yang},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
   eprint = {2504.21798},
-  primaryclass = {cs.SE},
-  title = {SWE-smith: Scaling Data for Software Engineering Agents},
-  url = {https://arxiv.org/abs/2504.21798},
-  year = {2025},
+  title = {{SWE}-smith: Scaling Data for Software Engineering Agents},
+  url = {https://openreview.net/forum?id=63iVrXc8cC},
+  year = {2026},
 }
 """,
     )

@@ -3,7 +3,7 @@ from __future__ import annotations
 import heapq
 import logging
 import time
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING, Any, cast
 
 import numpy as np
 from tqdm.auto import tqdm
@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     import torch
+    from datasets import Dataset
     from torch.utils.data import DataLoader
 
     from mteb.abstasks.task_metadata import TaskMetadata
@@ -37,6 +38,29 @@ if TYPE_CHECKING:
     from .search_encoder_index.search_backend_protocol import IndexEncoderSearchProtocol
 
 logger = logging.getLogger(__name__)
+
+
+def _select_loader_rows(
+    loader: DataLoader[BatchedInput], indices: list[int]
+) -> DataLoader[BatchedInput]:
+    """Rebuild a dataloader over the given rows of its dataset, without copying them.
+
+    Args:
+        loader: Dataloader created by `create_dataloader`.
+        indices: Rows to load, possibly repeated.
+
+    Returns:
+        A dataloader with the same settings over the selected rows.
+    """
+    from torch.utils.data import DataLoader
+
+    return DataLoader(
+        cast("Dataset", loader.dataset).select(indices),
+        batch_size=loader.batch_size,
+        collate_fn=loader.collate_fn,
+        num_workers=loader.num_workers,
+        shuffle=False,
+    )
 
 
 def chunked_full_corpus_search(  # noqa: PLR0913
@@ -446,10 +470,13 @@ class SearchEncoderWrapper:
                     )
                 result_heaps = {qid: [] for qid in query_idx_to_id.values()}
                 for query_itr in range(len(query_embeddings)):
+                    qid = query_idx_to_id[query_itr]
+                    if qid not in top_ranked:
+                        continue
                     result_heaps = self._rerank_sort_results(
                         result_heaps=result_heaps,
-                        query_id=query_idx_to_id[query_itr],
-                        ranked_ids=top_ranked[query_idx_to_id[query_itr]],
+                        query_id=qid,
+                        ranked_ids=top_ranked[qid],
                         scores_top_k_idx=torch.tensor(
                             [cos_scores_top_k_idx[query_itr]]
                         ),
@@ -751,25 +778,30 @@ class SearchCrossEncoderWrapper:
                 query_indices.append(query_idx)
                 doc_indices.append(doc_id_to_idx[corpus_id])
 
-        # select() builds an indices-mapping view over the existing datasets
-        # instead of materializing one copied (and, for images, decoded) row per
-        # pair, which for image corpora multiplies memory by top_k x decode size.
-        queries_loader = create_dataloader(
-            queries.select(query_indices),
-            task_metadata=task_metadata,
-            # PromptType.query, matching SearchEncoderWrapper: on mixed-modality
-            # tasks the query rows carry the query modality, and a
-            # document prompt type would prepare them with the corpus modality.
-            prompt_type=PromptType.query,
-            num_proc=num_proc,
-            **encode_kwargs,
+        # Prepare before repeating rows per pair: preparation copies repeated
+        # rows, which overflows Arrow for video queries.
+        queries_loader = _select_loader_rows(
+            create_dataloader(
+                queries,
+                task_metadata=task_metadata,
+                # PromptType.query, matching SearchEncoderWrapper: on mixed-modality
+                # tasks the query rows carry the query modality, and a
+                # document prompt type would prepare them with the corpus modality.
+                prompt_type=PromptType.query,
+                num_proc=num_proc,
+                **encode_kwargs,
+            ),
+            query_indices,
         )
-        corpus_loader = create_dataloader(
-            self.task_corpus.select(doc_indices),
-            task_metadata=task_metadata,
-            prompt_type=PromptType.document,
-            num_proc=num_proc,
-            **encode_kwargs,
+        corpus_loader = _select_loader_rows(
+            create_dataloader(
+                self.task_corpus,
+                task_metadata=task_metadata,
+                prompt_type=PromptType.document,
+                num_proc=num_proc,
+                **encode_kwargs,
+            ),
+            doc_indices,
         )
         predictions = self.model.predict(
             inputs1=queries_loader,

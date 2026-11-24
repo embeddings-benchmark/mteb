@@ -343,7 +343,7 @@ kure_reranker_base = ModelMeta(
     model_type=["cross-encoder"],
     languages=KOR_EN,
     open_weights=True,
-    revision="53e42a46af81f71df6b37ba553bb0c49f3008433",
+    revision="0ca23195dc2c37177e7458330e2286e2f9fa04b3",
     release_date="2026-09-23",
     n_parameters=1_720_574_976,
     embed_dim=None,
@@ -359,7 +359,6 @@ kure_reranker_base = ModelMeta(
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
     training_datasets=kure_training_data,
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -388,7 +387,6 @@ kure_v3 = ModelMeta(
     public_training_code="https://github.com/nlpai-lab/KURE/tree/main/train/dense",
     public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
     training_datasets=kure_training_data,
-    output_dtypes=OutputDType.BF16,
 )
 
 kure_sparse_base = ModelMeta(

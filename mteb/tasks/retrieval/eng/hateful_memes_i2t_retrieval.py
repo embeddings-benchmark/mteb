@@ -15,7 +15,10 @@ if TYPE_CHECKING:
 
 
 def _load_data(
-    path: str, splits: str, revision: str | None = None
+    path: str,
+    splits: str,
+    revision: str | None = None,
+    point_to_kept_copy: bool = False,
 ) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
     corpus = {}
     queries = {}
@@ -31,6 +34,11 @@ def _load_data(
     text_df = pl.DataFrame({"text": shared_corpus["text"]})
     unique_indices = text_df["text"].arg_unique()
     shared_corpus = shared_corpus.select(unique_indices)
+    # the corpus keeps one meme per text; v2 points each query at that meme
+    kept_id = {
+        text: "corpus-" + str(row_id)
+        for text, row_id in zip(shared_corpus["text"], shared_corpus["id"], strict=True)
+    }
 
     shared_corpus = shared_corpus.map(
         lambda x: {
@@ -59,7 +67,11 @@ def _load_data(
         relevant_docs[split] = {}
         for example in split_dataset:
             query_id = "query-" + str(example["id"])
-            doc_id = "corpus-" + str(example["id"])
+            doc_id = (
+                kept_id[example["text"]]
+                if point_to_kept_copy
+                else "corpus-" + str(example["id"])
+            )
             if query_id not in relevant_docs[split]:
                 relevant_docs[split][query_id] = {}
             relevant_docs[split][query_id][doc_id] = 1
@@ -89,6 +101,7 @@ class HatefulMemesI2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         modalities=["text", "image"],
         sample_creation="found",
+        superseded_by="HatefulMemesI2TRetrieval.v2",
         bibtex_citation=r"""
 @article{kiela2020hateful,
   author = {Kiela, Douwe and Firooz, Hamed and Mohan, Aravind and Goswami, Vedanuj and Singh, Amanpreet and Ringshia, Pratik and Testuggine, Davide},
@@ -110,4 +123,27 @@ class HatefulMemesI2TRetrieval(AbsTaskRetrieval):
             revision=self.metadata.dataset["revision"],
         )
 
+        self.data_loaded = True
+
+
+class HatefulMemesI2TRetrievalV2(AbsTaskRetrieval):
+    metadata = HatefulMemesI2TRetrieval.metadata.model_copy(
+        update={
+            "name": "HatefulMemesI2TRetrieval.v2",
+            "description": HatefulMemesI2TRetrieval.metadata.description
+            + " Version 2 points each query at the corpus text kept for it: the corpus keeps one text per meme text, and v1 pointed 171 of the 1,000 test queries at removed duplicates.",
+            "adapted_from": ["HatefulMemesI2TRetrieval"],
+            "superseded_by": None,
+        }
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        if self.data_loaded:
+            return
+        self.corpus, self.queries, self.relevant_docs = _load_data(
+            path=self.metadata.dataset["path"],
+            splits=self.metadata.eval_splits,
+            revision=self.metadata.dataset["revision"],
+            point_to_kept_copy=True,
+        )
         self.data_loaded = True

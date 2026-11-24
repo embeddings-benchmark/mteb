@@ -25,14 +25,14 @@ class FreshStackRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{thakur2025freshstackbuildingrealisticbenchmarks,
+@inproceedings{thakur2025freshstackbuildingrealisticbenchmarks,
   archiveprefix = {arXiv},
   author = {Nandan Thakur and Jimmy Lin and Sam Havens and Michael Carbin and Omar Khattab and Andrew Drozdov},
+  booktitle = {The Thirty-ninth Annual Conference on Neural Information Processing Systems Datasets and Benchmarks Track},
   eprint = {2504.13128},
-  primaryclass = {cs.IR},
   title = {FreshStack: Building Realistic Benchmarks for Evaluating Retrieval on Technical Documents},
-  url = {https://arxiv.org/abs/2504.13128},
-  year = {2025},
+  url = {https://openreview.net/forum?id=54TTgXlS2U},
+  year = {2026},
 }
 """,
     )

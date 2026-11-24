@@ -269,3 +269,14 @@ def test_filter_languages_script_exclusive_mismatch_raises(
         task.filter_languages(
             languages=languages, script=script, exclusive_language_filter=True
         )
+
+
+def test_filter_tasks_language_script_only_matches_that_script_regression_5720(
+    all_tasks: list[AbsTask],
+):
+    """Raised in https://github.com/embeddings-benchmark/mteb/pull/5720/"""
+    tasks = filter_tasks(all_tasks, languages=["zho-Hant"])
+
+    assert tasks
+    for task in tasks:
+        assert "zho-Hant" in task.metadata.bcp47_codes

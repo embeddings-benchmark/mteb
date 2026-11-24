@@ -71,7 +71,6 @@ colsmol_256m = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 colsmol_500m = ModelMeta(
@@ -101,5 +100,4 @@ colsmol_500m = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )

@@ -1008,8 +1008,11 @@ def _create_summary_table(  # noqa: PLR0914
             _incomplete_subset_pairs(pl_df),
             keys=("model_name", _EXPERIMENT_ID_COL, "task_name", "subset"),
         )
+        # A model has no row for a (task, subset) pair it never ran, so count the
+        # pairs as well: one missing pair nulls the mean, like a null score does.
+        n_subsets = _scored(pl_df).select("task_name", "subset").n_unique()
         subset_mean = per_subset_long.group_by(["model_name", _EXPERIMENT_ID_COL]).agg(
-            pl.when(pl.col("score").is_null().any())
+            pl.when(pl.col("score").is_null().any() | (pl.len() < n_subsets))
             .then(None)
             .otherwise(pl.col("score").mean())
             .alias(mean_subset_col)

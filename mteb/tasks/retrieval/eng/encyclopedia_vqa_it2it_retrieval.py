@@ -8,8 +8,8 @@ class EncyclopediaVQAIT2ITRetrieval(AbsTaskRetrieval):
         description="Retrieval Wiki passage and image and passage to answer query about an image.",
         reference="https://github.com/google-research/google-research/tree/master/encyclopedic_vqa",
         dataset={
-            "path": "izhx/UMRB-EncyclopediaVQA",
-            "revision": "d6eae4f06e260664eb3f276fd1bdb5d4d4c9f32b",
+            "path": "mteb/UMRB-EncyclopediaVQA",
+            "revision": "e1fe15f40860e85ecc4567b4031b52e9bda21d26",
         },
         type="Any2AnyRetrieval",
         category="it2it",

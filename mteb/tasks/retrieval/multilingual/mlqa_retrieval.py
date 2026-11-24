@@ -95,12 +95,18 @@ class MLQARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{lewis2019mlqa,
+@inproceedings{lewis2019mlqa,
+  address = {Online},
   author = {Lewis, Patrick and Oguz, Barlas and Rinott, Ruty and Riedel, Sebastian and Schwenk, Holger},
-  eid = {arXiv: 1910.07475},
-  journal = {arXiv preprint arXiv:1910.07475},
-  title = {MLQA: Evaluating Cross-lingual Extractive Question Answering},
-  year = {2019},
+  booktitle = {Proceedings of the 58th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics},
+  doi = {10.18653/v1/2020.acl-main.653},
+  editor = {Jurafsky, Dan and Chai, Joyce and Schluter, Natalie and Tetreault, Joel},
+  month = {jul},
+  pages = {7315--7330},
+  publisher = {Association for Computational Linguistics},
+  title = {{MLQA}: Evaluating Cross-lingual Extractive Question Answering},
+  url = {https://aclanthology.org/2020.acl-main.653/},
+  year = {2020},
 }
 """,
     )

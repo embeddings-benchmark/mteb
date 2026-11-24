@@ -8,7 +8,7 @@ class CodeTransOceanDLRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="CodeTransOceanDL",
         description="The dataset is a collection of equivalent Python Deep Learning code snippets written in different machine learning framework. The task is to retrieve the equivalent code snippet in another framework, given a query code snippet from one framework.",
-        reference="https://arxiv.org/abs/2310.04951",
+        reference="https://aclanthology.org/2023.findings-emnlp.337/",
         dataset={
             "path": "CoIR-Retrieval/codetrans-dl",
             "revision": "281562cb8a1265ab5c0824bfa6ddcd9b0a15618f",
@@ -27,13 +27,17 @@ class CodeTransOceanDLRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{yan2023codetransoceancomprehensivemultilingualbenchmark,
-  archiveprefix = {arXiv},
-  author = {Weixiang Yan and Yuchen Tian and Yunzhe Li and Qian Chen and Wen Wang},
-  eprint = {2310.04951},
-  primaryclass = {cs.AI},
-  title = {CodeTransOcean: A Comprehensive Multilingual Benchmark for Code Translation},
-  url = {https://arxiv.org/abs/2310.04951},
+@inproceedings{yan2023codetransoceancomprehensivemultilingualbenchmark,
+  address = {Singapore},
+  author = {Yan, Weixiang and Tian, Yuchen and Li, Yunzhe and Chen, Qian and Wang, Wen},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {EMNLP} 2023},
+  doi = {10.18653/v1/2023.findings-emnlp.337},
+  editor = {Bouamor, Houda and Pino, Juan and Bali, Kalika},
+  month = {dec},
+  pages = {5067--5089},
+  publisher = {Association for Computational Linguistics},
+  title = {{C}ode{T}rans{O}cean: A Comprehensive Multilingual Benchmark for Code Translation},
+  url = {https://aclanthology.org/2023.findings-emnlp.337/},
   year = {2023},
 }
 """,

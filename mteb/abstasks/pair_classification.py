@@ -324,12 +324,14 @@ class AbsTaskPairClassification(AbsTask):
         rows = list(zip(scores, labels, strict=True))
         rows = sorted(rows, key=lambda x: x[0], reverse=high_score_more_similar)
 
-        max_acc = 0
-        best_threshold = -1.0
         positive_so_far = 0
         remaining_negatives = sum(labels == 0)
+        # start from the threshold that predicts every pair as negative
+        max_acc = remaining_negatives / len(labels)
+        best_threshold = -1.0
 
-        for i in range(len(rows) - 1):
+        # the cut after the last row predicts every pair as positive
+        for i in range(len(rows)):
             score, label = rows[i]
             if label == 1:
                 positive_so_far += 1
@@ -337,13 +339,14 @@ class AbsTaskPairClassification(AbsTask):
                 remaining_negatives -= 1
 
             # a threshold can't split tied scores, otherwise their row order leaks into the metric
-            if score == rows[i + 1][0]:
+            is_last = i == len(rows) - 1
+            if not is_last and score == rows[i + 1][0]:
                 continue
 
             acc = (positive_so_far + remaining_negatives) / len(labels)
             if acc > max_acc:
                 max_acc = acc
-                best_threshold = (rows[i][0] + rows[i + 1][0]) / 2
+                best_threshold = score if is_last else (score + rows[i + 1][0]) / 2
         return max_acc, best_threshold
 
     def _find_best_f1_and_threshold(  # noqa: PLR6301
@@ -361,12 +364,14 @@ class AbsTaskPairClassification(AbsTask):
         ncorrect = 0
         total_num_duplicates = sum(labels)
 
-        for i, (score, label) in enumerate(rows[:-1]):
+        # the cut after the last row predicts every pair as positive
+        for i, (score, label) in enumerate(rows):
             if label == 1:
                 ncorrect += 1
 
             # a threshold can't split tied scores, otherwise their row order leaks into the metric
-            if score == rows[i + 1][0]:
+            is_last = i == len(rows) - 1
+            if not is_last and score == rows[i + 1][0]:
                 continue
 
             if ncorrect > 0:
@@ -378,6 +383,6 @@ class AbsTaskPairClassification(AbsTask):
                     best_f1 = f1
                     best_precision = precision
                     best_recall = recall
-                    threshold = (rows[i][0] + rows[i + 1][0]) / 2
+                    threshold = score if is_last else (score + rows[i + 1][0]) / 2
 
         return best_f1, best_precision, best_recall, threshold

@@ -387,6 +387,7 @@ class ResultCache:
         model_revision: str | None = None,
         *,
         encode_kwargs: Mapping[str, Any] | None = None,
+        evaluated_splits: Mapping[str, Sequence[str]] | None = None,
     ) -> None:
         """Save the task results to the local cache directory in the location {model_name}/{model_revision}/{task_name}.json.
 
@@ -398,6 +399,9 @@ class ResultCache:
             model_name: The name of the model as a valid directory name or a ModelMeta object.
             model_revision: The revision of the model. Must be specified if model_name is a string.
             encode_kwargs: The keyword arguments passed to the model's encode method during evaluation.
+            evaluated_splits: A mapping from each split to the subsets evaluated in this run. Only these are
+                recorded in run_settings.jsonl, so subsets loaded from the cache keep their original settings.
+                If None, all splits and subsets in the task result are recorded.
         """
         result_path = self.get_task_result_path(
             model_name=model_name,
@@ -417,6 +421,13 @@ class ResultCache:
 
         run_settings_list: list[dict[str, Any]] = []
         for split, split_scores in task_result.scores.items():
+            subsets = {
+                score_entry.get("hf_subset", "default") for score_entry in split_scores
+            }
+            if evaluated_splits is not None:
+                subsets &= set(evaluated_splits.get(split, []))
+            if not subsets:
+                continue
             run_settings = {
                 "task": task_result.task_name,
                 "splits": [split],
@@ -424,12 +435,7 @@ class ResultCache:
                 "encode_kwargs": json.loads(json.dumps(encode_kwargs, default=str))
                 if encode_kwargs is not None
                 else {},
-                "subsets": sorted(
-                    {
-                        score_entry.get("hf_subset", "default")
-                        for score_entry in split_scores
-                    }
-                ),
+                "subsets": sorted(subsets),
             }
             run_settings_list.append(run_settings)
 
@@ -900,6 +906,15 @@ class ResultCache:
         results_path = self.cache_path / "results"
         remote_path = self.remote_results_path
 
+        # materialize once so generators/iterators are not consumed by inspection
+        model_list = (
+            cast("list[str] | list[ModelMeta]", list(models))
+            if models is not None
+            else None
+        )
+        if tasks is not None and not isinstance(tasks, Benchmark):
+            tasks = cast("list[str] | list[AbsTask]", list(tasks))
+
         cache_paths = _get_paths(results_path, load_experiments)
 
         if include_remote:
@@ -907,7 +922,7 @@ class ResultCache:
 
         cache_paths = self._filter_paths_by_model_and_revision(
             cache_paths,
-            models=models,
+            models=model_list,
             load_experiments=load_experiments,
         )
         cache_paths = self._filter_paths_by_task(cache_paths, tasks=tasks)
@@ -1169,10 +1184,9 @@ class ResultCache:
                 local_models = self.get_models(
                     require_model_meta=False, include_remote=False
                 )
+                model_dir_name = model.replace("/", "__").replace(" ", "_")
                 matching = [
-                    (name, rev)
-                    for name, rev in local_models
-                    if name == model.replace("/", "__")
+                    (name, rev) for name, rev in local_models if name == model_dir_name
                 ]
                 if not matching:
                     raise ValueError(
@@ -1406,8 +1420,17 @@ class ResultCache:
         if isinstance(tasks, str):
             tasks = get_benchmark(tasks)
 
+        # materialize once so generators/iterators are not consumed by inspection
+        model_list = (
+            cast("list[str] | list[ModelMeta]", list(models))
+            if models is not None
+            else None
+        )
+        if tasks is not None and not isinstance(tasks, Benchmark):
+            tasks = cast("list[str] | list[AbsTask]", list(tasks))
+
         benchmarks: Sequence[Benchmark] | Benchmark | None = None
-        if isinstance(tasks, Sequence) and isinstance(tasks[0], Benchmark):
+        if isinstance(tasks, Sequence) and tasks and isinstance(tasks[0], Benchmark):
             benchmarks = tasks  # type: ignore[assignment]
             tasks = [sub for task in tasks for sub in cast("Benchmark", task).tasks]
 
@@ -1427,13 +1450,13 @@ class ResultCache:
                 stacklevel=2,
             )
 
-        models_as_model_meta = models is not None and isinstance(
-            next(iter(models)), ModelMeta
+        models_as_model_meta = model_list is not None and isinstance(
+            next(iter(model_list), None), ModelMeta
         )
 
         paths = self.get_cache_paths(
-            models=models,
-            tasks=tasks,  # type: ignore[arg-type]
+            models=model_list,
+            tasks=tasks,
             require_model_meta=require_model_meta,
             include_remote=include_remote,
             load_experiments=load_experiments,
@@ -1446,7 +1469,7 @@ class ResultCache:
                 if isinstance(task, AbsTask):
                     task_names[task.metadata.name] = task
                 else:
-                    task_names[cast("str", task)] = None
+                    task_names[task] = None
 
         experiment_names = set()
         if isinstance(experiment_kwargs, Mapping):

@@ -148,6 +148,7 @@ EmbeddingType = Literal[
 ]
 
 OUTPUT_TYPES = [
+    OutputDType.FLOAT32,  # default; the quantized types are opt-in via the API
     OutputDType.INT8,
     OutputDType.UINT8,
     OutputDType.BINARY,
@@ -498,6 +499,63 @@ cohere_eng_light_3 = ModelMeta(
     use_instructions=True,
     public_training_code=None,
     public_training_data=None,  # assumed
+    training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
+)
+
+
+cohere_embed_v5_pro = ModelMeta(
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
+        model_prompts=model_prompts,
+    ),
+    name="Cohere/Cohere-embed-v5.0-pro",
+    model_type=["dense"],
+    languages=supported_languages,
+    open_weights=False,
+    revision="1",
+    release_date=None,
+    n_parameters=None,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=8192,
+    embed_dim=2048,
+    reference="https://docs.cohere.com/docs/cohere-embed",
+    license=None,
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
+    training_datasets=None,
+    output_dtypes=OUTPUT_TYPES,
+    extra_requirements_groups=["cohere"],
+)
+
+cohere_embed_v5_fast = ModelMeta(
+    loader=CohereTextEmbeddingModel,
+    loader_kwargs=dict(
+        model_prompts=model_prompts,
+    ),
+    name="Cohere/Cohere-embed-v5.0-fast",
+    model_type=["dense"],
+    languages=supported_languages,
+    open_weights=False,
+    revision="1",
+    release_date=None,
+    n_parameters=None,
+    n_embedding_parameters=None,
+    memory_usage_mb=None,
+    max_tokens=8192,
+    embed_dim=2048,
+    reference="https://docs.cohere.com/docs/cohere-embed",
+    license=None,
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["API"],
+    use_instructions=True,
+    public_training_code=None,
+    public_training_data=None,
     training_datasets=None,
     output_dtypes=OUTPUT_TYPES,
     extra_requirements_groups=["cohere"],

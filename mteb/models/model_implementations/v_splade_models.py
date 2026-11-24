@@ -4,13 +4,16 @@ from mteb.models.model_implementations.colpali_models import COLPALI_TRAINING_DA
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SparseEncoderWrapper
 
-V_SPLADE_CITATION = """@misc{cho2026vsplade,
-  title         = {Inference-Free Multimodal Learned Sparse Retrieval for Production-Scale Visual Document Search},
-  author        = {Cho, Gyu-Hwung and Lee, Youngjune and Jeong, Kiyoon and Lee, Siyoung and Han, Sanggyu and Dejean, Herv{\\'e} and Clinchant, St{\\'e}phane and Hwang, Seung-won},
-  year          = {2026},
-  eprint        = {2605.30917},
-  archivePrefix = {arXiv},
-  primaryClass  = {cs.IR}
+V_SPLADE_CITATION = """@inproceedings{cho2026vsplade,
+  author = {Cho, Gyu-Hwung and Lee, Youngjune and Jeong, Kiyoon and Lee, Siyoung and Han, Sanggyu and Déjean, Hervé and Clinchant, Stéphane and Hwang, Seung-won},
+  booktitle = {Proceedings of the 35th ACM International Conference on Information and Knowledge Management},
+  doi = {10.1145/3799682.3840581},
+  month = {Nov},
+  pages = {783–794},
+  publisher = {ACM},
+  title = {Inference-Free Multimodal Learned Sparse Retrieval for Production-Scale Visual Document Search},
+  url = {https://doi.org/10.1145/3799682.3840581},
+  year = {2026},
 }"""
 
 RLHN_680K_TRAINING_DATA = {

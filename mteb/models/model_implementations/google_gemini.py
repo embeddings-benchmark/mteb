@@ -72,15 +72,18 @@ GEMINI_EMBEDDING_CITATION = """@misc{lee2025geminiembeddinggeneralizableembeddin
   url={https://arxiv.org/abs/2503.07891},
 }"""
 
-GEMINI_EMBEDDING_2_CITATION = """@misc{shanbhogue2026geminiembedding2native,
-  title={Gemini Embedding 2: A Native Multimodal Embedding Model from Gemini},
-  author={Madhuri Shanbhogue and Zhe Li and Shanfeng Zhang and Gustavo Hernández Ábrego and Shih-Cheng Huang and Aashi Jain and Daniel Salz and Sonam Goenka and Chaitra Hegde and Ji Ma and Feiyang Chen and Jiaxing Wu and Tanmaya Dabral and Babak Samari and Kevin Poulet and Daniel Cer and Kaifeng Chen and Paul Suganathan and Hui Hui and Jovan Andonov and Philippe Schlattner and Jay Han and Iftekhar Naim and Wing Lowe and Vladimir Pchelin and Albert Yang and Yi-Ting Chen and Zhongli Ding and Grace Zhang and Georg Heigold and Yichang Chen and Antoine Reveillon and Brendan Mccloskey and Wenlei Zhou and Dahun Kim and Rui Meng and Emma Wang and Jack Zheng and Halley Fede and Zhen Yang and Keegan Mosley and Brian Potetz and Sahil Dua and Henrique Schechter Vera and Shen Gao and Hesen Zhang and Andreas Hess and Hengxuan Ying and Alberto Montes and Karan Gill and Min Choi and Sebastian Russo and Anja Hauth and Jinhyuk Lee and Michael Boratko and Megan Barnes and Vikram Rao and Claudiu Musat and Cyril Allauzen and Ehsan Variani and Shankar Kumar and Tom Bagby and Junyi Jiao and Yang Gu and Tengxin Li and Ayush Agrawal and Roberto Santana and Dev Nath and Stephen Karukas and Shuoxuan Han and Lucia Loher and Alice Twu and Nidhi Vyas and Siddharth Bhai and Frank Palma Gomez and Wangyuan Zhang and Chaoren Liu and Jizheng Yang and Steve Qiu and Shijie Zhang and Sujay Kulkarni and Sascha Rothe and Sean Nakamoto and Raphael Hoffmann and Zach Gleicher and Yunhsuan Sung and Qin Yin and Tom Duerig and Mojtaba Seyedhosseini},
-  year={2026},
-  eprint={2605.27295},
-  archivePrefix={arXiv},
-  primaryClass={cs.CV},
-  url={https://arxiv.org/abs/2605.27295},
-}"""
+GEMINI_EMBEDDING_2_CITATION = """
+@misc{shanbhogue2026geminiembedding2native,
+  doi = {10.48550/arXiv.2605.27295},
+  title = {Gemini Embedding 2: A Native Multimodal Embedding Model from Gemini},
+  author = {Madhuri Shanbhogue and Zhe Li and Shanfeng Zhang and Gustavo Hernández Ábrego and Shih-Cheng Huang and Aashi Jain and Daniel Salz and Sonam Goenka and Chaitra Hegde and Ji Ma and Feiyang Chen and Jiaxing Wu and Tanmaya Dabral and Babak Samari and Kevin Poulet and Daniel Cer and Kaifeng Chen and Paul Suganathan and Hui Hui and Jovan Andonov and Philippe Schlattner and Jay Han and Iftekhar Naim and Wing Lowe and Vladimir Pchelin and Albert Yang and Yi-Ting Chen and Zhongli Ding and Grace Zhang and Georg Heigold and Yichang Chen and Antoine Reveillon and Brendan Mccloskey and Wenlei Zhou and Dahun Kim and Rui Meng and Emma Wang and Jack Zheng and Halley Fede and Zhen Yang and Keegan Mosley and Brian Potetz and Sahil Dua and Henrique Schechter Vera and Shen Gao and Hesen Zhang and Andreas Hess and Hengxuan Ying and Alberto Montes and Karan Gill and Min Choi and Sebastian Russo and Anja Hauth and Jinhyuk Lee and Michael Boratko and Megan Barnes and Vikram Rao and Claudiu Musat and Cyril Allauzen and Ehsan Variani and Shankar Kumar and Tom Bagby and Junyi Jiao and Yang Gu and Tengxin Li and Ayush Agrawal and Roberto Santana and Dev Nath and Stephen Karukas and Shuoxuan Han and Lucia Loher and Alice Twu and Nidhi Vyas and Siddharth Bhai and Frank Palma Gomez and Wangyuan Zhang and Chaoren Liu and Jizheng Yang and Steve Qiu and Shijie Zhang and Sujay Kulkarni and Sascha Rothe and Sean Nakamoto and Raphael Hoffmann and Zach Gleicher and Yunhsuan Sung and Qin Yin and Tom Duerig and Mojtaba Seyedhosseini},
+  year = {2026},
+  eprint = {2605.27295},
+  archivePrefix = {arXiv},
+  primaryClass = {cs.CV},
+  url = {https://arxiv.org/abs/2605.27295},
+}
+"""
 
 
 # Prompt mapping for Gemini Embedding 2.

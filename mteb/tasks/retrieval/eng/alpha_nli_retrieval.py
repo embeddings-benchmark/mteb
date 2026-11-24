@@ -25,11 +25,14 @@ class AlphaNLI(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{bhagavatula2019abductive,
+@inproceedings{bhagavatula2019abductive,
+  archiveprefix = {arXiv},
   author = {Bhagavatula, Chandra and Bras, Ronan Le and Malaviya, Chaitanya and Sakaguchi, Keisuke and Holtzman, Ari and Rashkin, Hannah and Downey, Doug and Yih, Scott Wen-tau and Choi, Yejin},
-  journal = {arXiv preprint arXiv:1908.05739},
+  booktitle = {8th International Conference on Learning Representations, {ICLR} 2020},
+  eprint = {1908.05739},
   title = {Abductive commonsense reasoning},
-  year = {2019},
+  url = {https://openreview.net/forum?id=Byg1v1HKDB},
+  year = {2020},
 }
 
 @article{xiao2024rar,

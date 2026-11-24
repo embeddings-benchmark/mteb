@@ -1,6 +1,18 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
+CMU_ARCTIC_CITATION = r"""
+@techreport{kominek2003cmu,
+  author = {Kominek, John and Black, Alan W.},
+  institution = {Language Technologies Institute, School of Computer Science,
+Carnegie Mellon University},
+  number = {CMU-LTI-03-177},
+  title = {CMU ARCTIC  databases for speech synthesis},
+  url = {http://festvox.org/cmu_arctic/},
+  year = {2003},
+}
+"""
+
 
 class CMUArcticA2TRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
@@ -30,17 +42,7 @@ class CMUArcticA2TRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         superseded_by="CMUArcticA2TRetrieval.v2",
-        bibtex_citation=r"""
-@techreport{kominek2003cmu,
-  author = {Kominek, John and Black, Alan W.},
-  institution = {Language Technologies Institute, School of Computer Science,
-Carnegie Mellon University},
-  number = {CMU-LTI-03-177},
-  title = {CMU ARCTIC  databases for speech synthesis},
-  url = {http://festvox.org/cmu_arctic/},
-  year = {2003},
-}
-""",
+        bibtex_citation=CMU_ARCTIC_CITATION,
     )
 
 
@@ -74,17 +76,7 @@ class CMUArcticT2ARetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         superseded_by="CMUArcticT2ARetrieval.v2",
-        bibtex_citation=r"""
-@techreport{kominek2003cmu,
-  author = {Kominek, John and Black, Alan W.},
-  institution = {Language Technologies Institute, School of Computer Science,
-Carnegie Mellon University},
-  number = {CMU-LTI-03-177},
-  title = {CMU ARCTIC  databases for speech synthesis},
-  url = {http://festvox.org/cmu_arctic/},
-  year = {2003},
-}
-""",
+        bibtex_citation=CMU_ARCTIC_CITATION,
     )
 
 
@@ -117,17 +109,7 @@ class CMUArcticA2TRetrievalV2(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         adapted_from=["CMUArcticA2TRetrieval"],
-        bibtex_citation=r"""
-@techreport{kominek2003cmu,
-  author = {Kominek, John and Black, Alan W.},
-  institution = {Language Technologies Institute, School of Computer Science,
-Carnegie Mellon University},
-  number = {CMU-LTI-03-177},
-  title = {CMU ARCTIC  databases for speech synthesis},
-  url = {http://festvox.org/cmu_arctic/},
-  year = {2003},
-}
-""",
+        bibtex_citation=CMU_ARCTIC_CITATION,
     )
 
 
@@ -162,15 +144,5 @@ class CMUArcticT2ARetrievalV2(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         adapted_from=["CMUArcticT2ARetrieval"],
-        bibtex_citation=r"""
-@techreport{kominek2003cmu,
-  author = {Kominek, John and Black, Alan W.},
-  institution = {Language Technologies Institute, School of Computer Science,
-Carnegie Mellon University},
-  number = {CMU-LTI-03-177},
-  title = {CMU ARCTIC  databases for speech synthesis},
-  url = {http://festvox.org/cmu_arctic/},
-  year = {2003},
-}
-""",
+        bibtex_citation=CMU_ARCTIC_CITATION,
     )

@@ -46,6 +46,7 @@ hybrid_bm25s_e5_rrf = ModelMeta(
     training_datasets=ME5_TRAINING_DATA,
     adapted_from="microsoft/Multilingual-MiniLM-L12-H384",
     citation=MULTILINGUAL_E5_CITATION,
+    output_dtypes=None,
 )
 
 
@@ -81,6 +82,7 @@ hybrid_bm25s_e5_dbsf = ModelMeta(
     training_datasets=ME5_TRAINING_DATA,
     adapted_from="microsoft/Multilingual-MiniLM-L12-H384",
     citation=MULTILINGUAL_E5_CITATION,
+    output_dtypes=None,
 )
 
 
@@ -116,4 +118,5 @@ hybrid_bm25s_e5_rsf = ModelMeta(
     training_datasets=ME5_TRAINING_DATA,
     adapted_from="microsoft/Multilingual-MiniLM-L12-H384",
     citation=MULTILINGUAL_E5_CITATION,
+    output_dtypes=None,
 )

@@ -6,7 +6,7 @@ class BuiltBenchReranking(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="BuiltBenchReranking",
         description="Reranking of built asset entity type/class descriptions given a query describing an entity as represented in well-established industry classification systems such as Uniclass, IFC, etc.",
-        reference="https://arxiv.org/abs/2411.12056",
+        reference="https://doi.org/10.1038/s41598-025-09052-5",
         dataset={
             "path": "mteb/BuiltBenchReranking",
             "revision": "63343e96ffc63a82470fc5bf919ad13951df6c15",
@@ -27,9 +27,16 @@ class BuiltBenchReranking(AbsTaskRetrieval):
         bibtex_citation=r"""
 @article{shahinmoghadam2024benchmarking,
   author = {Shahinmoghadam, Mehrzad and Motamedi, Ali},
-  journal = {arXiv preprint arXiv:2411.12056},
+  doi = {10.1038/s41598-025-09052-5},
+  issn = {2045-2322},
+  journal = {Scientific Reports},
+  month = {July},
+  number = {1},
+  publisher = {Springer Science and Business Media LLC},
   title = {Benchmarking pre-trained text embedding models in aligning built asset information},
-  year = {2024},
+  url = {https://doi.org/10.1038/s41598-025-09052-5},
+  volume = {15},
+  year = {2025},
 }
 """,
         prompt={

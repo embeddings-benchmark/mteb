@@ -12,7 +12,7 @@ class SpeechEditAcousticRetrieval(AbsTaskRetrieval):
             "Each query combines an original speech recording with a natural-language editing instruction, "
             "and the goal is to retrieve the corresponding edited target recording."
         ),
-        reference="https://arxiv.org/abs/2606.01804",
+        reference="https://doi.org/10.18653/2026.emnlp-main.1151",
         dataset={
             "path": "deep9539/speech_edit_acoustic",
             "revision": "27955b1e1dfc1b433602a26f697a9d19de710d36",
@@ -31,10 +31,14 @@ class SpeechEditAcousticRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{zhang2026speecheditbench,
+@inproceedings{zhang2026speecheditbench,
   author = {Zhang, Hanlin and Tan, Daxin and Tao, Dehua and Chen, Xiao and Tan, Haochen and Song, Linqi},
-  journal = {arXiv preprint arXiv:2606.01804},
+  booktitle = {Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/2026.emnlp-main.1151},
+  pages = {26394–26414},
+  publisher = {Association for Computational Linguistics},
   title = {SpeechEditBench: A Bilingual Multi-Attribute Benchmark for Instruction-Guided Speech Editing},
+  url = {https://doi.org/10.18653/2026.emnlp-main.1151},
   year = {2026},
 }
 """,

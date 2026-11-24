@@ -8,7 +8,6 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import FramesCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -269,12 +268,16 @@ class VideoPrismClipWrapper(AbsEncoder):
         )
 
 
-_VIDEOPRISM_CITATION = """@inproceedings{zhao2024videoprism,
+_VIDEOPRISM_CITATION = """
+@inproceedings{zhao2024videoprism,
+  archiveprefix = {arXiv},
+  eprint = {2402.13217},
   title = {{VideoPrism}: A Foundational Visual Encoder for Video Understanding},
   author = {Long Zhao and Nitesh B. Gundavarapu and Liangzhe Yuan and Hao Zhou and Shen Yan and Jennifer J. Sun and Luke Friedman and Rui Qian and Tobias Weyand and Yue Zhao and Rachel Hornung and Florian Schroff and Ming-Hsuan Yang and David A. Ross and Huisheng Wang and Hartwig Adam and Mikhail Sirotenko and Ting Liu and Boqing Gong},
   booktitle = {International Conference on Machine Learning (ICML)},
-  year = {2024}
-}"""
+  year = {2024},
+}
+"""
 
 _VIDEOPRISM_COMMON = dict(
     model_type=["dense"],
@@ -309,7 +312,6 @@ videoprism_base_f16r288 = ModelMeta(
     reference="https://huggingface.co/google/videoprism-base-f16r288",
     loader_kwargs=dict(num_frames=16),
     **_VIDEOPRISM_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 videoprism_large_f8r288 = ModelMeta(
@@ -326,7 +328,6 @@ videoprism_large_f8r288 = ModelMeta(
     reference="https://huggingface.co/google/videoprism-large-f8r288",
     loader_kwargs=dict(num_frames=8),
     **_VIDEOPRISM_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 videoprism_lvt_base_f16r288 = ModelMeta(
@@ -343,7 +344,6 @@ videoprism_lvt_base_f16r288 = ModelMeta(
     reference="https://huggingface.co/google/videoprism-lvt-base-f16r288",
     loader_kwargs=dict(num_frames=16),
     **_VIDEOPRISM_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 videoprism_lvt_large_f8r288 = ModelMeta(
@@ -360,5 +360,4 @@ videoprism_lvt_large_f8r288 = ModelMeta(
     reference="https://huggingface.co/google/videoprism-lvt-large-f8r288",
     loader_kwargs=dict(num_frames=8),
     **_VIDEOPRISM_COMMON,
-    output_dtypes=OutputDType.BF16,
 )

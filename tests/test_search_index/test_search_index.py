@@ -2,6 +2,7 @@ import json
 from copy import deepcopy
 from pathlib import Path
 
+import numpy as np
 import pytest
 
 import mteb
@@ -74,3 +75,53 @@ def test_retrieval_backends(
         assert python_predictions[python_pred_key] == pytest.approx(
             faiss_predictions[faiss_pred_key]
         )
+
+
+@pytest.mark.parametrize("second_candidates", [["d2"], []], ids=["unequal", "empty"])
+def test_faiss_euclidean_reranking_candidate_lengths(
+    second_candidates: list[str],
+) -> None:
+    """Euclidean scores support unequal candidate counts, including empty rows."""
+    pytest.importorskip("faiss", reason="faiss is not installed")
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    model.mteb_model_meta = model.mteb_model_meta.model_copy(
+        update={"similarity_fn_name": ScoringFunction.EUCLIDEAN}
+    )
+    backend = FaissSearchIndex(model)
+    backend.add_documents(
+        np.array([[1, 0], [3, 1], [4, 4]], dtype=np.float32),
+        ["d1", "d2", "d3"],
+    )
+
+    scores, indices = backend.search(
+        np.array([[1, 0], [2, 1]], dtype=np.float32),
+        top_k=5,
+        similarity_fn=model.similarity,
+        top_ranked={"q1": ["d3", "d1", "d2"], "q2": second_candidates},
+        query_idx_to_id={0: "q1", 1: "q2"},
+    )
+
+    # Indices refer to positions within each query's candidate list.
+    assert indices == [[1, 2, 0], [0] if second_candidates else []]
+    assert scores[0] == pytest.approx([0, -np.sqrt(5), -5])
+    assert scores[1] == pytest.approx([-1] if second_candidates else [])
+
+
+def test_faiss_reranking_missing_query_in_top_ranked(tmp_path: Path) -> None:
+    """Evaluation preserves empty results for queries without reranking candidates."""
+    pytest.importorskip("faiss", reason="faiss is not installed")
+    task = MockRerankingTask()
+    task.load_data()
+    del task.dataset["default"]["test"]["top_ranked"]["q2"]
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    wrapper = SearchEncoderWrapper(model, index_backend=FaissSearchIndex(model))
+
+    with pytest.warns(UserWarning, match="No top-ranked documents for query q2"):
+        mteb.evaluate(wrapper, task, prediction_folder=tmp_path, cache=None)
+
+    with task._predictions_path(tmp_path).open(encoding="utf-8") as f:
+        predictions = json.load(f)["default"]["test"]
+
+    assert set(predictions) == {"q1", "q2"}
+    assert set(predictions["q1"]) == {"d1", "d2"}
+    assert predictions["q2"] == {}

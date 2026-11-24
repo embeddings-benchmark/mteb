@@ -8,7 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
-from mteb.types import OutputDType, PromptType
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     import torch
@@ -65,7 +65,11 @@ class PEAudioVisualWrapper(AbsEncoder):
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        from transformers import PeAudioVideoModel, PeAudioVideoProcessor
+        from transformers import (
+            PeAudioVideoConfig,
+            PeAudioVideoModel,
+            PeAudioVideoProcessor,
+        )
 
         self.model_name = model_name
         self.device = device
@@ -73,8 +77,12 @@ class PEAudioVisualWrapper(AbsEncoder):
         self.max_frames = max_frames
         self.num_frames = num_frames
         self.max_samples = max_samples
+        config = PeAudioVideoConfig.from_pretrained(model_name, revision=revision)
+        # Recent transformers leave num_labels at its default of 2 instead of the checkpoint's num_classes
+        vision_config = config.audio_video_config.video_config.vision_config
+        vision_config.num_labels = vision_config.num_classes
         self.model = PeAudioVideoModel.from_pretrained(
-            model_name, revision=revision
+            model_name, revision=revision, config=config
         ).to(self.device)
         self.model.eval()
         # Meta's code pools the CLS token before ModernBERT's final norm
@@ -483,7 +491,6 @@ pe_av_small_16_frame = ModelMeta(
     reference="https://huggingface.co/facebook/pe-av-small-16-frame",
     loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_base_16_frame = ModelMeta(
@@ -498,7 +505,6 @@ pe_av_base_16_frame = ModelMeta(
     reference="https://huggingface.co/facebook/pe-av-base-16-frame",
     loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_large_16_frame = ModelMeta(
@@ -513,7 +519,6 @@ pe_av_large_16_frame = ModelMeta(
     reference="https://huggingface.co/facebook/pe-av-large-16-frame",
     loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_small = ModelMeta(
@@ -527,7 +532,6 @@ pe_av_small = ModelMeta(
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-small",
     **_PE_AV_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_base = ModelMeta(
@@ -541,7 +545,6 @@ pe_av_base = ModelMeta(
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-base",
     **_PE_AV_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_large = ModelMeta(
@@ -555,5 +558,4 @@ pe_av_large = ModelMeta(
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-large",
     **_PE_AV_COMMON,
-    output_dtypes=OutputDType.BF16,
 )

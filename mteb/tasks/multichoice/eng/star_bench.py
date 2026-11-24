@@ -9,10 +9,13 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _BIBTEX = r"""
-@inproceedings{wu2024star,
+@misc{wu2024star,
+  archiveprefix = {arXiv},
+  doi = {10.48550/arXiv.2405.09711},
+  eprint = {2405.09711},
   author = {Wu, Bo and Yu, Shoubin and Chen, Zhenfang and Tenenbaum, Joshua B and Gan, Chuang},
-  booktitle = {Advances in Neural Information Processing Systems},
-  title = {STAR: Situated Reasoning in Real-World Videos},
+  title = {STAR: A Benchmark for Situated Reasoning in Real-World Videos},
+  url = {https://arxiv.org/abs/2405.09711},
   year = {2024},
 }
 """

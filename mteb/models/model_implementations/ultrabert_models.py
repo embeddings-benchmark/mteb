@@ -6,7 +6,6 @@ from typing import Any
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.types import OutputDType
 
 ULTRABERT_EMBED_PROMPTS = {
     "query": "Given a question, retrieve passages that answer the question",
@@ -200,7 +199,6 @@ ultrabert_embed_150m = ModelMeta(
     n_embedding_parameters=37_748_736,
     memory_usage_mb=576,
     embed_dim=768,
-    output_dtypes=OutputDType.BF16,
     license="apache-2.0",
     max_tokens=32768,
     reference="https://huggingface.co/dmis-lab/UltraBERT-Embed-150M",

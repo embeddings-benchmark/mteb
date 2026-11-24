@@ -45,6 +45,10 @@ def test_output_folder_model_meta(task: AbsTask, tmp_path: Path):
     output_path = Path(output_path)
     assert output_path.exists()
     assert output_path.is_dir()
-    assert output_path.name == model.config._commit_hash
+    # sentence-transformers<3.1 has no CrossEncoder.model_card_data; mirror ModelMeta._from_cross_encoder_model
+    expected_revision = getattr(model.config, "_commit_hash", None)
+    if expected_revision is None:
+        expected_revision = model.model_card_data.base_model_revision
+    assert output_path.name == expected_revision
     assert output_path.parent.name == "cross-encoder__ms-marco-TinyBERT-L2-v2"
     assert output_path.parent.parent == tmp_path

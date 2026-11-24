@@ -171,13 +171,21 @@ from .decontaminated_beir import (
 from .dense_webvid_covr_retrieval import DenseWebVidCoVRVT2VRetrieval
 from .didemo_retrieval import (
     DiDeMoA2VRetrieval,
+    DiDeMoA2VRetrievalV2,
     DiDeMoAT2VRetrieval,
+    DiDeMoAT2VRetrievalV2,
     DiDeMoT2VARetrieval,
+    DiDeMoT2VARetrievalV2,
     DiDeMoT2VRetrieval,
+    DiDeMoT2VRetrievalV2,
     DiDeMoV2ARetrieval,
+    DiDeMoV2ARetrievalV2,
     DiDeMoV2TRetrieval,
+    DiDeMoV2TRetrievalV2,
     DiDeMoVA2TRetrieval,
+    DiDeMoVA2TRetrievalV2,
     DiDeMoVT2ARetrieval,
+    DiDeMoVT2ARetrievalV2,
 )
 from .droid_retrieval import DROIDIT2VRetrieval
 from .edir_it2i_retrieval import EDIRIT2IRetrieval
@@ -217,7 +225,7 @@ from .flickr_audio_image_retrieval import (
     FlickrAudioToImageRetrieval,
     FlickrImageToAudioRetrieval,
 )
-from .forb_i2i_retrieval import FORBI2I
+from .forb_i2i_retrieval import FORBI2I, FORBI2IV2
 from .giga_speech import (
     GigaSpeechA2TRetrieval,
     GigaSpeechA2TRetrievalV2,
@@ -229,8 +237,14 @@ from .gl_dv2_i2t_retrieval import GLDv2I2TRetrieval
 from .gov_report_retrieval import GovReportRetrieval
 from .greatest_hits_retrieval import GreatestHitsA2VRetrieval, GreatestHitsV2ARetrieval
 from .hagrid_retrieval import HagridRetrieval
-from .hateful_memes_i2t_retrieval import HatefulMemesI2TRetrieval
-from .hateful_memes_t2i_retrieval import HatefulMemesT2IRetrieval
+from .hateful_memes_i2t_retrieval import (
+    HatefulMemesI2TRetrieval,
+    HatefulMemesI2TRetrievalV2,
+)
+from .hateful_memes_t2i_retrieval import (
+    HatefulMemesT2IRetrieval,
+    HatefulMemesT2IRetrievalV2,
+)
 from .hc3_finance_retrieval import HC3FinanceRetrieval
 from .hella_swag_retrieval import HellaSwag
 from .hi_fi_tts import (
@@ -303,6 +317,10 @@ from .lmeb_retrieval import (
     ProceduralMemBench,
     ReMe,
     ToolBench,
+)
+from .localized_narratives_retrieval import (
+    LocalizedNarrativesA2IRetrieval,
+    LocalizedNarrativesI2ARetrieval,
 )
 from .lombard_grid_retrieval import (
     LombardGridA2VRetrieval,
@@ -439,7 +457,7 @@ from .shot2story_retrieval import (
 )
 from .shs100k_retrieval import SHS100KA2ARetrieval
 from .siqa_retrieval import SIQA
-from .sketchy_i2i_retrieval import SketchyI2IRetrieval
+from .sketchy_i2i_retrieval import SketchyI2IRetrieval, SketchyI2IRetrievalV2
 from .sop_i2i_retrieval import SOPI2IRetrieval
 from .sounding_earth import (
     SoundingEarthA2IRetrieval,
@@ -481,13 +499,21 @@ from .valor_32k_retrieval import (
 )
 from .vatex_retrieval import (
     VATEXA2VRetrieval,
+    VATEXA2VRetrievalV2,
     VATEXAT2VRetrieval,
+    VATEXAT2VRetrievalV2,
     VATEXT2VARetrieval,
+    VATEXT2VARetrievalV2,
     VATEXT2VRetrieval,
+    VATEXT2VRetrievalV2,
     VATEXV2ARetrieval,
+    VATEXV2ARetrievalV2,
     VATEXV2TRetrieval,
+    VATEXV2TRetrievalV2,
     VATEXVA2TRetrieval,
+    VATEXVA2TRetrievalV2,
     VATEXVT2ARetrieval,
+    VATEXVT2ARetrievalV2,
 )
 from .vggsound_av_retrieval import (
     VGGSoundAVA2VRetrieval,
@@ -540,6 +566,7 @@ __all__ = [
     "CUB200I2I",
     "FEVER",
     "FORBI2I",
+    "FORBI2IV2",
     "LMEBMLDR",
     "MSMARCO",
     "MSRVTTA2V",
@@ -709,13 +736,21 @@ __all__ = [
     "DeepPlanning",
     "DenseWebVidCoVRVT2VRetrieval",
     "DiDeMoA2VRetrieval",
+    "DiDeMoA2VRetrievalV2",
     "DiDeMoAT2VRetrieval",
+    "DiDeMoAT2VRetrievalV2",
     "DiDeMoT2VARetrieval",
+    "DiDeMoT2VARetrievalV2",
     "DiDeMoT2VRetrieval",
+    "DiDeMoT2VRetrievalV2",
     "DiDeMoV2ARetrieval",
+    "DiDeMoV2ARetrievalV2",
     "DiDeMoV2TRetrieval",
+    "DiDeMoV2TRetrievalV2",
     "DiDeMoVA2TRetrieval",
+    "DiDeMoVA2TRetrievalV2",
     "DiDeMoVT2ARetrieval",
+    "DiDeMoVT2ARetrievalV2",
     "EDIRIT2IRetrieval",
     "EDIST2ITRetrieval",
     "EMIDA2IRetrieval",
@@ -766,7 +801,9 @@ __all__ = [
     "HC3FinanceRetrieval",
     "HagridRetrieval",
     "HatefulMemesI2TRetrieval",
+    "HatefulMemesI2TRetrievalV2",
     "HatefulMemesT2IRetrieval",
+    "HatefulMemesT2IRetrievalV2",
     "HellaSwag",
     "HiFiTTSA2TRetrieval",
     "HiFiTTSA2TRetrievalV2",
@@ -811,6 +848,8 @@ __all__ = [
     "LitSearchRetrieval",
     "LoCoMo",
     "LoTTERetrieval",
+    "LocalizedNarrativesA2IRetrieval",
+    "LocalizedNarrativesI2ARetrieval",
     "LombardGridA2VRetrieval",
     "LombardGridV2ARetrieval",
     "LombardGridV2VRetrieval",
@@ -931,6 +970,7 @@ __all__ = [
     "Shot2Story20KVA2TRetrieval",
     "Shot2Story20KVT2ARetrieval",
     "SketchyI2IRetrieval",
+    "SketchyI2IRetrievalV2",
     "SoundingEarthA2IRetrieval",
     "SoundingEarthA2IRetrievalV2",
     "SoundingEarthI2ARetrieval",
@@ -971,13 +1011,21 @@ __all__ = [
     "VALOR32KVA2TRetrieval",
     "VALOR32KVT2ARetrieval",
     "VATEXA2VRetrieval",
+    "VATEXA2VRetrievalV2",
     "VATEXAT2VRetrieval",
+    "VATEXAT2VRetrievalV2",
     "VATEXT2VARetrieval",
+    "VATEXT2VARetrievalV2",
     "VATEXT2VRetrieval",
+    "VATEXT2VRetrievalV2",
     "VATEXV2ARetrieval",
+    "VATEXV2ARetrievalV2",
     "VATEXV2TRetrieval",
+    "VATEXV2TRetrievalV2",
     "VATEXVA2TRetrieval",
+    "VATEXVA2TRetrievalV2",
     "VATEXVT2ARetrieval",
+    "VATEXVT2ARetrievalV2",
     "VGGSoundAVA2VRetrieval",
     "VGGSoundAVAT2VRetrieval",
     "VGGSoundAVT2VARetrieval",

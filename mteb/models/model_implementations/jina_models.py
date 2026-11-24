@@ -558,9 +558,15 @@ class JinaV4Wrapper(AbsEncoder):
             and embeddings
             and isinstance(embeddings[0], torch.Tensor)
         ):
-            # Multi-vector embeddings have one vector per token or image patch.
-            # Their sequence lengths vary by input, so they must remain ragged.
-            embeddings = [e.cpu().detach().float() for e in embeddings]
+            if self.vector_type == "multi_vector":
+                # Multi-vector embeddings have one vector per token or image patch.
+                # Their sequence lengths vary by input, so they must remain ragged.
+                embeddings = [e.cpu().detach().float() for e in embeddings]
+            else:
+                # Single-vector embeddings all have the same size.
+                embeddings = (
+                    torch.stack(list(embeddings)).cpu().detach().float().numpy()
+                )
         return embeddings
 
     def get_text_embeddings(
@@ -693,7 +699,7 @@ class JinaV4Wrapper(AbsEncoder):
         scores = (
             torch.einsum("bd,cd->bc", qs_stacked, ps_stacked).to(torch.float32).cpu()
         )
-        return scores.squeeze(0) if scores.shape[0] == 1 else scores
+        return scores
 
     def score_multi_vector(
         self,
@@ -1051,7 +1057,6 @@ jina_embeddings_v5_text_small = ModelMeta(
       url={https://arxiv.org/abs/2602.15547},
 }""",
     extra_requirements_groups=["peft"],
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -1162,7 +1167,6 @@ jina_embeddings_v5_omni_small = ModelMeta(
       url={https://arxiv.org/abs/2602.15547},
 }""",
     extra_requirements_groups=["peft"],
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -1217,7 +1221,6 @@ jina_embeddings_v5_omni_nano = ModelMeta(
       url={https://arxiv.org/abs/2602.15547},
 }""",
     extra_requirements_groups=["peft"],
-    output_dtypes=OutputDType.BF16,
 )
 
 jina_reranker_v3 = ModelMeta(
@@ -1256,7 +1259,6 @@ jina_reranker_v3 = ModelMeta(
       url={https://arxiv.org/abs/2509.25085},}
 """,
     superseded_by="jinaai/jina-reranker-v3.5",
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -1295,7 +1297,6 @@ jina_reranker_v3_5 = ModelMeta(
       primaryClass={cs.IR},
       url={https://arxiv.org/abs/2607.18152},
 }""",
-    output_dtypes=OutputDType.BF16,
 )
 
 jina_embeddings_v4 = Jinav4ModelMeta(
@@ -1331,17 +1332,21 @@ jina_embeddings_v4 = Jinav4ModelMeta(
     public_training_data=None,
     training_datasets=JinaV4_TRAINING_DATA,
     adapted_from="Qwen/Qwen2.5-VL-3B-Instruct",
-    citation="""@misc{günther2025jinaembeddingsv4universalembeddingsmultimodal,
-      title={jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
-      author={Michael Günther and Saba Sturua and Mohammad Kalim Akram and Isabelle Mohr and Andrei Ungureanu and Sedigheh Eslami and Scott Martens and Bo Wang and Nan Wang and Han Xiao},
-      year={2025},
-      eprint={2506.18902},
-      archivePrefix={arXiv},
-      primaryClass={cs.AI},
-      url={https://arxiv.org/abs/2506.18902},
+    citation="""@inproceedings{günther2025jinaembeddingsv4universalembeddingsmultimodal,
+  address = {Suzhuo, China},
+  author = {G{\\"u}nther, Michael and Sturua, Saba and Akram, Mohammad Kalim and Mohr, Isabelle and Ungureanu, Andrei and Wang, Bo and Eslami, Sedigheh and Martens, Scott and Werk, Maximilian and Wang, Nan and Xiao, Han},
+  booktitle = {Proceedings of the 5th Workshop on Multilingual Representation Learning ({MRL} 2025)},
+  doi = {10.18653/v1/2025.mrl-main.36},
+  editor = {Adelani, David Ifeoluwa and Arnett, Catherine and Ataman, Duygu and Chang, Tyler A. and Gonen, Hila and Raja, Rahul and Schmidt, Fabian and Stap, David and Wang, Jiayi},
+  isbn = {979-8-89176-345-6},
+  month = {nov},
+  pages = {531--550},
+  publisher = {Association for Computational Linguistics},
+  title = {jina-embeddings-v4: Universal Embeddings for Multimodal Multilingual Retrieval},
+  url = {https://aclanthology.org/2025.mrl-main.36/},
+  year = {2025},
 }""",
     extra_requirements_groups=["jina-v4"],
-    output_dtypes=OutputDType.BF16,
 )
 
 jina_embeddings_v3 = ModelMeta(
@@ -1596,13 +1601,18 @@ jina_embedding_b_en_v1 = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
-    citation="""@misc{günther2023jina,
-      title={Jina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
-      author={Michael Günther and Louis Milliken and Jonathan Geuter and Georgios Mastrapas and Bo Wang and Han Xiao},
-      year={2023},
-      eprint={2307.11224},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+    citation="""@inproceedings{günther2023jina,
+  address = {Singapore},
+  author = {G{\\"u}nther, Michael and Milliken, Louis and Geuter, Jonathan and Mastrapas, Georgios and Wang, Bo and Xiao, Han},
+  booktitle = {Proceedings of the 3rd Workshop for Natural Language Processing Open Source Software ({NLP}-{OSS} 2023)},
+  doi = {10.18653/v1/2023.nlposs-1.2},
+  editor = {Tan, Liling and Milajevs, Dmitrijs and Chauhan, Geeticka and Gwinnup, Jeremy and Rippeth, Elijah},
+  month = {dec},
+  pages = {8--18},
+  publisher = {Association for Computational Linguistics},
+  title = {{J}ina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
+  url = {https://aclanthology.org/2023.nlposs-1.2/},
+  year = {2023},
 }""",
 )
 
@@ -1654,12 +1664,17 @@ jina_embedding_s_en_v1 = ModelMeta(
     },
     public_training_code=None,
     public_training_data=None,
-    citation="""@misc{günther2023jina,
-      title={Jina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
-      author={Michael Günther and Louis Milliken and Jonathan Geuter and Georgios Mastrapas and Bo Wang and Han Xiao},
-      year={2023},
-      eprint={2307.11224},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL}
+    citation="""@inproceedings{günther2023jina,
+  address = {Singapore},
+  author = {G{\\"u}nther, Michael and Milliken, Louis and Geuter, Jonathan and Mastrapas, Georgios and Wang, Bo and Xiao, Han},
+  booktitle = {Proceedings of the 3rd Workshop for Natural Language Processing Open Source Software ({NLP}-{OSS} 2023)},
+  doi = {10.18653/v1/2023.nlposs-1.2},
+  editor = {Tan, Liling and Milajevs, Dmitrijs and Chauhan, Geeticka and Gwinnup, Jeremy and Rippeth, Elijah},
+  month = {dec},
+  pages = {8--18},
+  publisher = {Association for Computational Linguistics},
+  title = {{J}ina Embeddings: A Novel Set of High-Performance Sentence Embedding Models},
+  url = {https://aclanthology.org/2023.nlposs-1.2/},
+  year = {2023},
 }""",
 )
