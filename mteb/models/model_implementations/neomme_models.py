@@ -384,3 +384,31 @@ neomme_260m_retriever = ModelMeta(
     extra_requirements_groups=["neomme", "image"],
     citation=NEOMME_CITATION,
 )
+
+
+neomme_800m_retriever = ModelMeta(
+    name="Hcompany/NeoMME-800M-Retriever",
+    loader=NeoMMERetrieverWrapper,
+    revision="1a89315b30e2c2fac38b949b35a92ca321e62b24",
+    release_date="2026-09-03",
+    languages=NEOMME_LANGUAGES,
+    n_parameters=793_944_408,
+    n_embedding_parameters=92_274_688,
+    memory_usage_mb=1514,
+    max_tokens=16_384,
+    embed_dim=128,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=False,
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/Hcompany/NeoMME-800M-Retriever",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=True,
+    training_datasets=NEOMME_TRAINING_DATA,
+    adapted_from="Hcompany/NeoMME-800M",
+    modalities=["image", "text"],
+    model_type=["late-interaction"],
+    extra_requirements_groups=["neomme", "image"],
+    citation=NEOMME_CITATION,
+)
