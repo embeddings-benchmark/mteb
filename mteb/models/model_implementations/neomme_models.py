@@ -303,35 +303,61 @@ class NeoMMERetrieverWrapper(AbsEncoder):
         }
 
 
+# English and the 20 FineWeb2-HQ languages in Table 8 of the paper.
+NEOMME_LANGUAGES = [
+    "eng-Latn",
+    "deu-Latn",
+    "fra-Latn",
+    "spa-Latn",
+    "rus-Cyrl",
+    "cmn-Hani",
+    "jpn-Jpan",
+    "ita-Latn",
+    "por-Latn",
+    "pol-Latn",
+    "nld-Latn",
+    "ind-Latn",
+    "tur-Latn",
+    "ces-Latn",
+    "vie-Latn",
+    "swe-Latn",
+    "fas-Arab",
+    "arb-Arab",
+    "ell-Grek",
+    "dan-Latn",
+    "hun-Latn",
+]
+
+# Text: the LightOn fine-tuning mixture. Pages: ColPali, VisRAG and VDR.
+NEOMME_TRAINING_DATA = (
+    denseon_lateon_supervised_data
+    | mdenseon_mlateon_organic_data
+    | mdenseon_mlateon_code_data
+    | COLPALI_TRAINING_DATA
+    | {
+        "VDRMultilingualRetrieval",
+        "VisRAG-Ret-Train-Synthetic-data",
+        "VisRAG-Ret-Train-In-domain-data",
+    }
+)
+
+NEOMME_CITATION = """@misc{lac2026neomme,
+    title={NeoMME: A Single-Tower Multimodal-Native Multilingual Foundation Encoder for Efficient Fine-Tuning and Inference},
+    author={Aurélien Lac and Tony Wu},
+    year={2026},
+    eprint={2609.01657},
+    archivePrefix={arXiv},
+    primaryClass={cs.IR},
+    url={https://arxiv.org/abs/2609.01657},
+}"""
+
+
 neomme_260m_retriever = ModelMeta(
     name="Hcompany/NeoMME-260M-Retriever",
     loader=NeoMMERetrieverWrapper,
     revision="481083153ac22931afbd614e672212bffbcb666e",
     release_date="2026-09-03",
-    # English and the 20 FineWeb2-HQ languages in Table 8 of the paper.
-    languages=[
-        "eng-Latn",
-        "deu-Latn",
-        "fra-Latn",
-        "spa-Latn",
-        "rus-Cyrl",
-        "cmn-Hani",
-        "jpn-Jpan",
-        "ita-Latn",
-        "por-Latn",
-        "pol-Latn",
-        "nld-Latn",
-        "ind-Latn",
-        "tur-Latn",
-        "ces-Latn",
-        "vie-Latn",
-        "swe-Latn",
-        "fas-Arab",
-        "arb-Arab",
-        "ell-Grek",
-        "dan-Latn",
-        "hun-Latn",
-    ],
+    languages=NEOMME_LANGUAGES,
     n_parameters=263_068_978,
     n_embedding_parameters=67_108_864,
     memory_usage_mb=502,
@@ -345,27 +371,10 @@ neomme_260m_retriever = ModelMeta(
     reference="https://huggingface.co/Hcompany/NeoMME-260M-Retriever",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
-    # Text: the LightOn fine-tuning mixture. Pages: ColPali, VisRAG and VDR.
-    training_datasets=denseon_lateon_supervised_data
-    | mdenseon_mlateon_organic_data
-    | mdenseon_mlateon_code_data
-    | COLPALI_TRAINING_DATA
-    | {
-        "VDRMultilingualRetrieval",
-        "VisRAG-Ret-Train-Synthetic-data",
-        "VisRAG-Ret-Train-In-domain-data",
-    },
+    training_datasets=NEOMME_TRAINING_DATA,
     adapted_from="Hcompany/NeoMME-260M",
     modalities=["image", "text"],
     model_type=["late-interaction"],
     extra_requirements_groups=["neomme", "image"],
-    citation="""@misc{lac2026neomme,
-    title={NeoMME: A Single-Tower Multimodal-Native Multilingual Foundation Encoder for Efficient Fine-Tuning and Inference},
-    author={Aurélien Lac and Tony Wu},
-    year={2026},
-    eprint={2609.01657},
-    archivePrefix={arXiv},
-    primaryClass={cs.IR},
-    url={https://arxiv.org/abs/2609.01657},
-}""",
+    citation=NEOMME_CITATION,
 )
