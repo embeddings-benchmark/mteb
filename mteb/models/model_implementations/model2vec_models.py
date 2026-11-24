@@ -490,14 +490,7 @@ blink_code_16m = ModelMeta(
         "SyntheticText2SQL",
     },
     public_training_code=None,
-    public_training_data=(
-        "https://huggingface.co/collections/nomic-ai/cornstack; "
-        "https://huggingface.co/datasets/minishlab/coir-train-hard-negatives; "
-        "https://huggingface.co/datasets/minishlab/cornstack-hard-negatives; "
-        "https://huggingface.co/datasets/minishlab/cornstack-queries-docs; "
-        "https://huggingface.co/datasets/minishlab/tokenlearn-cornstack-docs-coderankembed-v2; "
-        "https://huggingface.co/datasets/minishlab/tokenlearn-cornstack-queries-coderankembed-v2"
-    ),
+    public_training_data="https://huggingface.co/minishlab/blink-code-16M#training",
     citation=MODEL2VEC_CITATION,
 )
 
