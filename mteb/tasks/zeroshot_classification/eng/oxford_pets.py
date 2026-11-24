@@ -11,7 +11,7 @@ class OxfordPetsZeroShotClassification(AbsTaskZeroShotClassification):
         reference="https://arxiv.org/abs/1306.5151",
         dataset={
             "path": "mteb/OxfordPets",
-            "revision": "557b480fae8d69247be74d9503b378a09425096f",
+            "revision": "0aa151cd59d5b9bd21f78c2201b12d24f3c7fd4b",
         },
         type="ZeroShotClassification",
         category="i2t",

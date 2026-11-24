@@ -13,7 +13,7 @@ class Country211ZeroShotClassification(AbsTaskZeroShotClassification):
         reference="https://huggingface.co/datasets/clip-benchmark/wds_country211",
         dataset={
             "path": "mteb/wds_country211",
-            "revision": "c3875324cab4803fa6d3afcd5947a97c84fad4c6",
+            "revision": "c909965b14b8ce3d117da2b2fd40f6134e542b09",
         },
         type="ZeroShotClassification",
         category="i2t",
