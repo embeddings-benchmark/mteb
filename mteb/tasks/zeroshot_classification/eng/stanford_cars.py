@@ -11,7 +11,7 @@ class StanfordCarsZeroShotClassification(AbsTaskZeroShotClassification):
         reference="https://pure.mpg.de/rest/items/item_2029263/component/file_2029262/content",
         dataset={
             "path": "mteb/StanfordCars",
-            "revision": "1977edea87134be9b560e52de81b18f7539d0385",
+            "revision": "09ffe9bc7864d3f1e851529e5c4b7e05601a04fb",
         },
         type="ZeroShotClassification",
         category="i2t",

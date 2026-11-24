@@ -124,7 +124,7 @@ class VidoreDocVQARetrieval(AbsTaskRetrieval):
         reference="https://openreview.net/forum?id=ogjBpZ8uSi",
         dataset={
             "path": "mteb/docvqa_test_subsampled_beir",
-            "revision": "101f4a1a453e13633ca04a3b387034da4089a03a",
+            "revision": "e78cd130055fcb8d69bb0ff4115c4712a157f3d3",
         },
         type="DocumentUnderstanding",
         category="t2i",

@@ -8,7 +8,8 @@ huggingface_hub. Scans and prepares locally by default; --push uploads changes::
     python scripts/reupload_rgb_datasets.py --datasets mteb/OxfordPets --push
 
 Counts below are reported problem counts, not limits: every image is checked.
-Image(mode="RGB") handles conversion; map materializes it before upload.
+RGB images retain their original bytes; non-RGB images are saved as RGB PNGs.
+Each conversion is logged and recorded in the JSON report with its original mode.
 Unreadable images abort that repository before uploading; no rows are dropped.
 Uploads replace affected configs in place. Each config is a separate Hub commit,
 so an interrupted upload can leave a repository partially updated. Rerunning is
@@ -20,6 +21,7 @@ from __future__ import annotations
 import argparse
 import json
 import logging
+from io import BytesIO
 from pathlib import Path
 
 from datasets import DatasetDict, Image, get_dataset_config_names, load_dataset
@@ -47,17 +49,60 @@ def repair_split(dataset, context):
     if not image_columns:
         return dataset, {}
     for column in image_columns:
-        dataset = dataset.cast_column(column, Image(mode="RGB"))
+        dataset = dataset.cast_column(column, Image(decode=False))
 
-    # Casting converts on decode only. Mapping the decoded images back into the
-    # dataset materializes the RGB bytes so push_to_hub uploads converted images.
+    decoder = Image()
+    conversions = []
+
+    def repair_row(row, index):
+        images = {}
+        for column in image_columns:
+            original = row[column]
+            if original is None:
+                images[column] = None
+                continue
+            with decoder.decode_example(original) as image:
+                if image.mode == "RGB":
+                    # Return the storage representation, not a PIL image: the
+                    # latter can re-encode JPEGs and change their pixels.
+                    images[column] = original
+                else:
+                    conversion = {
+                        "row": index,
+                        "column": column,
+                        "original_mode": image.mode,
+                        "original_format": image.format,
+                        "original_path": original.get("path"),
+                    }
+                    buffer = BytesIO()
+                    image.convert("RGB").save(buffer, format="PNG")
+                    images[column] = {"bytes": buffer.getvalue(), "path": None}
+                    conversions.append(conversion)
+                    logger.info(
+                        "%s row=%s column=%s: %s (%s, path=%r) -> RGB PNG",
+                        context,
+                        index,
+                        column,
+                        image.mode,
+                        image.format,
+                        original.get("path"),
+                    )
+        return images
+
     fixed = dataset.map(
-        lambda row: {column: row[column] for column in image_columns},
+        repair_row,
+        with_indices=True,
         load_from_cache_file=False,
         writer_batch_size=32,
         desc=context,
     )
-    return fixed, {"rows": len(fixed), "image_columns": image_columns}
+    for column in image_columns:
+        fixed = fixed.cast_column(column, Image())
+    return fixed, {
+        "rows": len(fixed),
+        "image_columns": image_columns,
+        "conversions": conversions,
+    }
 
 
 def main():

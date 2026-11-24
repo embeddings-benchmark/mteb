@@ -14,7 +14,7 @@ class FER2013Classification(AbsTaskClassification):
         reference="https://arxiv.org/abs/1412.6572",
         dataset={
             "path": "mteb/wds_fer2013",
-            "revision": "7008e82d0991e788e022df586b6d333028729c65",
+            "revision": "d9cabab388cb32bc071a1601ef68cb2f70ca0ba7",
         },
         type="ImageClassification",
         category="i2c",

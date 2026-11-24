@@ -9,7 +9,7 @@ class VQA2IT2TRetrieval(AbsTaskRetrieval):
         reference="https://openaccess.thecvf.com/content_cvpr_2017/html/Goyal_Making_the_v_CVPR_2017_paper.html",
         dataset={
             "path": "mteb/vqa-2",
-            "revision": "dba1f142ff3f7ffc132597bf94421a2be521a153",
+            "revision": "cee84d52b243da575fa9ba71501a8433464a79a1",
         },
         type="Any2AnyRetrieval",
         category="it2t",
