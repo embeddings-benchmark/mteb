@@ -1,98 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
-
-from datasets import concatenate_datasets, load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from collections.abc import Callable
-
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType
-
-
-def _load_data(
-    path: str, splits: str, revision: str | None = None
-) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
-    corpus = {}
-    queries = {}
-    relevant_docs = {}
-
-    dataset = load_dataset(
-        path,
-        revision=revision,
-    )
-    dataset_splits = list(dataset)
-
-    def map_function(
-        split_name: str,
-    ) -> Callable[[dict[str, Any], int], dict[str, Any]]:
-        return lambda x, idx: {
-            "id": f"corpus-{split_name}-{idx}",
-            "text": x["text_corrected"],
-            "modality": "text",
-        }
-
-    split_datasets = {}
-    for split in dataset_splits:
-        split_datasets[split] = dataset[split].filter(
-            lambda example: example["text_corrected"] is not None
-        )
-
-    shared_corpus = concatenate_datasets(
-        [
-            split_datasets[split].map(
-                map_function(split),
-                with_indices=True,
-                remove_columns=[
-                    "split",
-                    "text_ocr",
-                    "text_corrected",
-                    "humor",
-                    "sarcasm",
-                    "offensive",
-                    "motivational",
-                    "sentiment",
-                ],
-            )
-            for split in dataset_splits
-        ]
-    )
-
-    for split in splits:
-        corpus[split] = shared_corpus
-        split_dataset = split_datasets[split]
-
-        queries[split] = split_dataset.map(
-            lambda x, idx, split=split: {
-                "id": f"query-{split}-{idx}",
-                "modality": "image",
-            },
-            with_indices=True,
-            remove_columns=[
-                "split",
-                "text_ocr",
-                "humor",
-                "sarcasm",
-                "offensive",
-                "motivational",
-                "sentiment",
-                "text_corrected",
-            ],
-        )
-
-        relevant_docs[split] = {}
-        for index in range(len(split_dataset)):
-            query_id = f"query-{split}-{index}"
-            doc_id = f"corpus-{split}-{index}"
-            if query_id not in relevant_docs[split]:
-                relevant_docs[split][query_id] = {}
-            relevant_docs[split][query_id][doc_id] = 1
-    return corpus, queries, relevant_docs
 
 
 class MemotionI2TRetrieval(AbsTaskRetrieval):
@@ -101,8 +10,8 @@ class MemotionI2TRetrieval(AbsTaskRetrieval):
         description="Retrieve captions based on memes.",
         reference="https://aclanthology.org/2020.semeval-1.99/",
         dataset={
-            "path": "mteb/MMSoc_Memotion_corrected",
-            "revision": "15bac69b0c917ecd824b8a13827e517b83727878",
+            "path": "mteb/MemotionI2TRetrieval",
+            "revision": "4b431fdea826fc498caf7a1d3c509acbebdb86fa",
         },
         type="Any2AnyRetrieval",
         category="i2t",
@@ -127,14 +36,3 @@ class MemotionI2TRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True

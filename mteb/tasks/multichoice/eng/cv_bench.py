@@ -1,15 +1,13 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 from datasets import Dataset, load_dataset
 
 from mteb.abstasks import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from mteb.types import RelevantDocumentsType, TopRankedDocumentsType
 
 
 def _load_data(
@@ -17,12 +15,7 @@ def _load_data(
     splits: list[str],
     revision: str | None = None,
     subtask: str = "Count",
-) -> tuple[
-    dict[str, Dataset],
-    dict[str, Dataset],
-    dict[str, RelevantDocumentsType],
-    dict[str, TopRankedDocumentsType],
-]:
+) -> dict[str, RetrievalSplitData]:
     corpus = {}
     queries = {}
     relevant_docs = {}
@@ -93,7 +86,15 @@ def _load_data(
             for corpus_id in relevant:
                 top_ranked[split][query_id].append(corpus_id)
 
-    return corpus, queries, relevant_docs, top_ranked
+    return {
+        split: RetrievalSplitData(
+            corpus=corpus[split],
+            queries=queries[split],
+            relevant_docs=relevant_docs[split],
+            top_ranked=top_ranked[split],
+        )
+        for split in splits
+    }
 
 
 def transform_choices(example: dict[str, Any]) -> dict[str, Any]:
@@ -138,12 +139,14 @@ class CVBenchCount(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            subtask="Count",
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+                subtask="Count",
+            )
+        }
         self.data_loaded = True
 
 
@@ -183,12 +186,14 @@ class CVBenchRelation(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            subtask="Relation",
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+                subtask="Relation",
+            )
+        }
         self.data_loaded = True
 
 
@@ -228,12 +233,14 @@ class CVBenchDepth(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            subtask="Depth",
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+                subtask="Depth",
+            )
+        }
         self.data_loaded = True
 
 
@@ -273,10 +280,12 @@ class CVBenchDistance(AbsTaskRetrieval):
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            subtask="Distance",
-        )
+        self.dataset = {
+            "default": _load_data(
+                path=self.metadata.dataset["path"],
+                splits=self.metadata.eval_splits,
+                revision=self.metadata.dataset["revision"],
+                subtask="Distance",
+            )
+        }
         self.data_loaded = True

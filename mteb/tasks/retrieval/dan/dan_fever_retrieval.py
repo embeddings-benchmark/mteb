@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -10,8 +6,8 @@ class DanFeverRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="DanFeverRetrieval",
         dataset={
-            "path": "strombergnlp/danfever",
-            "revision": "3b17b754ed5bf356582b93ec11d1c72469f7bb9c",
+            "path": "mteb/DanFeverRetrieval",
+            "revision": "7339a3c35ef27a0bf2af829597bd7d297b69f81c",
         },
         description="A Danish dataset intended for misinformation research. It follows the same format as the English FEVER dataset. DanFeverRetrieval fixed an issue in DanFever where some corpus entries were incorrectly removed.",
         reference="https://aclanthology.org/2021.nodalida-main.47/",
@@ -48,62 +44,6 @@ Derczynski, Leon},
         },
         task_subtypes=["Claim verification"],
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """And transform to a retrieval dataset, which have the following attributes
-
-        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
-        self.queries = dict[query_id, str] #id => query
-        self.relevant_docs = dict[query_id, dict[[doc_id, score]]
-        """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
-        text2id = {}
-
-        for split in self.dataset:
-            self.corpus[split] = {}
-            self.relevant_docs[split] = {}
-            self.queries[split] = {}
-
-            ds = self.dataset[split]
-            claims = ds["claim"]
-            evidences = ds["evidence_extract"]
-            labels = ds["label"]
-            class_labels = ds.features["label"].names
-
-            for claim, evidence, label_id in zip(
-                claims, evidences, labels, strict=True
-            ):
-                claim_is_supported = class_labels[label_id] == "Supported"
-
-                sim = (
-                    1 if claim_is_supported else 0
-                )  # negative for refutes claims - is that what we want?
-
-                if claim not in text2id:
-                    text2id[claim] = str(len(text2id))
-                if evidence not in text2id:
-                    text2id[evidence] = len(text2id)
-
-                claim_id = "Q" + str(text2id[claim])
-                evidence_id = "C" + str(text2id[evidence])
-
-                self.queries[split][claim_id] = claim
-                self.corpus[split][evidence_id] = {"title": "", "text": evidence}
-
-                if claim_id not in self.relevant_docs[split]:
-                    self.relevant_docs[split][claim_id] = {}
-
-                self.relevant_docs[split][claim_id][evidence_id] = sim
 
 
 class DanFever(AbsTaskRetrieval):

@@ -1,47 +1,22 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import datasets
 
 from mteb.abstasks import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType, TopRankedDocumentsType
 
 
 def load_bright_data(
     path: str,
     domain: str,
-    eval_splits: list,
+    is_long: bool = False,
     cache_dir: str | None = None,
     revision: str | None = None,
-) -> tuple[
-    dict[str, Dataset],
-    dict[str, Dataset],
-    dict[str, RelevantDocumentsType],
-    dict[str, TopRankedDocumentsType],
-]:
-    eval_split = eval_splits[0]
-    corpus_name = "documents" if eval_split == "standard" else "long_documents"
-    gold_ids_field = "gold_ids" if eval_split == "standard" else "gold_ids_long"
-
-    corpus = dict.fromkeys(eval_splits)
-    queries = dict.fromkeys(eval_splits)
-    relevant_docs = dict.fromkeys(eval_splits)
-    top_ranked = dict.fromkeys(eval_splits)
-
-    domain_corpus = datasets.load_dataset(
-        path,
-        corpus_name,
-        split=domain,
-        cache_dir=cache_dir,
-        revision=revision,
-    )
+) -> RetrievalSplitData:
     examples = datasets.load_dataset(
         path,
         "examples",
@@ -49,41 +24,38 @@ def load_bright_data(
         cache_dir=cache_dir,
         revision=revision,
     )
-    corpus[eval_split] = {e["id"]: {"text": e["content"]} for e in domain_corpus}
-    queries[eval_split] = {e["id"]: e["query"] for e in examples}
-    relevant_docs[eval_split] = defaultdict(dict)
-    top_ranked[eval_split] = defaultdict(list)
-
-    # Get all document IDs
-    all_doc_ids = [e["id"] for e in domain_corpus]
+    queries = examples.select_columns(["id", "query"]).rename_column("query", "text")
+    corpus_name = "long_documents" if is_long else "documents"
+    gold_ids_field = "gold_ids_long" if is_long else "gold_ids"
+    domain_corpus = datasets.load_dataset(
+        path, corpus_name, split=domain, cache_dir=cache_dir, revision=revision
+    )
+    corpus = domain_corpus.select_columns(["id", "content"]).rename_column(
+        "content", "text"
+    )
+    relevant_docs = defaultdict(dict)
+    top_ranked = {}
+    all_doc_ids = list(corpus["id"])
     have_excluded_ids = False
-
-    for e in examples:
-        qid = e["id"]
-        gold_ids = e[gold_ids_field]
-        for gid in gold_ids:
-            relevant_docs[eval_split][qid].update({gid: 1})
-
-        # Create top_ranked: all documents except excluded_ids
-        excluded_ids = e.get("excluded_ids", [])
+    for example in examples:
+        qid = example["id"]
+        for gid in example[gold_ids_field]:
+            relevant_docs[qid][gid] = 1
+        excluded_ids = example.get("excluded_ids", [])
         if excluded_ids and excluded_ids != ["N/A"]:
             excluded_set = set(excluded_ids)
-            top_ranked[eval_split][qid] = [
+            top_ranked[qid] = [
                 doc_id for doc_id in all_doc_ids if doc_id not in excluded_set
             ]
             have_excluded_ids = True
         else:
-            # No exclusions, use all documents
-            top_ranked[eval_split][qid] = all_doc_ids
-
-    corpus = datasets.DatasetDict(corpus)
-    queries = datasets.DatasetDict(queries)
-    relevant_docs = datasets.DatasetDict(relevant_docs)
-    if have_excluded_ids:
-        top_ranked = datasets.DatasetDict(top_ranked)
-    else:
-        top_ranked = None
-    return corpus, queries, relevant_docs, top_ranked
+            top_ranked[qid] = all_doc_ids
+    return RetrievalSplitData(
+        corpus=corpus,
+        queries=queries,
+        relevant_docs=dict(relevant_docs),
+        top_ranked=top_ranked if have_excluded_ids else None,
+    )
 
 
 _BIBTEX_CITATION = r"""
@@ -127,19 +99,20 @@ class BrightBiologyRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="biology",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="biology",
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -171,19 +144,20 @@ class BrightEarthScienceRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="earth_science",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="earth_science",
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -215,19 +189,20 @@ class BrightEconomicsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="economics",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="economics",
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -259,19 +234,20 @@ class BrightPsychologyRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="psychology",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="psychology",
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -303,19 +279,20 @@ class BrightRoboticsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="robotics",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="robotics",
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -347,19 +324,20 @@ class BrightStackoverflowRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="stackoverflow",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="stackoverflow",
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -391,19 +369,20 @@ class BrightSustainableLivingRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="sustainable_living",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="sustainable_living",
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -435,19 +414,20 @@ class BrightPonyRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="pony",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="pony",
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -479,19 +459,20 @@ class BrightLeetcodeRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="leetcode",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="leetcode",
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -523,19 +504,20 @@ class BrightAopsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="aops",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="aops",
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -567,19 +549,20 @@ class BrightTheoremQATheoremsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="theoremqa_theorems",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="theoremqa_theorems",
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -611,19 +594,20 @@ class BrightTheoremQAQuestionsRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="theoremqa_questions",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="theoremqa_questions",
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -655,19 +639,21 @@ class BrightBiologyLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="biology",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="biology",
+                    is_long=True,
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -699,19 +685,21 @@ class BrightEarthScienceLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="earth_science",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="earth_science",
+                    is_long=True,
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -743,19 +731,21 @@ class BrightEconomicsLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="economics",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="economics",
+                    is_long=True,
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -787,19 +777,21 @@ class BrightPsychologyLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="psychology",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="psychology",
+                    is_long=True,
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -831,19 +823,21 @@ class BrightRoboticsLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="robotics",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="robotics",
+                    is_long=True,
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -875,19 +869,21 @@ class BrightStackoverflowLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="stackoverflow",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="stackoverflow",
+                    is_long=True,
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -919,19 +915,21 @@ class BrightSustainableLivingLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="sustainable_living",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="sustainable_living",
+                    is_long=True,
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True
 
 
@@ -963,17 +961,19 @@ class BrightPonyLongRetrieval(AbsTaskRetrieval):
         bibtex_citation=_BIBTEX_CITATION,
     )
 
-    def load_data(self, **kwargs: Any):
+    def load_data(self, **kwargs: Any) -> None:
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs, self.top_ranked = (
-            load_bright_data(
-                path=self.metadata.dataset["path"],
-                eval_splits=self.metadata.eval_splits,
-                domain="pony",
-                cache_dir=kwargs.get("cache_dir"),
-                revision=self.metadata.dataset["revision"],
-            )
-        )
+        self.dataset = {
+            "default": {
+                self.eval_splits[0]: load_bright_data(
+                    path=self.metadata.dataset["path"],
+                    domain="pony",
+                    is_long=True,
+                    cache_dir=kwargs.get("cache_dir"),
+                    revision=self.metadata.dataset["revision"],
+                )
+            }
+        }
         self.data_loaded = True

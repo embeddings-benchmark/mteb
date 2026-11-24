@@ -1,17 +1,13 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
 import datasets
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType
 
 _EVAL_LANGS = {
     "bengali": ["ben-Beng"],
@@ -32,60 +28,40 @@ logger = logging.getLogger(__name__)
 
 
 def _load_data_retrieval(
-    path: str, langs: list, splits: str, revision: str | None = None
-) -> tuple[
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, RelevantDocumentsType]],
-]:
-    corpus = {lang: {split: {} for split in splits} for lang in langs}
-    queries = {lang: {split: {} for split in splits} for lang in langs}
-    relevant_docs = {lang: {split: {} for split in splits} for lang in langs}
-
-    split = _EVAL_SPLIT
-
+    path: str, langs: list, splits: list[str], revision: str | None = None
+) -> dict[str, dict[str, RetrievalSplitData]]:
+    dataset = {lang: {} for lang in langs}
     for lang in langs:
-        qrels_data = datasets.load_dataset(
-            path,
-            name=f"{lang}-qrels",
-            revision=revision,
-        )[split]
-
-        for row in qrels_data:
-            query_id = row["query-id"]
-            doc_id = row["corpus-id"]
-            score = row["score"]
-            if query_id not in relevant_docs[lang][split]:
-                relevant_docs[lang][split][query_id] = {}
-            relevant_docs[lang][split][query_id][doc_id] = score
-
-        corpus_data = datasets.load_dataset(
-            path,
-            name=f"{lang}-corpus",
-            revision=revision,
-        )["train"]
-
-        for row in corpus_data:
-            doc_id = row["_id"]
-            doc_title = row["title"]
-            doc_text = row["text"]
-            corpus[lang][split][doc_id] = {"title": doc_title, "text": doc_text}
-
-        queries_data = datasets.load_dataset(
-            path,
-            name=f"{lang}-queries",
-            revision=revision,
-        )[split]
-
-        for row in queries_data:
-            query_id = row["_id"]
-            query_text = row["text"]
-            queries[lang][split][query_id] = query_text
-
-        queries = queries  # noqa: PLW0127
-        logger.info("Loaded %d %s Queries.", len(queries), split.upper())
-
-    return corpus, queries, relevant_docs
+        corpus = (
+            datasets.load_dataset(
+                path, name=f"{lang}-corpus", revision=revision, split="train"
+            )
+            .rename_column("_id", "id")
+            .select_columns(["id", "title", "text"])
+        )
+        for split in splits:
+            queries = (
+                datasets.load_dataset(
+                    path, name=f"{lang}-queries", revision=revision, split=split
+                )
+                .rename_column("_id", "id")
+                .select_columns(["id", "text"])
+            )
+            qrels = datasets.load_dataset(
+                path, name=f"{lang}-qrels", revision=revision, split=split
+            )
+            relevant_docs = {}
+            for row in qrels:
+                relevant_docs.setdefault(row["query-id"], {})[row["corpus-id"]] = row[
+                    "score"
+                ]
+            dataset[lang][split] = RetrievalSplitData(
+                corpus=corpus,
+                queries=queries,
+                relevant_docs=relevant_docs,
+                top_ranked=None,
+            )
+    return dataset
 
 
 class MrTidyRetrieval(AbsTaskRetrieval):
@@ -131,7 +107,7 @@ class MrTidyRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_data_retrieval(
+        self.dataset = _load_data_retrieval(
             path=self.metadata.dataset["path"],
             langs=self.hf_subsets,
             splits=self.metadata.eval_splits,

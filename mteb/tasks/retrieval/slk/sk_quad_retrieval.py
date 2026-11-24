@@ -1,7 +1,4 @@
 import logging
-from typing import Any
-
-from datasets import load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
@@ -20,8 +17,8 @@ class SKQuadRetrieval(AbsTaskRetrieval):
         ),
         reference="https://huggingface.co/datasets/TUKE-KEMT/retrieval-skquad",
         dataset={
-            "path": "TUKE-KEMT/retrieval-skquad",
-            "revision": "09f81f51dd5b8497da16d02c69c98d5cb5993ef2",
+            "path": "mteb/SKQuadRetrieval",
+            "revision": "8c8f19417e986ea1214310ca890f53e1c9823199",
         },
         type="Retrieval",
         category="t2t",
@@ -38,34 +35,3 @@ class SKQuadRetrieval(AbsTaskRetrieval):
         sample_creation="found",
         bibtex_citation="",
     )
-
-    def load_data(self, eval_splits: list[str] | None = None, **kwargs: Any) -> None:
-        """Load and preprocess datasets for retrieval task."""
-        eval_splits = eval_splits or ["test"]
-
-        # Load datasets
-        ds_default = load_dataset("TUKE-KEMT/retrieval-skquad", "default")
-        ds_corpus = load_dataset("TUKE-KEMT/retrieval-skquad", "corpus")
-        ds_query = load_dataset("TUKE-KEMT/retrieval-skquad", "queries")
-
-        if "test" in eval_splits:
-            # Corpus, Queries, and Relevance dictionary for 'test' split
-            self.corpus = {
-                "test": {
-                    row["_id"]: {"text": row["text"], "title": row["title"]}
-                    for row in ds_corpus["corpus"]
-                }
-            }
-            self.queries = {
-                "test": {row["_id"]: row["text"] for row in ds_query["queries"]}
-            }
-            self.relevant_docs = {"test": {}}
-
-            for row in ds_default["test"]:
-                self.relevant_docs["test"].setdefault(row["query-id"], {})[
-                    row["corpus-id"]
-                ] = int(row["score"])
-
-            logger.info(
-                f"Data Loaded:\n- Corpus size: {len(self.corpus['test'])}\n- Query size: {len(self.queries['test'])}\n- Relevance entries: {len(self.relevant_docs['test'])}"
-            )

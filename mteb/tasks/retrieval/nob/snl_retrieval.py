@@ -1,7 +1,3 @@
-from typing import Any
-
-import datasets
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -10,8 +6,8 @@ class SNLRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="SNLRetrieval",
         dataset={
-            "path": "adrlau/navjordj-SNL_summarization_copy",  # TODO: replace with mteb/SNLRetrieval after #2820 is resolved.
-            "revision": "22c474c88fb4678052f9099bb917ad8f9e155f9f",
+            "path": "mteb/SNLRetrieval",
+            "revision": "6c0b6700612eba05b9bed0b858dcceda1ded0174",
         },
         description="Webscrabed articles and ingresses from the Norwegian lexicon 'Det Store Norske Leksikon'.",
         reference="https://huggingface.co/datasets/mteb/SNLRetrieval",
@@ -38,47 +34,3 @@ class SNLRetrieval(AbsTaskRetrieval):
         prompt={"query": "Given a lexicon headline in Norwegian, retrieve its article"},
         task_subtypes=["Article retrieval"],
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """Load dataset from HuggingFace hub"""
-        if self.data_loaded:
-            return
-        self.dataset = datasets.load_dataset(**self.metadata.dataset)
-        self.dataset_transform()
-        self.data_loaded = True
-
-    def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        """And transform to a retrieval dataset, which have the following attributes
-
-        self.corpus = dict[doc_id, dict[str, str]] #id => dict with document data like title and text
-        self.queries = dict[query_id, str] #id => query
-        self.relevant_docs = dict[query_id, dict[[doc_id, score]]
-        """
-        self.corpus = {}
-        self.relevant_docs = {}
-        self.queries = {}
-        text2id = {}
-
-        for split in self.dataset:
-            ds: datasets.Dataset = self.dataset[split]
-            ds = ds.shuffle(seed=42)
-
-            self.queries[split] = {}
-            self.relevant_docs[split] = {}
-            self.corpus[split] = {}
-
-            headline = ds["headline"]
-            article = ds["article"]
-
-            n = 0
-            for headl, art in zip(headline, article, strict=True):
-                self.queries[split][str(n)] = headl
-                q_n = n
-                n += 1
-                if art not in text2id:
-                    text2id[art] = n
-                    self.corpus[split][str(n)] = {"title": "", "text": art}
-                    n += 1
-                self.relevant_docs[split][str(q_n)] = {
-                    str(text2id[art]): 1
-                }  # only one correct matches

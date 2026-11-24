@@ -1,17 +1,12 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-from datasets import DatasetDict, Image, load_dataset
+from datasets import Image, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType
 
 _LANGUAGES = {
     "de": ["deu-Latn"],
@@ -23,65 +18,6 @@ _LANGUAGES = {
     "tr": ["tur-Latn"],
     "zh": ["zho-Hans"],
 }
-
-
-def _load_xflickrco_data(
-    path: str, langs: list, splits: list[str], revision: str | None = None
-) -> tuple[
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, RelevantDocumentsType]],
-]:
-    corpus = {lang: dict.fromkeys(splits) for lang in langs}
-    queries = {lang: dict.fromkeys(splits) for lang in langs}
-    relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
-
-    split = "test"
-
-    for lang in langs:
-        lang_data = load_dataset(
-            path,
-            revision=revision,
-        )[lang]
-        lang_corpus = lang_data.map(
-            lambda x: {
-                "id": "corpus-" + x["id"],
-                "modality": "image",
-                "image": x["image"],
-            },
-            remove_columns=["sentences"],
-        )
-        lang_corpus = lang_corpus.cast_column("image", Image())
-
-        lang_queries = lang_data.map(
-            lambda x: {
-                "id": "query-" + x["id"],
-                "text": x["sentences"],
-                "modality": "text",
-            },
-            remove_columns=["sentences"],
-        )
-        # None values
-        lang_queries = lang_queries.remove_columns(["image"])
-
-        relevant_docs[lang][split] = {}
-        for row in lang_data:
-            query_id = "query-" + row["id"]
-            corpus_id = "corpus-" + row["id"]
-            score = 1
-            if query_id not in relevant_docs[lang][split]:
-                relevant_docs[lang][split][query_id] = {}
-            relevant_docs[lang][split][query_id][corpus_id] = score
-
-        corpus[lang][split] = lang_corpus
-        queries[lang][split] = lang_queries
-
-    corpus = DatasetDict({lang: DatasetDict(splits) for lang, splits in corpus.items()})
-    queries = DatasetDict(
-        {lang: DatasetDict(splits) for lang, splits in queries.items()}
-    )
-    relevant_docs = DatasetDict(relevant_docs)
-    return corpus, queries, relevant_docs
 
 
 def _load_xflickrco_i2t_data(
@@ -131,8 +67,8 @@ class XFlickr30kCoT2IRetrieval(AbsTaskRetrieval):
         description="Retrieve images based on multilingual descriptions.",
         reference="https://proceedings.mlr.press/v162/bugliarello22a/bugliarello22a.pdf",
         dataset={
-            "path": "mteb/xflickrco",
-            "revision": "4da629e05455d757306174cdc72f2edfe00b9027",
+            "path": "mteb/XFlickr30kCoT2IRetrieval",
+            "revision": "0b0e192defceb4db8df0e7094ee8ad807a73d992",
         },
         type="Any2AnyMultilingualRetrieval",
         category="t2i",
@@ -158,19 +94,6 @@ class XFlickr30kCoT2IRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_xflickrco_data(
-            path=self.metadata.dataset["path"],
-            langs=self.hf_subsets,
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-        )
-
-        self.data_loaded = True
 
 
 class XFlickr30kCoI2TRetrieval(AbsTaskRetrieval):

@@ -3,10 +3,11 @@ from collections import defaultdict
 from typing import Any
 
 import datasets
-from datasets import Audio, DatasetDict
+from datasets import Audio
 from tqdm.auto import tqdm
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_LANGS = {
@@ -77,9 +78,7 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
     def load_data(self, **kwargs: Any):
         if getattr(self, "data_loaded", False):
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -132,9 +131,12 @@ class GoogleSVQA2TRetrieval(AbsTaskRetrieval):
                     str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
                 }
 
-                self.corpus[locale][split] = corpus_ds
-                self.queries[locale][split] = queries_ds
-                self.relevant_docs[locale][split] = relevant_docs_
+                self.dataset.setdefault(locale, {})[split] = RetrievalSplitData(
+                    corpus=corpus_ds,
+                    queries=queries_ds,
+                    relevant_docs=relevant_docs_,
+                    top_ranked=None,
+                )
 
 
 class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
@@ -175,9 +177,7 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
     def load_data(self, **kwargs: Any):
         if getattr(self, "data_loaded", False):
             return
-        self.corpus = defaultdict(DatasetDict)
-        self.queries = defaultdict(DatasetDict)
-        self.relevant_docs = defaultdict(DatasetDict)
+        self.dataset = {}
         self.dataset_transform()
         self.data_loaded = True
 
@@ -228,9 +228,12 @@ class GoogleSVQT2ARetrieval(AbsTaskRetrieval):
                     str(row[id_col]): {str(row[id_col]): 1} for row in lang_dataset
                 }
 
-                self.corpus[locale][split] = corpus_ds
-                self.queries[locale][split] = queries_ds
-                self.relevant_docs[locale][split] = relevant_docs_
+                self.dataset.setdefault(locale, {})[split] = RetrievalSplitData(
+                    corpus=corpus_ds,
+                    queries=queries_ds,
+                    relevant_docs=relevant_docs_,
+                    top_ranked=None,
+                )
 
 
 # Arabic diacritics and tatweel, and hamza forms of alef
@@ -300,7 +303,6 @@ class GoogleSVQA2TRetrievalV2(AbsTaskRetrieval):
         # same rows as v1, then one entry per unique sentence
         v1 = GoogleSVQA2TRetrieval()
         v1.load_data()
-        v1.convert_v1_dataset_format_to_v2(num_proc=None)
         self.dataset = v1.dataset
         for splits in self.dataset.values():
             for split_data in splits.values():
@@ -335,7 +337,6 @@ class GoogleSVQT2ARetrievalV2(AbsTaskRetrieval):
         # same rows as v1, then one entry per unique sentence
         v1 = GoogleSVQT2ARetrieval()
         v1.load_data()
-        v1.convert_v1_dataset_format_to_v2(num_proc=None)
         self.dataset = v1.dataset
         for splits in self.dataset.values():
             for split_data in splits.values():

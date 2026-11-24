@@ -1,70 +1,7 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
-
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType
-
-
-def _load_data(
-    path: str,
-    splits: list[str],
-    revision: str | None = None,
-    num_proc: int | None = None,
-) -> tuple[dict[str, Dataset], dict[str, Dataset], dict[str, RelevantDocumentsType]]:
-    corpus = {}
-    queries = {}
-    relevant_docs = {}
-
-    for split in splits:
-        queries[split] = load_dataset(
-            path,
-            "queries",
-            split=split,
-            revision=revision,
-            num_proc=num_proc,
-        )
-        queries[split] = (
-            queries[split]
-            .rename_column("query-id", "id")
-            .rename_column("query", "text")
-            .select_columns(["id", "text"])
-        )
-
-        corpus[split] = load_dataset(
-            path,
-            "corpus",
-            split=split,
-            revision=revision,
-            num_proc=num_proc,
-        )
-        corpus[split] = (
-            corpus[split]
-            .rename_column("corpus-id", "id")
-            .select_columns(["id", "audio"])
-        )
-
-        qrels = load_dataset(
-            path,
-            "qrels",
-            split=split,
-            revision=revision,
-            num_proc=num_proc,
-        )
-        relevant_docs[split] = {}
-        for row in qrels:
-            relevant_docs[split].setdefault(row["query-id"], {})[row["corpus-id"]] = (
-                int(row["score"])
-            )
-
-    return corpus, queries, relevant_docs
 
 
 class IncompeBenchStrictRetrieval(AbsTaskRetrieval):
@@ -79,8 +16,8 @@ class IncompeBenchStrictRetrieval(AbsTaskRetrieval):
         ),
         reference="https://arxiv.org/abs/2602.11941",
         dataset={
-            "path": "mixedbread-ai/incompebench-strict",
-            "revision": "ad7297f765dcff7e398dccefa0f9caf4b5c81715",
+            "path": "mteb/IncompeBenchStrictRetrieval",
+            "revision": "1185590f69aa460a9d61164f66df920fda7f0013",
         },
         type="Any2AnyRetrieval",
         category="t2a",
@@ -108,18 +45,6 @@ class IncompeBenchStrictRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve music that matches the user's search query."},
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            num_proc=num_proc,
-        )
-        self.data_loaded = True
 
 
 class IncompeBenchLenientRetrieval(AbsTaskRetrieval):
@@ -135,8 +60,8 @@ class IncompeBenchLenientRetrieval(AbsTaskRetrieval):
         ),
         reference="https://arxiv.org/abs/2602.11941",
         dataset={
-            "path": "mixedbread-ai/incompebench-lenient",
-            "revision": "2b96667d0163b3d86a4f9ba36da3869ff41e0f88",
+            "path": "mteb/IncompeBenchLenientRetrieval",
+            "revision": "529032a89c6f8bd166f623322a736d528cf89ca7",
         },
         type="Any2AnyRetrieval",
         category="t2a",
@@ -164,15 +89,3 @@ class IncompeBenchLenientRetrieval(AbsTaskRetrieval):
 """,
         prompt={"query": "Retrieve music that matches the user's search query."},
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-
-        self.corpus, self.queries, self.relevant_docs = _load_data(
-            path=self.metadata.dataset["path"],
-            splits=self.metadata.eval_splits,
-            revision=self.metadata.dataset["revision"],
-            num_proc=num_proc,
-        )
-        self.data_loaded = True

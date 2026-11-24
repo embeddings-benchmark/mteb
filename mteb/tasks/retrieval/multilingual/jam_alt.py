@@ -1,16 +1,12 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import Any
 
-from datasets import Audio, DatasetDict, load_dataset
+from datasets import Audio, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
-
-if TYPE_CHECKING:
-    from datasets import Dataset
-
-    from mteb.types import RelevantDocumentsType
 
 _EVAL_LANGS = {
     "en": ["eng-Latn"],
@@ -28,11 +24,7 @@ def _load_jam_alt_data(
     corpus_column: str,
     qrels_column: str,
     **kwargs: Any,
-) -> tuple[
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, Dataset]],
-    dict[str, dict[str, RelevantDocumentsType]],
-]:
+) -> dict[str, dict[str, RetrievalSplitData]]:
     corpus = {lang: dict.fromkeys(splits) for lang in langs}
     queries = {lang: dict.fromkeys(splits) for lang in langs}
     relevant_docs = {lang: dict.fromkeys(splits) for lang in langs}
@@ -103,13 +95,18 @@ def _load_jam_alt_data(
 
         relevant_docs[lang][split] = qrels
 
-    corpus = DatasetDict({lang: DatasetDict(splits) for lang, splits in corpus.items()})
-    queries = DatasetDict(
-        {lang: DatasetDict(splits) for lang, splits in queries.items()}
-    )
-    relevant_docs = DatasetDict(relevant_docs)
-
-    return corpus, queries, relevant_docs
+    return {
+        lang: {
+            split: RetrievalSplitData(
+                corpus=corpus[lang][split],
+                queries=queries[lang][split],
+                relevant_docs=relevant_docs[lang][split],
+                top_ranked=None,
+            )
+            for split in splits
+        }
+        for lang in langs
+    }
 
 
 class JamAltArtistA2ARetrieval(AbsTaskRetrieval):
@@ -160,7 +157,7 @@ Music Information Retrieval Conference},
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_jam_alt_data(
+        self.dataset = _load_jam_alt_data(
             splits=self.metadata.eval_splits,
             langs=self.hf_subsets,
             dataset_args=self.metadata.dataset,
@@ -218,7 +215,7 @@ Music Information Retrieval Conference},
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_jam_alt_data(
+        self.dataset = _load_jam_alt_data(
             splits=self.metadata.eval_splits,
             langs=self.hf_subsets,
             dataset_args=self.metadata.dataset,
@@ -278,7 +275,7 @@ Music Information Retrieval Conference},
         if self.data_loaded:
             return
 
-        self.corpus, self.queries, self.relevant_docs = _load_jam_alt_data(
+        self.dataset = _load_jam_alt_data(
             splits=self.metadata.eval_splits,
             langs=self.hf_subsets,
             dataset_args=self.metadata.dataset,

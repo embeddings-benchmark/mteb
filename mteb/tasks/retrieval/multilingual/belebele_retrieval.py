@@ -1,8 +1,9 @@
 from typing import Any
 
-from datasets import load_dataset
+from datasets import Dataset, load_dataset
 
 from mteb.abstasks.retrieval import AbsTaskRetrieval
+from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _EVAL_SPLIT = "test"
@@ -222,11 +223,7 @@ class BelebeleRetrieval(AbsTaskRetrieval):
         if self.data_loaded:
             return
 
-        self.queries = {lang_pair: {_EVAL_SPLIT: {}} for lang_pair in self.hf_subsets}
-        self.corpus = {lang_pair: {_EVAL_SPLIT: {}} for lang_pair in self.hf_subsets}
-        self.relevant_docs = {
-            lang_pair: {_EVAL_SPLIT: {}} for lang_pair in self.hf_subsets
-        }
+        self.dataset = {}
 
         languages_to_load = {
             language.replace("-", "_")
@@ -239,6 +236,9 @@ class BelebeleRetrieval(AbsTaskRetrieval):
         }
 
         for lang_pair in self.hf_subsets:
+            corpus = {}
+            queries = {}
+            relevant_docs = {}
             languages = self.metadata.eval_langs[lang_pair]
             lang_corpus, lang_question = (
                 languages[0].replace("-", "_"),
@@ -247,33 +247,42 @@ class BelebeleRetrieval(AbsTaskRetrieval):
             ds_corpus = dataset[lang_corpus]
             ds_question = dataset[lang_question]
 
-            question_ids = {}
-            for row in ds_question:
-                question = row["question"]
-                if question not in question_ids:
-                    question_ids[question] = len(question_ids)
+            question_ids = {
+                question: idx
+                for idx, question in enumerate(dict.fromkeys(ds_question["question"]))
+            }
 
             link_to_context_id = {}
-            context_idx = 0
             for row in ds_corpus:
                 if row["link"] not in link_to_context_id:
-                    context_id = f"C{context_idx}"
+                    context_id = f"C{len(link_to_context_id)}"
                     link_to_context_id[row["link"]] = context_id
-                    self.corpus[lang_pair][_EVAL_SPLIT][context_id] = {
+                    corpus[context_id] = {
                         "title": "",
                         "text": row["flores_passage"],
                     }
-                    context_idx = context_idx + 1  # noqa: PLR6104
 
             for row in ds_question:
-                query = row["question"]
-                query_id = f"Q{question_ids[query]}"
-                self.queries[lang_pair][_EVAL_SPLIT][query_id] = query
+                query_id = f"Q{question_ids[row['question']]}"
+                queries[query_id] = row["question"]
 
                 context_link = row["link"]
                 context_id = link_to_context_id[context_link]
-                if query_id not in self.relevant_docs[lang_pair][_EVAL_SPLIT]:
-                    self.relevant_docs[lang_pair][_EVAL_SPLIT][query_id] = {}
-                self.relevant_docs[lang_pair][_EVAL_SPLIT][query_id][context_id] = 1
+                if query_id not in relevant_docs:
+                    relevant_docs[query_id] = {}
+                relevant_docs[query_id][context_id] = 1
+
+            self.dataset[lang_pair] = {
+                _EVAL_SPLIT: RetrievalSplitData(
+                    corpus=Dataset.from_list(
+                        [{"id": id_, **doc} for id_, doc in corpus.items()]
+                    ),
+                    queries=Dataset.from_list(
+                        [{"id": id_, "text": text} for id_, text in queries.items()]
+                    ),
+                    relevant_docs=relevant_docs,
+                    top_ranked=None,
+                )
+            }
 
         self.data_loaded = True

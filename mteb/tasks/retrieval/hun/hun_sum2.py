@@ -1,7 +1,3 @@
-from typing import Any
-
-from datasets import load_dataset
-
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -10,8 +6,8 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="HunSum2AbstractiveRetrieval",
         dataset={
-            "path": "SZTAKI-HLT/HunSum-2-abstractive",
-            "revision": "24e1445c8180d937f0a16f8ae8a62e77cc952e56",
+            "path": "mteb/HunSum2AbstractiveRetrieval",
+            "revision": "039db2353a8d399d7ff1019d7c06d6f4e23857c1",
         },
         description=(
             "HunSum-2-abstractive is a Hungarian dataset containing news articles along with lead, titles and metadata."
@@ -50,24 +46,3 @@ class HunSum2AbstractiveRetrieval(AbsTaskRetrieval):
 }
 """,
     )
-
-    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
-        if self.data_loaded:
-            return
-        self.corpus, self.queries, self.relevant_docs = {}, {}, {}
-        ds = load_dataset(**self.metadata.dataset, split=self.metadata.eval_splits)
-        ds = dict(zip(self.metadata.eval_splits, ds, strict=True))
-        for split_name, split in ds.items():
-            self.corpus[split_name] = {}
-            self.queries[split_name] = {}
-            self.relevant_docs[split_name] = {}
-            for record in split:
-                self.corpus[split_name]["d" + record["uuid"]] = {
-                    "title": record["title"],
-                    "text": record["article"],
-                }
-                self.queries[split_name]["q" + record["uuid"]] = record["lead"]
-                self.relevant_docs[split_name]["q" + record["uuid"]] = {
-                    "d" + record["uuid"]: 1
-                }
-        self.data_loaded = True
