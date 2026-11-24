@@ -27,7 +27,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
 
-_EMBED_DIMS: dict[str, int] = {"single_vector": 1024, "multi_vector": 128}
+_VECTOR_TYPES = ("single_vector", "multi_vector")
 
 
 def _query_lengths(queries: Array, device: torch.device) -> torch.Tensor:
@@ -41,7 +41,8 @@ class NeoMMERetrieverWrapper(AbsEncoder):
 
     Args:
         vector_type: "multi_vector" (128-d token vectors scored with MaxSim) or
-            "single_vector" (one 1024-d vector scored with cosine).
+            "single_vector" (one vector of the model's hidden size, scored with
+            cosine).
         embed_dim: Must match vector_type if given. Leave it unset with
             "single_vector": ModelMeta.load_model checks it against the
             registered 128.
@@ -62,15 +63,9 @@ class NeoMMERetrieverWrapper(AbsEncoder):
         max_batch_tokens: int = 65536,
         **kwargs: Any,
     ) -> None:
-        if vector_type not in _EMBED_DIMS:
+        if vector_type not in _VECTOR_TYPES:
             raise ValueError(
-                f"vector_type must be one of {list(_EMBED_DIMS)}, got {vector_type!r}"
-            )
-        dimension = _EMBED_DIMS[vector_type]
-        if embed_dim is not None and embed_dim != dimension:
-            raise ValueError(
-                f"{vector_type} gives {dimension}-d vectors, got embed_dim={embed_dim}. "
-                "Leave embed_dim unset: vector_type sets the dimension."
+                f"vector_type must be one of {list(_VECTOR_TYPES)}, got {vector_type!r}"
             )
 
         import torch
@@ -99,6 +94,17 @@ class NeoMMERetrieverWrapper(AbsEncoder):
             .eval()
         )
         self.processor = NeoMMEProcessor.from_pretrained(model_name, revision=revision)
+        # Dense vectors have the hidden size, which differs between model sizes.
+        self.embed_dim: int = (
+            self.model.config.hidden_size
+            if vector_type == "single_vector"
+            else self.model.config.embedding_dim
+        )
+        if embed_dim is not None and embed_dim != self.embed_dim:
+            raise ValueError(
+                f"{vector_type} gives {self.embed_dim}-d vectors, got embed_dim={embed_dim}. "
+                "Leave embed_dim unset: vector_type sets the dimension."
+            )
 
     @property
     def mteb_model_meta(self) -> ModelMeta | None:
@@ -112,7 +118,7 @@ class NeoMMERetrieverWrapper(AbsEncoder):
         if self.vector_type == "single_vector":
             self._mteb_model_meta = meta.model_copy(
                 update={
-                    "embed_dim": _EMBED_DIMS["single_vector"],
+                    "embed_dim": self.embed_dim,
                     "model_type": ["dense"],
                     "similarity_fn_name": ScoringFunction.COSINE,
                 },
@@ -303,35 +309,61 @@ class NeoMMERetrieverWrapper(AbsEncoder):
         }
 
 
+# English and the 20 FineWeb2-HQ languages in Table 8 of the paper.
+NEOMME_LANGUAGES = [
+    "eng-Latn",
+    "deu-Latn",
+    "fra-Latn",
+    "spa-Latn",
+    "rus-Cyrl",
+    "cmn-Hani",
+    "jpn-Jpan",
+    "ita-Latn",
+    "por-Latn",
+    "pol-Latn",
+    "nld-Latn",
+    "ind-Latn",
+    "tur-Latn",
+    "ces-Latn",
+    "vie-Latn",
+    "swe-Latn",
+    "fas-Arab",
+    "arb-Arab",
+    "ell-Grek",
+    "dan-Latn",
+    "hun-Latn",
+]
+
+# Text: the LightOn fine-tuning mixture. Pages: ColPali, VisRAG and VDR.
+NEOMME_TRAINING_DATA = (
+    denseon_lateon_supervised_data
+    | mdenseon_mlateon_organic_data
+    | mdenseon_mlateon_code_data
+    | COLPALI_TRAINING_DATA
+    | {
+        "VDRMultilingualRetrieval",
+        "VisRAG-Ret-Train-Synthetic-data",
+        "VisRAG-Ret-Train-In-domain-data",
+    }
+)
+
+NEOMME_CITATION = """@misc{lac2026neomme,
+    title={NeoMME: A Single-Tower Multimodal-Native Multilingual Foundation Encoder for Efficient Fine-Tuning and Inference},
+    author={Aurélien Lac and Tony Wu},
+    year={2026},
+    eprint={2609.01657},
+    archivePrefix={arXiv},
+    primaryClass={cs.IR},
+    url={https://arxiv.org/abs/2609.01657},
+}"""
+
+
 neomme_260m_retriever = ModelMeta(
     name="Hcompany/NeoMME-260M-Retriever",
     loader=NeoMMERetrieverWrapper,
     revision="481083153ac22931afbd614e672212bffbcb666e",
     release_date="2026-09-03",
-    # English and the 20 FineWeb2-HQ languages in Table 8 of the paper.
-    languages=[
-        "eng-Latn",
-        "deu-Latn",
-        "fra-Latn",
-        "spa-Latn",
-        "rus-Cyrl",
-        "cmn-Hani",
-        "jpn-Jpan",
-        "ita-Latn",
-        "por-Latn",
-        "pol-Latn",
-        "nld-Latn",
-        "ind-Latn",
-        "tur-Latn",
-        "ces-Latn",
-        "vie-Latn",
-        "swe-Latn",
-        "fas-Arab",
-        "arb-Arab",
-        "ell-Grek",
-        "dan-Latn",
-        "hun-Latn",
-    ],
+    languages=NEOMME_LANGUAGES,
     n_parameters=263_068_978,
     n_embedding_parameters=67_108_864,
     memory_usage_mb=502,
@@ -345,27 +377,38 @@ neomme_260m_retriever = ModelMeta(
     reference="https://huggingface.co/Hcompany/NeoMME-260M-Retriever",
     similarity_fn_name=ScoringFunction.MAX_SIM,
     use_instructions=True,
-    # Text: the LightOn fine-tuning mixture. Pages: ColPali, VisRAG and VDR.
-    training_datasets=denseon_lateon_supervised_data
-    | mdenseon_mlateon_organic_data
-    | mdenseon_mlateon_code_data
-    | COLPALI_TRAINING_DATA
-    | {
-        "VDRMultilingualRetrieval",
-        "VisRAG-Ret-Train-Synthetic-data",
-        "VisRAG-Ret-Train-In-domain-data",
-    },
+    training_datasets=NEOMME_TRAINING_DATA,
     adapted_from="Hcompany/NeoMME-260M",
     modalities=["image", "text"],
     model_type=["late-interaction"],
     extra_requirements_groups=["neomme", "image"],
-    citation="""@misc{lac2026neomme,
-    title={NeoMME: A Single-Tower Multimodal-Native Multilingual Foundation Encoder for Efficient Fine-Tuning and Inference},
-    author={Aurélien Lac and Tony Wu},
-    year={2026},
-    eprint={2609.01657},
-    archivePrefix={arXiv},
-    primaryClass={cs.IR},
-    url={https://arxiv.org/abs/2609.01657},
-}""",
+    citation=NEOMME_CITATION,
+)
+
+
+neomme_800m_retriever = ModelMeta(
+    name="Hcompany/NeoMME-800M-Retriever",
+    loader=NeoMMERetrieverWrapper,
+    revision="1a89315b30e2c2fac38b949b35a92ca321e62b24",
+    release_date="2026-09-03",
+    languages=NEOMME_LANGUAGES,
+    n_parameters=793_944_408,
+    n_embedding_parameters=92_274_688,
+    memory_usage_mb=1514,
+    max_tokens=16_384,
+    embed_dim=128,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=False,
+    framework=["PyTorch", "Transformers", "safetensors"],
+    reference="https://huggingface.co/Hcompany/NeoMME-800M-Retriever",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=True,
+    training_datasets=NEOMME_TRAINING_DATA,
+    adapted_from="Hcompany/NeoMME-800M",
+    modalities=["image", "text"],
+    model_type=["late-interaction"],
+    extra_requirements_groups=["neomme", "image"],
+    citation=NEOMME_CITATION,
 )
