@@ -27,7 +27,7 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput
 
-_EMBED_DIMS: dict[str, int] = {"single_vector": 1024, "multi_vector": 128}
+_VECTOR_TYPES = ("single_vector", "multi_vector")
 
 
 def _query_lengths(queries: Array, device: torch.device) -> torch.Tensor:
@@ -41,7 +41,8 @@ class NeoMMERetrieverWrapper(AbsEncoder):
 
     Args:
         vector_type: "multi_vector" (128-d token vectors scored with MaxSim) or
-            "single_vector" (one 1024-d vector scored with cosine).
+            "single_vector" (one vector of the model's hidden size, scored with
+            cosine).
         embed_dim: Must match vector_type if given. Leave it unset with
             "single_vector": ModelMeta.load_model checks it against the
             registered 128.
@@ -62,15 +63,9 @@ class NeoMMERetrieverWrapper(AbsEncoder):
         max_batch_tokens: int = 65536,
         **kwargs: Any,
     ) -> None:
-        if vector_type not in _EMBED_DIMS:
+        if vector_type not in _VECTOR_TYPES:
             raise ValueError(
-                f"vector_type must be one of {list(_EMBED_DIMS)}, got {vector_type!r}"
-            )
-        dimension = _EMBED_DIMS[vector_type]
-        if embed_dim is not None and embed_dim != dimension:
-            raise ValueError(
-                f"{vector_type} gives {dimension}-d vectors, got embed_dim={embed_dim}. "
-                "Leave embed_dim unset: vector_type sets the dimension."
+                f"vector_type must be one of {list(_VECTOR_TYPES)}, got {vector_type!r}"
             )
 
         import torch
@@ -99,6 +94,17 @@ class NeoMMERetrieverWrapper(AbsEncoder):
             .eval()
         )
         self.processor = NeoMMEProcessor.from_pretrained(model_name, revision=revision)
+        # Dense vectors have the hidden size, which differs between model sizes.
+        self.embed_dim: int = (
+            self.model.config.hidden_size
+            if vector_type == "single_vector"
+            else self.model.config.embedding_dim
+        )
+        if embed_dim is not None and embed_dim != self.embed_dim:
+            raise ValueError(
+                f"{vector_type} gives {self.embed_dim}-d vectors, got embed_dim={embed_dim}. "
+                "Leave embed_dim unset: vector_type sets the dimension."
+            )
 
     @property
     def mteb_model_meta(self) -> ModelMeta | None:
@@ -112,7 +118,7 @@ class NeoMMERetrieverWrapper(AbsEncoder):
         if self.vector_type == "single_vector":
             self._mteb_model_meta = meta.model_copy(
                 update={
-                    "embed_dim": _EMBED_DIMS["single_vector"],
+                    "embed_dim": self.embed_dim,
                     "model_type": ["dense"],
                     "similarity_fn_name": ScoringFunction.COSINE,
                 },
