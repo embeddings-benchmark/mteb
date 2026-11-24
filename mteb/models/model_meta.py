@@ -505,8 +505,33 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         **kwargs: Any,
     ) -> MTEBModels:
         """Loads the model using the specified loader function."""
-        # create a copy so that changing the model meta on the model does not influence the original meta
         self._check_requirements()
+        resolved = self._prepare_load_model(
+            device=device, embed_dim=embed_dim, **kwargs
+        )
+        loader = cast("Callable[..., MTEBModels]", resolved.loader)
+        try:
+            model = loader(
+                resolved.name, revision=resolved.revision, **resolved.loader_kwargs
+            )
+        except ModuleNotFoundError as e:
+            if e.name is None or e.name.split(".")[0] not in _FULL_INSTALL_DEPENDENCIES:
+                raise
+            raise ModuleNotFoundError(
+                _full_installation_message(f"Loading {resolved.name}"), name=e.name
+            ) from e
+        model.mteb_model_meta = resolved  # type: ignore[misc]
+        return model
+
+    def _prepare_load_model(
+        self,
+        device: str | None = None,
+        *,
+        embed_dim: int | None = None,
+        **kwargs: Any,
+    ) -> ModelMeta:
+        """Resolve loading metadata without allocating model weights or checking extras."""
+        # create a copy so that changing the model meta on the model does not influence the original meta
         _self = self.model_copy(deep=True)
 
         if _self.loader is None:
@@ -516,9 +541,6 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
         if _self.name is None:
             raise ValueError("name is not set for ModelMeta. Cannot load model.")
 
-        loader = _self.loader
-        name = _self.name
-        revision = _self.revision
         updates: dict[str, Any] = {}
         base_exp_kwargs = (
             dict(_self.experiment_kwargs) if _self.experiment_kwargs else {}
@@ -555,24 +577,7 @@ class ModelMeta(BaseModel):  # noqa: PLR0904
             _kwargs["device"] = device
 
         updates["loader_kwargs"] = _kwargs
-        _self = _self.model_copy(update=updates)
-        try:
-            model: MTEBModels = loader(
-                name,
-                revision=revision,
-                **_kwargs,
-            )
-        except ModuleNotFoundError as e:
-            # `mteb-core` can use tasks and results, but loading models needs a full installation
-            if e.name is None or e.name.split(".")[0] not in _FULL_INSTALL_DEPENDENCIES:
-                raise
-            # not a precondition like the other call sites: which packages a model needs depends on
-            # the model
-            raise ModuleNotFoundError(
-                _full_installation_message(f"Loading {name}"), name=e.name
-            ) from e
-        model.mteb_model_meta = _self  # type: ignore[misc]
-        return model
+        return _self.model_copy(update=updates)
 
     def _check_requirements(self) -> None:
         groups = self._resolve_extras_groups()

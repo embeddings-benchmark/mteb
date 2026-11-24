@@ -8,6 +8,12 @@ from .models_protocols import (
     MTEBModels,
     SearchProtocol,
 )
+from .multiprocess_encoder import (
+    MultiProcessCrossEncoder,
+    MultiProcessCrossEncoderConfig,
+    MultiProcessEncoder,
+    MultiProcessEncoderConfig,
+)
 from .openai_wrappers import (
     OpenAIAPIEncodeWrapper,
     OpenAIAPIRerankWrapper,
@@ -41,6 +47,10 @@ __all__ = [
     "IndexEncoderSearchProtocol",
     "MTEBModels",
     "ModelMeta",
+    "MultiProcessCrossEncoder",
+    "MultiProcessCrossEncoderConfig",
+    "MultiProcessEncoder",
+    "MultiProcessEncoderConfig",
     "MultiVectorSearchEncoderWrapper",
     "MultiVectorWrapper",
     "OpenAIAPIEncodeWrapper",
