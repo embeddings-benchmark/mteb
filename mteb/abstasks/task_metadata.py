@@ -4,6 +4,7 @@ import json
 import logging
 import re
 from collections.abc import Sequence
+from enum import Enum
 from pathlib import Path
 from typing import (
     TYPE_CHECKING,
@@ -436,8 +437,13 @@ class MetadataDatasetDict(TypedDict, total=False):
     trust_remote_code: bool
 
 
-NoBibtexSpecified: Final[Literal[False]] = False
-"""Sentinel indicating that a task citation has not been checked."""
+class CitationStatus(Enum):
+    """Status of a task citation that has not been checked."""
+
+    UNSPECIFIED = -1
+
+
+NoBibtexSpecified: Final = CitationStatus.UNSPECIFIED
 
 
 class TaskMetadata(BaseModel):
@@ -507,7 +513,7 @@ class TaskMetadata(BaseModel):
     dialect: list[str] | None = None
 
     sample_creation: SampleCreationMethod | None = None
-    bibtex_citation: str | None | Literal[False] = NoBibtexSpecified
+    bibtex_citation: str | None | CitationStatus = NoBibtexSpecified
     adapted_from: Sequence[str] | None = None
     is_public: bool = True
     contributed_by: str | None = None
