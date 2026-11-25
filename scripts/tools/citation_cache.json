@@ -11700,6 +11700,16 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "wang2026evieevidencevectorinformedembeddingsvisual||2610.11553|evie: evidence-vector-informed embeddings for visual document retrieval|2026": {
+            "stored_at": 1795639024.324358,
+            "value": {
+                "verdict": "OK",
+                "found_title": "EVIE: Evidence-Vector-Informed Embeddings for Visual Document Retrieval",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
         }
     }
 }
