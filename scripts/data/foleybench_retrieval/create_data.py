@@ -125,7 +125,8 @@ def _ffprobe_streams(path: Path) -> set[str]:
          "-of", "csv=p=0", str(path)],
         capture_output=True, text=True, timeout=60, check=True,
     ).stdout  # fmt: skip
-    return {line.strip() for line in out.splitlines() if line.strip()}
+    # Some streams print extra empty fields (e.g. "video,"), so keep the first field only.
+    return {line.split(",")[0].strip() for line in out.splitlines() if line.strip()}
 
 
 def _pcm_md5(path: Path) -> str:
