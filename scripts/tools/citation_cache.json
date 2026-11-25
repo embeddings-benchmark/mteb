@@ -11710,6 +11710,16 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "formal2026sparseupbetterrecipestraining||2611.09680|sparseup: towards better recipes for training modern learned sparse retrievers|2026": {
+            "stored_at": 1795640875.8359964,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SPARSEUP: Towards Better Recipes for Training Modern Learned Sparse Retrievers",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
         }
     }
 }
