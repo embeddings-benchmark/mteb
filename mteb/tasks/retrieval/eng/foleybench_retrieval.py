@@ -8,11 +8,11 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _BASE_DATASET = {
     "path": "mteb/FoleyBench",
-    "revision": "535ac1ca0cbdc60e4dd0a6680c6f5886dd5052d4",
+    "revision": "0398a0760b12bc3d142c0fc79ce100ee283c84d1",
 }
 _LONG_DATASET = {
     "path": "mteb/FoleyBenchLong",
-    "revision": "a22a29562c9d84f6db83790c1cc1da09d8548aaf",
+    "revision": "635c0bf80f53e1619632d50b3fcd07ffb4c3a3cd",
 }
 _BIBTEX = r"""
 @inproceedings{dixit2026foleybench,
@@ -40,16 +40,15 @@ _COMMON = {
 _BASE_DESCRIPTION = (
     "FoleyBench is a benchmark for Foley-style video-to-audio generation: ~10-second "
     "clips from FineVideo, V3C1 and LVBench, filtered so that the sound is non-speech, "
-    "non-music and caused by something visible on screen. 4,998 of its 5,000 clips are "
-    "used (one pair of different videos with an identical soundtrack is dropped), each "
-    "split into a silent video (re-encoded to at most 360 px high) and its audio track. "
+    "non-music and caused by something visible on screen. All 5,000 clips are used, "
+    "each split into a silent video (re-encoded to at most 360 px high) and its audio "
+    "track. "
 )
 _LONG_DESCRIPTION = (
     "FoleyBench-Long is the long-clip set of FoleyBench, a benchmark for Foley-style "
     "video-to-audio generation: 653 30-second clips from FineVideo and V3C1, filtered "
     "so that the sound is non-speech, non-music and caused by something visible on "
-    "screen. 651 of its 653 clips are used (one pair of different videos with an "
-    "identical soundtrack is dropped), each split into a silent video (re-encoded to at "
+    "screen. All 653 clips are used, each split into a silent video (re-encoded to at "
     "most 360 px high) and its audio track. "
 )
 _V2A = "The query is a silent video; retrieve the sound recorded with it."

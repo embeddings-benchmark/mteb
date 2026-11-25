@@ -8,8 +8,7 @@ that the sound is non-speech, non-music and caused by something visible on scree
   long   FoleyBench/foleybench-long    653  30 s clips (FineVideo, V3C1)
 
 The source repos ship each clip as one MP4 with its audio track. This script keeps every
-clip that has both a video and an audio stream, except clips whose audio is identical to
-another clip's (different videos with the same soundtrack), and splits each into
+clip that has both a video and an audio stream, as in the source, and splits each into
 
   * a silent video (audio track removed, re-encoded to at most 360 px high), and
   * its Foley audio track (lossless FLAC, original sample rate and channels).
@@ -43,12 +42,10 @@ from __future__ import annotations
 import argparse
 import ast
 import base64
-import hashlib
 import json
 import shutil
 import subprocess
 import tempfile
-from collections import Counter
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
@@ -129,14 +126,6 @@ def _ffprobe_streams(path: Path) -> set[str]:
     return {line.split(",")[0].strip() for line in out.splitlines() if line.strip()}
 
 
-def _pcm_md5(path: Path) -> str:
-    pcm = subprocess.run(
-        ["ffmpeg", "-nostdin", "-v", "error", "-i", str(path), "-f", "s16le", "-"],
-        capture_output=True, timeout=600, check=True,
-    ).stdout  # fmt: skip
-    return hashlib.md5(pcm).hexdigest()
-
-
 def split_clip(row: dict, out: Path) -> dict | None:
     """Write the silent video and the audio track of one clip; None if unusable.
 
@@ -176,7 +165,6 @@ def split_clip(row: dict, out: Path) -> dict | None:
     meta = ast.literal_eval(row["metadata"])
     return {
         "key": key,
-        "audio_md5": _pcm_md5(audio_out),
         "caption": row["caption"],
         "source_dataset": row["dataset"],
         "source_metadata": json.dumps(meta, sort_keys=True),
@@ -186,12 +174,7 @@ def split_clip(row: dict, out: Path) -> dict | None:
 
 
 def split_all(src: Path, work: Path, workers: int) -> tuple[list[dict], int]:
-    """Split every source clip; return the usable ones in key order.
-
-    Clips whose decoded audio is identical to another clip's are dropped: the source has
-    pairs of different videos carrying the same soundtrack, so which video the audio
-    belongs to is ambiguous.
-    """
+    """Split every source clip; return the ones with video and audio, in key order."""
     out = work / "media"
     for sub in ("video", "audio"):
         (out / sub).mkdir(parents=True, exist_ok=True)
@@ -201,16 +184,12 @@ def split_all(src: Path, work: Path, workers: int) -> tuple[list[dict], int]:
             for row, item in zip(rows, ex.map(lambda r: split_clip(r, out), rows)):
                 done[row["key"]] = item
                 bar.update()
-    audio_counts = Counter(item["audio_md5"] for item in done.values() if item)
     kept = []
     for key in sorted(done):
-        item = done[key]
-        if item is None:
+        if done[key] is None:
             print(f"skip key {key}: no video or no audio stream")
-        elif audio_counts[item["audio_md5"]] > 1:
-            print(f"skip key {key}: audio identical to another clip's")
         else:
-            kept.append(item)
+            kept.append(done[key])
     return kept, len(done)
 
 
@@ -248,9 +227,8 @@ Video/audio retrieval built from [{name}](https://huggingface.co/datasets/{src_r
 FoleyBench is a benchmark for Foley-style video-to-audio generation: each clip has a
 visible sound source and non-speech, non-music audio caused by on-screen events.
 
-{name} has {n_src:,} {clips}. {n:,} of them are used: clips without an audio track,
-or whose audio is identical to another clip's, are dropped. Each clip is split into a
-silent video and its audio track.
+{name} has {n_src:,} {clips}. Every clip with both a video and an audio track is used
+({n:,}), as in the source, and each is split into a silent video and its audio track.
 
 | config | split | rows | contents |
 |---|---|---|---|
@@ -268,8 +246,8 @@ CC BY-NC-SA 4.0, following FoleyBench, for academic research only. Each video ke
 license of its original source; `source_dataset` and `source_metadata` give its
 provenance (YouTube, Vimeo or V3C id and time range). The {name} terms of use, which this
 repo is gated with, apply in full. Videos removed from {name} on request will also be
-removed here. Changes: clips dropped as above; audio removed from the videos and stored
-separately; videos re-encoded to at most 360 px high.
+removed here. Changes: audio removed from the videos and stored separately; videos
+re-encoded to at most 360 px high.
 
 ## Citation
 
