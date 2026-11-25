@@ -688,7 +688,8 @@ class Benchmark:
             A dict mapping each model name to a dict whose keys are
             determined by
             [aggregations][mteb.benchmarks.benchmark.Benchmark.aggregations].
-            Possible keys include:
+            Results of an experiment are listed separately under
+            `"<model name> (<experiment name>)"`. Possible keys include:
 
             - `"Mean(Task)"`: mean score across all benchmark tasks (when
                 [MEAN_TASK][mteb.benchmarks.benchmark.BenchmarkAggregation.MEAN_TASK]
@@ -709,41 +710,26 @@ class Benchmark:
                 Always present.
         """
         from mteb.benchmarks._create_table import _get_borda_rank
-
-        # `join_revisions` returns one `ModelResult` per revision, so a model whose
-        # task results were kept from several revisions comes back in parts.
-        model_results: dict[tuple[str, str | None], ModelResult] = {}
-        for part in results.join_revisions():
-            key = (part.model_name, part.experiment_name)
-            previous = model_results.get(key)
-            model_results[key] = (
-                part
-                if previous is None
-                else previous.model_copy(
-                    update={"task_results": previous.task_results + part.task_results}
-                )
-            )
+        from mteb.results.model_result import _join_model_parts
 
         scores: dict[str, dict[str, float | None]] = {}
         per_task_rows: dict[str, dict[str, float | None]] = {}
 
-        for model_result in model_results.values():
-            per_task_rows[model_result.model_name] = {}
+        for name, model_result in _join_model_parts(results.join_revisions()).items():
+            per_task_rows[name] = {}
             filtered = model_result.select_tasks(self.tasks).task_results
             try:
-                scores[model_result.model_name] = self._get_model_score(model_result)
+                scores[name] = self._get_model_score(model_result)
             except ValueError:
                 if raise_error:
                     raise
                 logger.warning(
                     "Some task results are missing. Filling results with None"
                 )
-                scores[model_result.model_name] = dict.fromkeys(self._score_keys())
+                scores[name] = dict.fromkeys(self._score_keys())
                 continue
 
-            per_task_rows[model_result.model_name] = {
-                tr.task_name: tr.get_score() for tr in filtered
-            }
+            per_task_rows[name] = {tr.task_name: tr.get_score() for tr in filtered}
 
         if per_task_rows:
             per_task_df = pd.DataFrame.from_dict(per_task_rows, orient="index").reindex(

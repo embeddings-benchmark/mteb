@@ -550,3 +550,31 @@ class ModelResult(BaseModel):
                 commit_message=f"Add evaluation results for model {self.model_name} revision {self.model_revision}",
                 create_pr=create_pr,
             )
+
+
+def _join_model_parts(model_results: Iterable[ModelResult]) -> dict[str, ModelResult]:
+    """Combine the parts of each model and experiment into one `ModelResult`.
+
+    `BenchmarkResults.join_revisions` returns one `ModelResult` per revision, so a
+    model whose task results were kept from several revisions comes back in parts.
+
+    Returns:
+        The combined results, keyed by model name. An experiment is keyed by
+        `"<model name> (<experiment name>)"`, apart from the model's default run.
+    """
+    joined: dict[str, ModelResult] = {}
+    for part in model_results:
+        name = (
+            part.model_name
+            if part.experiment_name is None
+            else f"{part.model_name} ({part.experiment_name})"
+        )
+        previous = joined.get(name)
+        joined[name] = (
+            part
+            if previous is None
+            else previous.model_copy(
+                update={"task_results": previous.task_results + part.task_results}
+            )
+        )
+    return joined

@@ -161,6 +161,44 @@ def test_benchmark_get_score_results_kept_from_two_revisions(
     assert scores[model_name]["Rank"] == 1
 
 
+def test_benchmark_get_score_keeps_experiments_apart(
+    mock_mteb_cache: ResultCache,
+):
+    """An experiment of a model is scored separately from the model's default run."""
+    mock_benchmark = _make_benchmark()
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+    random_name = "mteb/baseline-random-encoder"
+    mock_results = mock_mteb_cache.load_results().select_models(
+        [model_name, random_name]
+    )
+    joined = mock_results.join_revisions().select_tasks(mock_benchmark.tasks)
+    by_name = {model_result.model_name: model_result for model_result in joined}
+    results = BenchmarkResults(
+        model_results=[
+            by_name[model_name],
+            ModelResult(
+                model_name=model_name,
+                model_revision=by_name[model_name].model_revision,
+                experiment_name="normalize_False",
+                task_results=by_name[random_name].task_results,
+            ),
+        ]
+    )
+
+    scores = mock_benchmark.get_score(results)
+
+    experiment = f"{model_name} (normalize_False)"
+    assert set(scores) == {model_name, experiment}
+    assert scores[model_name]["Mean(Task)"] == pytest.approx(
+        MODELS_SCORES["Mean(Task)"][model_name]
+    )
+    assert scores[experiment]["Mean(Task)"] == pytest.approx(
+        MODELS_SCORES["Mean(Task)"][random_name]
+    )
+    assert scores[model_name]["Rank"] == 1
+    assert scores[experiment]["Rank"] == 2
+
+
 def test_benchmark_get_score_task_without_results_keeps_custom_group_keys(
     mock_mteb_cache: ResultCache,
 ):

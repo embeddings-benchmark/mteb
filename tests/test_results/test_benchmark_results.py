@@ -307,6 +307,56 @@ def test_join_revisions_compares_version_ranges(
     assert [m.model_revision for m in joined.model_results] == [expected_revision]
 
 
+def test_get_aggregated_scores_without_benchmark_joins_model_parts() -> None:
+    """Parts of a model kept from two revisions are combined, and an experiment stays apart."""
+
+    def _model_result(
+        revision: str, task_name: str, score: float, experiment_name: str | None = None
+    ) -> ModelResult:
+        task_result = TaskResult(
+            dataset_revision="1",
+            task_name=task_name,
+            mteb_version="2.27.0",
+            scores={
+                "test": [
+                    {
+                        "hf_subset": "default",
+                        "languages": ["eng-Latn"],
+                        "main_score": score,
+                    }
+                ]
+            },
+            evaluation_time=1.0,
+        )
+        return ModelResult(
+            model_name="org/model-not-in-registry",
+            model_revision=revision,
+            experiment_name=experiment_name,
+            task_results=[task_result],
+        )
+
+    results = BenchmarkResults(
+        model_results=[
+            _model_result("first", "NFCorpus", 0.2),
+            _model_result("second", "Banking77Classification", 0.8),
+            _model_result("first", "NFCorpus", 0.6, experiment_name="normalize_False"),
+        ]
+    )
+
+    scores = results.get_aggregated_scores()
+
+    assert scores == {
+        "org/model-not-in-registry": {
+            "Mean(Task)": pytest.approx(0.5),
+            "Mean(TaskType)": pytest.approx(0.5),
+        },
+        "org/model-not-in-registry (normalize_False)": {
+            "Mean(Task)": pytest.approx(0.6),
+            "Mean(TaskType)": pytest.approx(0.6),
+        },
+    }
+
+
 @pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
 def test_join_revisions_keeps_benchmark(cache_path: Path) -> None:
     cache = ResultCache(cache_path)
