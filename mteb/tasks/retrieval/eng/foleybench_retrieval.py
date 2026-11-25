@@ -6,9 +6,14 @@ from typing import Any
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
 
-_DATASET_PATH = "mteb/FoleyBench"
-_DATASET_REVISION = "6b1d330111e85cbd637bc31b1a89534ebc2639e3"
-_REFERENCE = "https://arxiv.org/abs/2511.13219"
+_BASE_DATASET = {
+    "path": "mteb/FoleyBench",
+    "revision": "535ac1ca0cbdc60e4dd0a6680c6f5886dd5052d4",
+}
+_LONG_DATASET = {
+    "path": "mteb/FoleyBenchLong",
+    "revision": "473214aed6abc8ce48ee7166cc6151286b02bb7f",
+}
 _BIBTEX = r"""
 @inproceedings{dixit2026foleybench,
   author = {Dixit, Satvik and Saito, Koichi and Zhong, Zhi and Mitsufuji, Yuki and Donahue, Chris},
@@ -17,38 +22,59 @@ _BIBTEX = r"""
   year = {2026},
 }
 """
-_DESCRIPTION = (
+_COMMON = {
+    "reference": "https://arxiv.org/abs/2511.13219",
+    "type": "Any2AnyRetrieval",
+    "eval_splits": ["test"],
+    "main_score": "ndcg_at_10",
+    "date": ("2025-01-01", "2025-11-17"),
+    "domains": ["Scene", "AudioScene", "Web"],
+    "task_subtypes": ["Cross-Modal Retrieval"],
+    "license": "cc-by-nc-sa-4.0",
+    "annotations_creators": "derived",
+    "dialect": [],
+    "sample_creation": "found",
+    "is_beta": True,
+    "bibtex_citation": _BIBTEX,
+}
+_BASE_DESCRIPTION = (
     "FoleyBench is a benchmark for Foley-style video-to-audio generation: ~10-second "
     "clips from FineVideo, V3C1 and LVBench, filtered so that the sound is non-speech, "
-    "non-music and caused by something visible on screen. 1,000 of its 5,000 clips are "
-    "sampled with a fixed seed, and each clip is split into a silent video (re-encoded "
-    "to at most 360 px high) and its audio track. "
+    "non-music and caused by something visible on screen. 4,998 of its 5,000 clips are "
+    "used (one pair of different videos with an identical soundtrack is dropped), each "
+    "split into a silent video (re-encoded to at most 360 px high) and its audio track. "
 )
+_LONG_DESCRIPTION = (
+    "FoleyBench-Long is the long-clip set of FoleyBench, a benchmark for Foley-style "
+    "video-to-audio generation: 653 30-second clips from FineVideo and V3C1, filtered "
+    "so that the sound is non-speech, non-music and caused by something visible on "
+    "screen. 650 of its 653 clips are used (one has no audio track, and one pair of "
+    "different videos has an identical soundtrack), each split into a silent video "
+    "(re-encoded to at most 360 px high) and its audio track. "
+)
+_V2A = "The query is a silent video; retrieve the sound recorded with it."
+_VT2A = (
+    "The query is a silent video with its FoleyBench caption, as in text-conditioned "
+    "video-to-audio generation; retrieve the sound recorded with it."
+)
+_A2V = "The query is a sound; retrieve the silent video it was recorded with."
+_V2A_PROMPT = {"query": "Retrieve the sound that matches this silent video."}
+_VT2A_PROMPT = {
+    "query": "Retrieve the sound that matches this silent video and its description."
+}
+_A2V_PROMPT = {"query": "Retrieve the silent video that matches this sound."}
 
 
 class FoleyBenchV2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="FoleyBenchV2ARetrieval",
-        description=_DESCRIPTION
-        + "The query is a silent video; retrieve the sound recorded with it.",
-        reference=_REFERENCE,
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
-        type="Any2AnyRetrieval",
+        description=_BASE_DESCRIPTION + _V2A,
+        dataset=_BASE_DATASET,
         category="v2a",
         modalities=["video", "audio"],
-        eval_splits=["test"],
         eval_langs=["zxx-Zxxx"],
-        main_score="ndcg_at_10",
-        date=("2025-01-01", "2025-11-17"),
-        domains=["Scene", "AudioScene", "Web"],
-        task_subtypes=["Cross-Modal Retrieval"],
-        license="cc-by-nc-sa-4.0",
-        annotations_creators="derived",
-        dialect=[],
-        sample_creation="found",
-        is_beta=True,
-        bibtex_citation=_BIBTEX,
-        prompt={"query": "Retrieve the sound that matches this silent video."},
+        prompt=_V2A_PROMPT,
+        **_COMMON,
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -62,30 +88,13 @@ class FoleyBenchV2ARetrieval(AbsTaskRetrieval):
 class FoleyBenchVT2ARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="FoleyBenchVT2ARetrieval",
-        description=_DESCRIPTION
-        + "The query is a silent video with its FoleyBench caption, as in "
-        "text-conditioned video-to-audio generation; retrieve the sound recorded "
-        "with it.",
-        reference=_REFERENCE,
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
-        type="Any2AnyRetrieval",
+        description=_BASE_DESCRIPTION + _VT2A,
+        dataset=_BASE_DATASET,
         category="vt2a",
         modalities=["video", "text", "audio"],
-        eval_splits=["test"],
         eval_langs=["eng-Latn"],
-        main_score="ndcg_at_10",
-        date=("2025-01-01", "2025-11-17"),
-        domains=["Scene", "AudioScene", "Web"],
-        task_subtypes=["Cross-Modal Retrieval"],
-        license="cc-by-nc-sa-4.0",
-        annotations_creators="derived",
-        dialect=[],
-        sample_creation="found",
-        is_beta=True,
-        bibtex_citation=_BIBTEX,
-        prompt={
-            "query": "Retrieve the sound that matches this silent video and its description."
-        },
+        prompt=_VT2A_PROMPT,
+        **_COMMON,
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -99,26 +108,13 @@ class FoleyBenchVT2ARetrieval(AbsTaskRetrieval):
 class FoleyBenchA2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="FoleyBenchA2VRetrieval",
-        description=_DESCRIPTION
-        + "The query is a sound; retrieve the silent video it was recorded with.",
-        reference=_REFERENCE,
-        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
-        type="Any2AnyRetrieval",
+        description=_BASE_DESCRIPTION + _A2V,
+        dataset=_BASE_DATASET,
         category="a2v",
         modalities=["audio", "video"],
-        eval_splits=["test"],
         eval_langs=["zxx-Zxxx"],
-        main_score="ndcg_at_10",
-        date=("2025-01-01", "2025-11-17"),
-        domains=["Scene", "AudioScene", "Web"],
-        task_subtypes=["Cross-Modal Retrieval"],
-        license="cc-by-nc-sa-4.0",
-        annotations_creators="derived",
-        dialect=[],
-        sample_creation="found",
-        is_beta=True,
-        bibtex_citation=_BIBTEX,
-        prompt={"query": "Retrieve the silent video that matches this sound."},
+        prompt=_A2V_PROMPT,
+        **_COMMON,
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -134,3 +130,42 @@ class FoleyBenchA2VRetrieval(AbsTaskRetrieval):
                     for doc_id, score in docs.items():
                         relevant_docs[doc_id][query_id] = score
                 split_data["relevant_docs"] = dict(relevant_docs)
+
+
+class FoleyBenchLongV2ARetrieval(FoleyBenchV2ARetrieval):
+    metadata = TaskMetadata(
+        name="FoleyBenchLongV2ARetrieval",
+        description=_LONG_DESCRIPTION + _V2A,
+        dataset=_LONG_DATASET,
+        category="v2a",
+        modalities=["video", "audio"],
+        eval_langs=["zxx-Zxxx"],
+        prompt=_V2A_PROMPT,
+        **_COMMON,
+    )
+
+
+class FoleyBenchLongVT2ARetrieval(FoleyBenchVT2ARetrieval):
+    metadata = TaskMetadata(
+        name="FoleyBenchLongVT2ARetrieval",
+        description=_LONG_DESCRIPTION + _VT2A,
+        dataset=_LONG_DATASET,
+        category="vt2a",
+        modalities=["video", "text", "audio"],
+        eval_langs=["eng-Latn"],
+        prompt=_VT2A_PROMPT,
+        **_COMMON,
+    )
+
+
+class FoleyBenchLongA2VRetrieval(FoleyBenchA2VRetrieval):
+    metadata = TaskMetadata(
+        name="FoleyBenchLongA2VRetrieval",
+        description=_LONG_DESCRIPTION + _A2V,
+        dataset=_LONG_DATASET,
+        category="a2v",
+        modalities=["audio", "video"],
+        eval_langs=["zxx-Zxxx"],
+        prompt=_A2V_PROMPT,
+        **_COMMON,
+    )

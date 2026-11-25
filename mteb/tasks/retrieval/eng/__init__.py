@@ -227,6 +227,9 @@ from .flickr_audio_image_retrieval import (
 )
 from .foleybench_retrieval import (
     FoleyBenchA2VRetrieval,
+    FoleyBenchLongA2VRetrieval,
+    FoleyBenchLongV2ARetrieval,
+    FoleyBenchLongVT2ARetrieval,
     FoleyBenchV2ARetrieval,
     FoleyBenchVT2ARetrieval,
 )
@@ -794,6 +797,9 @@ __all__ = [
     "FlickrAudioToImageRetrieval",
     "FlickrImageToAudioRetrieval",
     "FoleyBenchA2VRetrieval",
+    "FoleyBenchLongA2VRetrieval",
+    "FoleyBenchLongV2ARetrieval",
+    "FoleyBenchLongVT2ARetrieval",
     "FoleyBenchV2ARetrieval",
     "FoleyBenchVT2ARetrieval",
     "GLDv2I2IRetrieval",
