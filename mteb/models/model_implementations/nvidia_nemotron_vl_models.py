@@ -578,6 +578,40 @@ nemotron_3_5_rerank_8b_bf16 = ModelMeta(
 )
 
 
+nemotron_3_5_rerank_1b_bf16 = ModelMeta(
+    loader=st_wrapper.CrossEncoderWrapper,
+    name="nvidia/Nemotron-3.5-Rerank-1B-BF16",
+    revision="10a9c552229c90fa9c3a12c83d521e17b058cdc1",
+    release_date="2026-11-30",
+    languages=nemotron_3_embed_supported_languages,
+    n_parameters=1_554_712_576,
+    n_embedding_parameters=268_435_456,
+    memory_usage_mb=5931,
+    max_tokens=32768,
+    embed_dim=None,
+    license="openmdw-1.1",
+    open_weights=True,
+    public_training_code="https://github.com/NVIDIA-NeMo/Automodel/blob/8f9b476dedf701a78f8acab3f1ca224d053da78c/examples/retrieval/nemotron_3_5/README.md",
+    public_training_data="https://huggingface.co/nvidia/Nemotron-3.5-Rerank-8B-BF16#training-dataset",
+    framework=["Sentence Transformers", "PyTorch", "Transformers"],
+    reference="https://huggingface.co/nvidia/Nemotron-3.5-Rerank-1B-BF16",
+    similarity_fn_name=None,
+    use_instructions=False,
+    training_datasets=nemotron_3_embed_training_datasets
+    | {
+        "VidoreArxivQARetrieval",
+        "VidoreInfoVQARetrieval",
+        "VidoreDocVQARetrieval",
+        "VidoreTatdqaRetrieval",
+        "VDRMultilingualRetrieval",
+    },
+    adapted_from="mistralai/Ministral-3-8B-Instruct-2512",
+    modalities=["image", "text"],
+    model_type=["cross-encoder"],
+    extra_requirements_groups=["nemotron-3-5-vl"],
+)
+
+
 nemotron_3_5_embed_1b_bf16 = ModelMeta(
     loader=st_wrapper.SentenceTransformerEncoderWrapper,
     name="nvidia/Nemotron-3.5-Embed-1B-BF16",
