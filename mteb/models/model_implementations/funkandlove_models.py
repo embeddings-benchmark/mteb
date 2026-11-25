@@ -64,14 +64,9 @@ scooby_embed_v1 = ModelMeta(
     use_instructions=False,
     public_training_code=None,
     public_training_data=None,
-    training_datasets=SCOOBY_TRAINING_DATASETS | (ritrieve_zh_v1.training_datasets or set()),
+    training_datasets=SCOOBY_TRAINING_DATASETS | ritrieve_zh_v1.training_datasets,
     adapted_from="thenlper/gte-small-zh",
     superseded_by=None,
     contacts=["Hofmann8"],
-    citation="""@misc{scooby-embed-v1,
-  title  = {Scooby Embed v1: A Compact Chinese Text Embedding Model},
-  author = {Hofmann88 and kicious},
-  year   = {2026},
-  howpublished = {\\url{https://huggingface.co/funkandlove/scooby-embed-v1}}
-}""",
+    citation=None,
 )
