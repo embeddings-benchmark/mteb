@@ -55,7 +55,7 @@ class VOC2007Classification(AbsTaskMultilabelClassification):
     # To be removed when we want full results
     n_experiments: int = 5
     input_column_name: str = "image"
-    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())
 
 
 class VOC2007ClassificationV2(AbsTaskMultilabelClassification):
@@ -105,4 +105,4 @@ class VOC2007ClassificationV2(AbsTaskMultilabelClassification):
     # To be removed when we want full results
     n_experiments: int = 5
     input_column_name: str = "image"
-    evaluator = MultiOutputClassifier(estimator=LogisticRegression())
+    evaluator_model = MultiOutputClassifier(estimator=LogisticRegression())

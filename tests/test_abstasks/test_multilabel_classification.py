@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, Any
 import pytest
 
 import mteb
+from mteb.abstasks import AbsTaskClassification, AbsTaskMultilabelClassification
 from mteb.mocks.mock_tasks import MockMultilabelClassification
 
 if TYPE_CHECKING:
@@ -18,6 +19,22 @@ class _RenamedLabelMultilabelClassification(MockMultilabelClassification):
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         super().load_data(num_proc=num_proc, **kwargs)
         self.dataset = self.dataset.rename_column("label", "labels")
+
+
+def test_multilabel_tasks_set_their_classifier_on_evaluator_model():
+    """Multilabel evaluation fits `evaluator_model` and never reads `evaluator`.
+
+    `evaluator` is the evaluator class of single-label classification, so a classifier
+    assigned to it is ignored and the task is scored with the default kNN instead.
+    """
+    tasks = mteb.get_tasks(exclude_superseded=False)
+    overridden = [
+        task.metadata.name
+        for task in tasks
+        if isinstance(task, AbsTaskMultilabelClassification)
+        and task.evaluator is not AbsTaskClassification.evaluator
+    ]
+    assert overridden == []
 
 
 @pytest.mark.parametrize(
