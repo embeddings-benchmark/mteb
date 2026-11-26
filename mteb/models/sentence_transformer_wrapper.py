@@ -259,6 +259,55 @@ def _as_vector_list(embeddings: Array) -> list[Any]:
     return list(embeddings)
 
 
+def _multi_vector_similarity(
+    embeddings1: Array,
+    embeddings2: Array,
+    *,
+    device: torch.device,
+    score_function: Callable[..., torch.Tensor],
+) -> torch.Tensor:
+    """Score length-grouped queries against document blocks on the encoder's device."""
+    # Token embeddings stay on the CPU after encoding, so documents are moved to the model's
+    # device in blocks, each block once, and scored against every query group. Queries are
+    # grouped by length as well, because sentence-transformers pads all of them to the longest
+    # and only chunks along the documents.
+    import torch
+
+    queries = [torch.as_tensor(q).to(device) for q in _as_vector_list(embeddings1)]
+    documents = _as_vector_list(embeddings2)
+    result_device = (
+        documents[0].device
+        if documents and isinstance(documents[0], torch.Tensor)
+        else torch.device("cpu")
+    )
+    scores = torch.empty(
+        len(queries), len(documents), dtype=torch.float32, device=result_device
+    )
+    if not queries or not documents:
+        return scores
+
+    query_widths = [len(q) for q in queries]
+    for doc_start, doc_end in _max_sim_document_blocks(documents):
+        block = [
+            torch.as_tensor(d).to(device, non_blocking=True)
+            for d in documents[doc_start:doc_end]
+        ]
+        # Padded query tokens per group, so that group * widest document fits the budget
+        query_token_budget = max(
+            1, _MAX_SIM_CHUNK_ELEMENTS // max(len(d) for d in block)
+        )
+        for query_indices in _token_budget_chunks(query_widths, query_token_budget):
+            block_scores = score_function(
+                [queries[i] for i in query_indices], block, device=device
+            )
+            scores[
+                torch.as_tensor(query_indices, device=result_device),
+                doc_start:doc_end,
+            ] = block_scores.to(result_device, torch.float32)
+        del block
+    return scores
+
+
 def _to_cpu_in_place(batch: list[Any]) -> list[Any]:
     """Move token embeddings to the CPU one at a time, replacing them in `batch`.
 
@@ -1238,46 +1287,12 @@ class MultiVectorWrapper(MultiVectorSearchEncoderWrapper):
 
         Scoring runs on the model's device; the scores are returned on the documents' device.
         """
-        # Token embeddings stay on the CPU after encoding, so documents are moved to the model's
-        # device in blocks, each block once, and scored against every query group. Queries are
-        # grouped by length as well, because sentence-transformers pads all of them to the longest
-        # and only chunks along the documents.
-        import torch
-
-        device = self.model.device
-        queries = [torch.as_tensor(q).to(device) for q in _as_vector_list(embeddings1)]
-        documents = _as_vector_list(embeddings2)
-        result_device = (
-            documents[0].device
-            if documents and isinstance(documents[0], torch.Tensor)
-            else torch.device("cpu")
+        return _multi_vector_similarity(
+            embeddings1,
+            embeddings2,
+            device=self.model.device,
+            score_function=self.model.similarity,
         )
-        scores = torch.empty(
-            len(queries), len(documents), dtype=torch.float32, device=result_device
-        )
-        if not queries or not documents:
-            return scores
-
-        query_widths = [len(q) for q in queries]
-        for doc_start, doc_end in _max_sim_document_blocks(documents):
-            block = [
-                torch.as_tensor(d).to(device, non_blocking=True)
-                for d in documents[doc_start:doc_end]
-            ]
-            # Padded query tokens per group, so that group * widest document fits the budget
-            query_token_budget = max(
-                1, _MAX_SIM_CHUNK_ELEMENTS // max(len(d) for d in block)
-            )
-            for query_indices in _token_budget_chunks(query_widths, query_token_budget):
-                block_scores = self.model.similarity(
-                    [queries[i] for i in query_indices], block, device=device
-                )
-                scores[
-                    torch.as_tensor(query_indices, device=result_device),
-                    doc_start:doc_end,
-                ] = block_scores.to(result_device, torch.float32)
-            del block
-        return scores
 
     def similarity_pairwise(self, embeddings1: Array, embeddings2: Array) -> Array:
         """Compute the pairwise MaxSim similarity between matched multi-vector embedding pairs.
