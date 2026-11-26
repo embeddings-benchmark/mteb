@@ -1193,3 +1193,59 @@ komugi_embeddings = ModelMeta(
     output_dtypes="float32",
     extra_requirements_groups=None,
 )
+
+kasya_embed_training_datasets = {
+    # MTEB(rus, v1.1) tasks whose train splits are used; the model card lists every source
+    "GeoreviewClassification",
+    "GeoreviewClusteringP2P",  # the reviews of GeoreviewClassification
+    "InappropriatenessClassification",
+    "KinopoiskClassification",
+    "MassiveIntentClassification",
+    "MassiveScenarioClassification",
+    "RuReviewsClassification",
+    "RuSciBenchGRNTIClassification",
+    "RuSciBenchGRNTIClusteringP2P",  # the repository of the classification task
+    "RuSciBenchOECDClassification",
+    "RuSciBenchOECDClusteringP2P",  # the repository of the classification task
+    "SensitiveTopicsClassification",
+    "RUParaPhraserSTS",
+    "MIRACLRetrieval",
+    "MIRACLRetrievalHardNegatives",
+    "MIRACLRetrievalHardNegatives.v2",
+    "MIRACLReranking",
+    "MrTidyRetrieval",
+    # other tasks on datasets used in training
+    "WebFAQRetrieval",
+    "CodeSearchNetRetrieval",
+    "CodeSearchNetCCRetrieval",
+    "COIRCodeSearchNetRetrieval",
+    "CosQA",
+    # distilled from ai-sage/Giga-Embeddings-instruct-10B-A1.8B-0826: its papers name these sets,
+    # the rest of the teacher's training data is not public
+    "MSMARCO",
+    "NQ",
+}
+
+kasya_embed_150m = ModelMeta(
+    loader=SentenceTransformerEncoderWrapper,
+    name="Quakeer444/Kasya-embed-150M",
+    model_type=["dense"],
+    languages=["rus-Cyrl"],
+    open_weights=True,
+    revision="5c24c9a2f9055e4696950ea118143b572e5e1bb5",
+    release_date="2026-11-26",
+    n_parameters=149_604_864,  # with the Dense module (2_Dense), which the Hub's counter leaves out
+    n_embedding_parameters=38_682_624,
+    memory_usage_mb=571,
+    embed_dim=768,
+    license="apache-2.0",
+    max_tokens=2048,
+    reference="https://huggingface.co/Quakeer444/Kasya-embed-150M",
+    similarity_fn_name=ScoringFunction.COSINE,
+    framework=["Sentence Transformers", "PyTorch", "safetensors", "Transformers"],
+    use_instructions=True,
+    training_datasets=kasya_embed_training_datasets,
+    public_training_code=None,
+    public_training_data=None,
+    adapted_from="deepvk/RuModernBERT-base",
+)
