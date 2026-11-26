@@ -24,8 +24,8 @@ audio track; it is dropped (video stream copied) so that every video is silent.
 
 One dataset serves two MTEB tasks:
 
-  MultiVENT2T2VRetrieval   query -> silent video
-  MultiVENT2T2VARetrieval  query -> video and its audio track
+  MultiVENT2MiniT2VRetrieval   query -> silent video
+  MultiVENT2MiniT2VARetrieval  query -> video and its audio track
 
 Configs (split ``test``):
 

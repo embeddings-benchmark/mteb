@@ -22,15 +22,16 @@ _DESCRIPTION = (
     "MultiVENT 2.0 is an event-centric news video retrieval benchmark: English queries "
     "about specific world events and news videos in Arabic, Chinese, English, Korean, "
     "Russian and Spanish, where relevance often depends on speech or on-screen text. "
-    "All 2,546 test queries and their graded judgments are kept; the corpus is reduced "
-    "from 109,800 videos to the 4,222 judged for any test query, including the videos "
-    "judged not relevant. "
+    "This is a mini version: all 2,546 test queries and their graded judgments are "
+    "kept, but the corpus is reduced from 109,800 videos to the 4,222 judged for any "
+    "test query, including the videos judged not relevant. Scores are therefore not "
+    "directly comparable to the paper's full-corpus results. "
 )
 
 
-class MultiVENT2T2VRetrieval(AbsTaskRetrieval):
+class MultiVENT2MiniT2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MultiVENT2T2VRetrieval",
+        name="MultiVENT2MiniT2VRetrieval",
         description=_DESCRIPTION + "The corpus is the silent videos.",
         reference=_REFERENCE,
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
@@ -60,9 +61,9 @@ class MultiVENT2T2VRetrieval(AbsTaskRetrieval):
                 )
 
 
-class MultiVENT2T2VARetrieval(AbsTaskRetrieval):
+class MultiVENT2MiniT2VARetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
-        name="MultiVENT2T2VARetrieval",
+        name="MultiVENT2MiniT2VARetrieval",
         description=_DESCRIPTION + "The corpus is the videos with their audio tracks.",
         reference=_REFERENCE,
         dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION},
