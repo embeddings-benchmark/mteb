@@ -46,15 +46,16 @@ model_with_compression = CompressionWrapper(
 ```
 
 ## Pooling multivector tokens
-`MultiVectorWrapper` supports Sentence Transformers' `HierarchicalTokenPooling` with `sentence-transformers >= 6.1.0`. Pooling merges similar document token vectors, reducing the number of vectors stored and scored during retrieval. Queries remain unpooled by default.
+`MultiVectorWrapper` supports hierarchical token pooling with `sentence-transformers >= 6.1.0`. Set `token_pooling` to `"HierarchicalTokenPooling"` and pass constructor arguments through `token_pooling_args`. Pooling merges similar document token vectors, reducing the number of vectors stored and scored during retrieval. Queries remain unpooled by default.
 
 ```python
 import mteb
 
 model = mteb.get_model(
     "perplexity-ai/pplx-embed-v2-late-0.6b",
-    token_pooling={"pool_factor": 2},
+    token_pooling="HierarchicalTokenPooling",
+    token_pooling_args={"pool_factor": 2},
 )
 ```
 
-The dictionary accepts `HierarchicalTokenPooling` constructor arguments. For example, with sentence-transformers >= 6.3, use `{"max_tokens": 32}` for a fixed token cap instead of a pooling factor. Pooling applies only to documents by default. Include `"tasks": ["query", "document"]` in the pooling dictionary to pool both. The pooling configuration is saved in experiment metadata. Evaluate the resulting model with `mteb.evaluate` as usual.
+For all available parameters, see the Sentence Transformers [`HierarchicalTokenPooling` API reference](https://www.sbert.net/docs/package_reference/multi_vector_encoder/modules.html#sentence_transformers.multi_vector_encoder.modules.HierarchicalTokenPooling). For configuration guidance, see [Choosing a Pooling Budget](https://www.sbert.net/examples/multi_vector_encoder/training/token_pooling/README.html#choosing-a-pooling-budget).
