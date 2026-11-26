@@ -161,22 +161,22 @@ def test_benchmark_get_score_results_kept_from_two_revisions(
     assert scores[model_name]["Rank"] == 1
 
 
-def test_benchmark_get_score_keeps_experiments_apart(
-    mock_mteb_cache: ResultCache,
-):
-    """An experiment of a model is scored separately from the model's default run."""
-    mock_benchmark = _make_benchmark()
+def _results_with_experiment(
+    mock_mteb_cache: ResultCache, benchmark: Benchmark
+) -> BenchmarkResults:
+    """The default run of all-MiniLM-L6-v2, plus a `normalize=False` experiment of it
+    that has the random encoder's scores."""
     model_name = "sentence-transformers/all-MiniLM-L6-v2"
     random_name = "mteb/baseline-random-encoder"
     mock_results = mock_mteb_cache.load_results().select_models(
         [model_name, random_name]
     )
-    joined = mock_results.join_revisions().select_tasks(mock_benchmark.tasks)
+    joined = mock_results.join_revisions().select_tasks(benchmark.tasks)
     by_name = {model_result.model_name: model_result for model_result in joined}
     experiment_meta = mteb.get_model_meta(model_name).model_copy(
         update={"experiment_kwargs": {"normalize": False}}
     )
-    results = BenchmarkResults(
+    return BenchmarkResults(
         model_results=[
             by_name[model_name],
             ModelResult(
@@ -188,6 +188,16 @@ def test_benchmark_get_score_keeps_experiments_apart(
             ),
         ]
     )
+
+
+def test_benchmark_get_score_keeps_experiments_apart(
+    mock_mteb_cache: ResultCache,
+):
+    """An experiment of a model is scored separately from the model's default run."""
+    mock_benchmark = _make_benchmark()
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+    random_name = "mteb/baseline-random-encoder"
+    results = _results_with_experiment(mock_mteb_cache, mock_benchmark)
 
     scores = mock_benchmark.get_score(results)
 
@@ -201,6 +211,22 @@ def test_benchmark_get_score_keeps_experiments_apart(
     )
     assert scores[model_name]["Rank"] == 1
     assert scores[experiment]["Rank"] == 2
+
+
+def test_tables_rank_experiments_apart(mock_mteb_cache: ResultCache):
+    """The summary and per-task tables rank an experiment apart from the default run."""
+    mock_benchmark = _make_benchmark()
+    results = _results_with_experiment(mock_mteb_cache, mock_benchmark)
+    pl_df = results.select_tasks(mock_benchmark.tasks)._to_results_df(
+        mock_benchmark.tasks
+    )
+
+    summary = mock_benchmark._create_summary_table(pl_df).df
+    per_task = mock_benchmark._create_per_task_table(pl_df)
+
+    ranks = dict(summary.select("_experiment_id", "Rank (Borda)").iter_rows())
+    assert ranks == {"": 1, "normalize_False": 2}
+    assert per_task.get_column("_experiment_id").to_list() == ["", "normalize_False"]
 
 
 def test_benchmark_get_score_task_without_results_keeps_custom_group_keys(
