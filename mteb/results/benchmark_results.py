@@ -20,7 +20,7 @@ from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.models.model_meta import _has_meaningful_value
 
-from .model_result import ModelResult, _aggregate_and_pivot
+from .model_result import ModelResult, _aggregate_and_pivot, _join_model_parts
 from .task_result import _parse_mteb_version_min
 
 if TYPE_CHECKING:
@@ -642,7 +642,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         the equivalent statistics directly from all task results.
 
         Returns:
-            A dict mapping each model name to a dict with the keys:
+            A dict mapping each model name to a dict with the keys below.
+            Results of an experiment are listed separately under
+            ``"<model name> (<experiment name>)"``.
 
             - ``"Mean(Task)"``: mean score across all (benchmark) tasks.
             - ``"Mean(TaskType)"``: mean of per-task-type means.
@@ -664,13 +666,12 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             _compute_mean_task_type,
         )
 
-        bench_results = self.join_revisions()
         return {
-            model_result.model_name: {
+            name: {
                 "Mean(Task)": _compute_mean_task(model_result.task_results),
                 "Mean(TaskType)": _compute_mean_task_type(model_result.task_results),
             }
-            for model_result in bench_results
+            for name, model_result in _join_model_parts(self.join_revisions()).items()
         }
 
     def get_benchmark_result(self) -> pd.DataFrame:
