@@ -35,11 +35,17 @@ from mteb.benchmarks._benchmark_metrics import (
     _is_whole_task_ref,
     _recompute_lenient_means,
 )
-from mteb.benchmarks._create_table import _CUSTOM_GROUP_COL_PREFIX, _format_max_tokens
+from mteb.benchmarks._create_table import (
+    _CUSTOM_GROUP_COL_PREFIX,
+    _EXPERIMENT_ID_COL,
+    _ensure_experiment_id,
+    _format_max_tokens,
+)
 from mteb.benchmarks.benchmark import CustomGrouping
 from mteb.get_tasks import _TASKS_REGISTRY
 from mteb.languages import language_label
 from mteb.models.model_implementations import MODEL_REGISTRY
+from mteb.models.model_meta import _has_meaningful_value
 
 if TYPE_CHECKING:
     from mteb.api.schemas import (
@@ -425,8 +431,7 @@ def _extract_variant_kwargs(
 ) -> dict[tuple[str, str], dict[str, Any]]:
     """``(model_name, experiment_id) -> that experiment's kwargs``, from ``long_df``.
 
-    ``experiment_id`` is the kwargs serialized to a stable string (see
-    ``_serialize_experiment_kwargs_to_name``). The dict also carries that
+    The key matches the experiment ID in the benchmark tables. The dict also carries that
     run's own model_type/embed_dim/output_dtypes (folded in by
     `_build_pre_agg_df`), used to patch MODEL_REGISTRY via
     `run_model_meta_to_schema`.
@@ -434,26 +439,26 @@ def _extract_variant_kwargs(
     variants_by_model: dict[tuple[str, str], dict[str, Any]] = {}
     if "experiments" not in long_df.columns:
         return variants_by_model
-    from mteb.models.model_meta import (
-        _has_meaningful_value,
-        _serialize_experiment_kwargs_to_name,
-    )
+
+    columns = ["model_name", "experiments"]
+    if _EXPERIMENT_ID_COL in long_df.columns:
+        columns.append(_EXPERIMENT_ID_COL)
 
     variant_pl = (
         long_df.lazy()
         .filter(pl.col("experiments").is_not_null())
-        .select(["model_name", "experiments"])
-        .unique(subset=["model_name", "experiments"])
+        .select(columns)
+        .unique()
         .collect()
     )
-    for vr in variant_pl.iter_rows(named=True):
+    for vr in _ensure_experiment_id(variant_pl).iter_rows(named=True):
         exp = vr["experiments"]
         if not exp:
             continue
         clean = {k: v for k, v in dict(exp).items() if _has_meaningful_value(v)}
         if not clean:
             continue
-        vid = _serialize_experiment_kwargs_to_name(clean) or ""
+        vid = vr[_EXPERIMENT_ID_COL]
         if not vid:
             continue
         variants_by_model[(vr["model_name"], vid)] = clean

@@ -18,6 +18,7 @@ from mteb.benchmarks._create_table import (
     _EXPERIMENT_ID_COL,
     _build_per_scope_pivot,
     _build_per_task_pivot,
+    _create_per_task_table_from_benchmark_results,
     _create_summary_table,
     _incomplete_subset_pairs,
     _incomplete_task_pairs,
@@ -99,6 +100,69 @@ def test_create_summary_table_nulls_mean_task_on_partial_split_coverage(
     assert rows[PARTIAL_MODEL]["Classification"] is None
     assert rows[PARTIAL_MODEL]["Mean (Task)"] is None
     assert rows[PARTIAL_MODEL]["Mean (TaskType)"] is None
+
+
+@pytest.mark.parametrize(
+    "aggregation", [BenchmarkAggregation.MEAN_TASK, BenchmarkAggregation.MEAN_SUBSET]
+)
+def test_hidden_experiment_does_not_take_borda_rank(
+    aggregation: BenchmarkAggregation,
+):
+    pl_df = pl.DataFrame(
+        {
+            "model_name": [FULL_MODEL] * 6,
+            _EXPERIMENT_ID_COL: [""] * 4 + ["normalize_False"] * 2,
+            "task_name": [CATALONIA] * 6,
+            "split": ["validation", "test"] * 3,
+            "subset": [
+                "catalan",
+                "catalan",
+                "spanish",
+                "spanish",
+                "catalan",
+                "catalan",
+            ],
+            "score": [0.2] * 4 + [0.8] * 2,
+        }
+    )
+
+    summary = _create_summary_table(pl_df, aggregations=(aggregation,)).df
+    per_task = _create_per_task_table_from_benchmark_results(pl_df)
+
+    assert summary.select(_EXPERIMENT_ID_COL, "Rank (Borda)").rows() == [("", 1)]
+    assert per_task.select(_EXPERIMENT_ID_COL, CATALONIA).rows() == [("", 0.2)]
+
+
+def test_per_task_table_sorts_using_complete_scores():
+    experiment = "normalize_False"
+    pl_df = pl.DataFrame(
+        [
+            (FULL_MODEL, "", BANKING77, "test", "default", 0.4),
+            (FULL_MODEL, "", POEM, "validation", "default", 0.8),
+            (FULL_MODEL, "", CATALONIA, "validation", "catalan", 0.8),
+            (FULL_MODEL, experiment, BANKING77, "test", "default", 0.5),
+            (FULL_MODEL, experiment, POEM, "validation", "default", 0.2),
+            (FULL_MODEL, experiment, POEM, "test", "default", 0.2),
+            (FULL_MODEL, experiment, CATALONIA, "validation", "catalan", 0.2),
+            (FULL_MODEL, experiment, CATALONIA, "test", "catalan", 0.2),
+        ],
+        schema=[
+            "model_name",
+            _EXPERIMENT_ID_COL,
+            "task_name",
+            "split",
+            "subset",
+            "score",
+        ],
+        orient="row",
+    )
+
+    per_task = _create_per_task_table_from_benchmark_results(pl_df)
+
+    assert per_task.select(_EXPERIMENT_ID_COL, BANKING77, POEM, CATALONIA).rows() == [
+        (experiment, 0.5, 0.2, 0.2),
+        ("", 0.4, None, None),
+    ]
 
 
 @_skip_if_datasets_too_old
@@ -258,3 +322,35 @@ def test_create_summary_table_custom_groups_scoped_hand_computed(
     # PARTIAL_MODEL -- unaffected by Catalan's gap (per-group, not
     # dimension-global, in the polars path).
     assert rows[PARTIAL_MODEL]["__cg__Language::Mixed"] is not None
+
+
+def test_scoped_summary_ranks_experiments_and_ignores_nan():
+    frame = pl.DataFrame(
+        {
+            "model_name": [FULL_MODEL] * 3,
+            _EXPERIMENT_ID_COL: ["", "better", "missing"],
+            "task_name": [CATALONIA] * 3,
+            "split": ["test"] * 3,
+            "subset": ["catalan"] * 3,
+            "score": [0.2, 0.8, float("nan")],
+        }
+    )
+    grouping = CustomGrouping(
+        name="Language",
+        groups=(
+            CustomGroup(
+                label="Catalan",
+                tasks=[
+                    mteb.get_task(
+                        CATALONIA, hf_subsets=["catalan"], eval_splits=["test"]
+                    )
+                ],
+            ),
+        ),
+    )
+    summary = _create_summary_table(
+        frame, aggregations=(BenchmarkAggregation.MEAN_SUBSET, grouping)
+    )
+    assert summary.df.sort("Rank (Borda)").select(
+        _EXPERIMENT_ID_COL, "__cg__Language::Catalan", "Rank (Borda)"
+    ).rows() == [("better", 0.8, 1), ("", 0.2, 2)]

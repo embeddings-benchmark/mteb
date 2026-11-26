@@ -401,7 +401,7 @@ def _build_per_task_pivot(
     """
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return None
-    pl_df = _ensure_experiment_id(pl_df)
+    pl_df = _ensure_experiment_id(pl_df).with_columns(pl.col("score").fill_nan(None))
     per_task_long = pl_df.group_by(["model_name", _EXPERIMENT_ID_COL, "task_name"]).agg(
         pl.col("score").mean()
     )
@@ -424,6 +424,19 @@ def _build_per_task_pivot(
     if per_task.is_empty():
         return None
     return per_task, task_cols
+
+
+def _borda_rank_from_task_pivot(
+    per_task: pl.DataFrame, task_cols: list[str]
+) -> pl.DataFrame:
+    """Rank the task scores that survived the pivot's coverage filters."""
+    scores = per_task.unpivot(
+        on=task_cols,
+        index=["model_name", _EXPERIMENT_ID_COL],
+        variable_name="task_name",
+        value_name="score",
+    ).drop_nulls("score")
+    return _borda_rank_from_long(scores, n_models=per_task.height)
 
 
 def _get_means_per_types(
@@ -483,16 +496,19 @@ def _build_per_scope_pivot(pl_df: pl.DataFrame) -> _ScopePivot | None:
     """
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return None
-    per_scope_long = pl_df.group_by(["model_name", "task_name", "subset", "split"]).agg(
-        pl.col("score").mean()
+    keys = ["model_name", _EXPERIMENT_ID_COL]
+    per_scope_long = (
+        _ensure_experiment_id(pl_df)
+        .group_by([*keys, "task_name", "subset", "split"])
+        .agg(pl.col("score").mean())
     )
     keyed = per_scope_long.with_columns(
         (pl.col("task_name") + "::" + pl.col("subset") + "::" + pl.col("split")).alias(
             "_tss"
         )
     )
-    wide = keyed.pivot(on="_tss", index="model_name", values="score")
-    cols = {c for c in wide.columns if c != "model_name"}
+    wide = keyed.pivot(on="_tss", index=keys, values="score")
+    cols = set(wide.columns).difference(keys)
     if not cols:
         return None
     return _ScopePivot(wide=wide, cols=cols)
@@ -913,7 +929,7 @@ def _create_summary_table(  # noqa: PLR0914
     per_task_aggs = [pl.col("score").mean()]
     if has_is_public:
         per_task_aggs.append(pl.col("is_public").first())
-    pl_df = _ensure_experiment_id(pl_df)
+    pl_df = _ensure_experiment_id(pl_df).with_columns(pl.col("score").fill_nan(None))
     per_task_long = pl_df.group_by(["model_name", _EXPERIMENT_ID_COL, "task_name"]).agg(
         *per_task_aggs
     )
@@ -992,15 +1008,14 @@ def _create_summary_table(  # noqa: PLR0914
     ).with_columns(_skipna_false_mean(type_cols).alias(mean_task_type_col))
 
     if custom_group_exprs:
+        keys = ["model_name", _EXPERIMENT_ID_COL]
         custom_group_source = (
-            per_task.join(scope_pivot.wide, on="model_name", how="left")
+            per_task.join(scope_pivot.wide, on=keys, how="left")
             if scope_pivot is not None
             else per_task
         )
-        custom_group_table = custom_group_source.select(
-            "model_name", *custom_group_exprs
-        )
-        joint_table = joint_table.join(custom_group_table, on="model_name", how="left")
+        custom_group_table = custom_group_source.select(*keys, *custom_group_exprs)
+        joint_table = joint_table.join(custom_group_table, on=keys, how="left")
 
     # Mean (Subset) + subset-partition Borda only when the benchmark actually
     # wants subset weighting — costs an extra group_by we'd otherwise skip.
@@ -1026,14 +1041,19 @@ def _create_summary_table(  # noqa: PLR0914
         joint_table = joint_table.join(
             subset_mean, on=["model_name", _EXPERIMENT_ID_COL], how="left"
         )
-        keyed = per_subset_long.with_columns(
+        visible_subsets = per_subset_long.join(
+            per_task.select("model_name", _EXPERIMENT_ID_COL),
+            on=["model_name", _EXPERIMENT_ID_COL],
+            how="semi",
+        )
+        keyed = visible_subsets.with_columns(
             (pl.col("task_name") + "::" + pl.col("subset")).alias("_ts")
         )
         borda_df = _borda_rank_from_long(
             keyed, partition_col="_ts", n_models=per_task.height
         )
     else:
-        borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
+        borda_df = _borda_rank_from_task_pivot(per_task, task_cols)
 
     joint_table = joint_table.join(
         borda_df, on=["model_name", _EXPERIMENT_ID_COL], how="left"
@@ -1086,9 +1106,7 @@ def _create_per_task_table_from_benchmark_results(
         return _no_results_frame()
     per_task, task_cols = pivot
 
-    borda_df = _borda_rank_from_long(
-        _ensure_experiment_id(pl_df), n_models=per_task.height
-    )
+    borda_df = _borda_rank_from_task_pivot(per_task, task_cols)
     select_cols = ["Model"]
     if _EXPERIMENT_ID_COL in per_task.columns:
         select_cols.append(_EXPERIMENT_ID_COL)
