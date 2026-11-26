@@ -12,9 +12,11 @@ from mteb.models.sentence_transformer_wrapper import (
     _multi_vector_similarity,
     _select_encode_function,
 )
-from mteb.types import OutputDType
+from mteb.types import OutputDType, PromptType
 
 if TYPE_CHECKING:
+    from collections.abc import Iterator
+
     import torch
     from sentence_transformers.multi_vector_encoder.modules import (
         HierarchicalTokenPooling,
@@ -23,7 +25,23 @@ if TYPE_CHECKING:
     from typing_extensions import Unpack
 
     from mteb.abstasks.task_metadata import TaskMetadata
-    from mteb.types import Array, BatchedInput, EncodeKwargs, PromptType
+    from mteb.types import Array, BatchedInput, EncodeKwargs
+
+
+def _format_passage_batches(inputs: DataLoader[BatchedInput]) -> Iterator[BatchedInput]:
+    """Format titles and bodies before the encoder drops corpus metadata."""
+    for batch in inputs:
+        if "title" in batch and "body" in batch:
+            columns = cast("dict[str, list[str]]", batch)
+            texts = [
+                f"title: {title} | text: {body}" if title else text
+                for title, body, text in zip(
+                    columns["title"], columns["body"], columns["text"], strict=True
+                )
+            ]
+            yield cast("BatchedInput", {**columns, "text": texts})
+        else:
+            yield batch
 
 
 class FridaV2(AbsEncoder):
@@ -143,9 +161,15 @@ class FridaV2(AbsEncoder):
                 )
             return embeddings
 
+        is_multimodal = "image" in inputs.dataset.features  # type: ignore[attr-defined]
+        batches = (
+            _format_passage_batches(inputs)
+            if prompt_type == PromptType.document and not is_multimodal
+            else inputs
+        )
         return _encode_batches(
-            inputs,
-            is_multimodal="image" in inputs.dataset.features,  # type: ignore[attr-defined]
+            batches,
+            is_multimodal=is_multimodal,
             encode_function=encode_batch,
             prompt=None,
             modalities=self._mteb_model_meta.modalities,
@@ -214,8 +238,9 @@ frida_v2 = ModelMeta(
     public_training_code=None,
     public_training_data=None,
     framework=["Sentence Transformers", "PyTorch"],
-    reference="TBD",
+    reference=None,
     similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
     training_datasets=set(),
     adapted_from="Qwen/Qwen3.5-2B",
     modalities=["text", "image"],

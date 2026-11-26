@@ -25,7 +25,7 @@ from .model_meta import ScoringFunction
 from .search_wrappers import chunked_full_corpus_search, rerank_top_ranked_documents
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Iterator, Sequence
+    from collections.abc import Callable, Iterable, Iterator, Sequence
 
     import torch
     from sentence_transformers import (
@@ -344,7 +344,7 @@ def _postprocess_sparse_embeddings(embeddings: Array) -> Array:
 
 
 def _encode_batches(
-    inputs: DataLoader[BatchedInput],
+    inputs: Iterable[BatchedInput],
     *,
     is_multimodal: bool,
     encode_function: Callable[..., Any],
