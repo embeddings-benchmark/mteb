@@ -18,7 +18,10 @@ from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_implementations import MODEL_REGISTRY
-from mteb.models.model_meta import _has_meaningful_value
+from mteb.models.model_meta import (
+    _has_meaningful_value,
+    _serialize_experiment_kwargs_to_name,
+)
 
 from .model_result import ModelResult, _aggregate_and_pivot, _join_model_parts
 from .task_result import _parse_mteb_version_min
@@ -489,6 +492,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         col_subset: list[Any] = []
         col_score: list[Any] = []
         col_experiments: list[Any] = []
+        experiment_ids: list[str] = []
 
         for model_result in bench_results:
             mn = model_result.model_name
@@ -520,6 +524,11 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                         continue
                     if _has_meaningful_value(value):
                         exp_kwargs[field] = value
+            experiment_id = (
+                model_result.experiment_name
+                or _serialize_experiment_kwargs_to_name(exp_kwargs)
+                or ""
+            )
             for task_result in model_result.task_results:
                 tn = task_result.task_name
                 for split, scores_list in task_result.scores.items():
@@ -532,6 +541,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                         col_subset.append(score_item.get("hf_subset", "default"))
                         col_score.append(score_item.get("main_score", None))
                         col_experiments.append(exp_kwargs)
+                        experiment_ids.append(experiment_id)
 
         if not col_model_name:
             return None
@@ -546,6 +556,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 "subset": col_subset,
                 "score": col_score,
                 "experiments": col_experiments,
+                "_experiment_id": experiment_ids,
             }
         )
         if include_model_revision is False:

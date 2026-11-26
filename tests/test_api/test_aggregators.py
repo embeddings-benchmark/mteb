@@ -202,3 +202,18 @@ def test_build_task_scores_ignores_subsets_outside_hf_subsets(monkeypatch):
     assert result.subsets == sorted(subsets)
     scores = {row.model.name: row.score for row in result.rows}
     assert scores == pytest.approx({FULL_MODEL: 0.6, other_model: 0.7})
+
+
+@pytest.mark.parametrize("stored_id", [None, "named-run"])
+def test_variant_kwargs_follow_table_experiment_id(stored_id: str | None):
+    pytest.importorskip("fastapi")
+    from mteb.api.aggregators import _extract_variant_kwargs
+
+    frame = pl.DataFrame(
+        {"model_name": [FULL_MODEL], "experiments": [{"normalize": False}]}
+    )
+    if stored_id:
+        frame = frame.with_columns(pl.lit(stored_id).alias("_experiment_id"))
+    assert _extract_variant_kwargs(frame) == {
+        (FULL_MODEL, stored_id or "normalize_False"): {"normalize": False}
+    }

@@ -486,3 +486,26 @@ def test_generate_model_card_with_table_and_benchmarks(
         assert output_row == golden_row, (
             f"Row {i} doesn't match.\nExpected: {golden_row}\nGot: {output_row}"
         )
+
+
+def test_aggregate_scores_preserve_colliding_experiment_labels(
+    benchmark_results: BenchmarkResults,
+):
+    base = benchmark_results.select_models(
+        ["mteb/baseline-random-encoder"]
+    ).model_results[0]
+    meta = mteb.get_model_meta(base.model_name)
+    runs = []
+    for kwargs in ({"a": "x, b=y"}, {"a": "x", "b": "y"}):
+        experiment = meta.model_copy(update={"experiment_kwargs": kwargs})
+        runs.append(
+            base.model_copy(
+                update={
+                    "model_meta": experiment,
+                    "experiment_name": experiment.experiment_name,
+                }
+            )
+        )
+    scores = BenchmarkResults(model_results=runs).get_aggregated_scores()
+    assert len(scores) == 2
+    assert f"{base.model_name} (a=x, b=y)" in scores
