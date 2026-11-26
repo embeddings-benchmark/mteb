@@ -173,13 +173,17 @@ def test_benchmark_get_score_keeps_experiments_apart(
     )
     joined = mock_results.join_revisions().select_tasks(mock_benchmark.tasks)
     by_name = {model_result.model_name: model_result for model_result in joined}
+    experiment_meta = mteb.get_model_meta(model_name).model_copy(
+        update={"experiment_kwargs": {"normalize": False}}
+    )
     results = BenchmarkResults(
         model_results=[
             by_name[model_name],
             ModelResult(
                 model_name=model_name,
                 model_revision=by_name[model_name].model_revision,
-                experiment_name="normalize_False",
+                experiment_name=experiment_meta.experiment_name,
+                model_meta=experiment_meta,
                 task_results=by_name[random_name].task_results,
             ),
         ]
@@ -187,7 +191,7 @@ def test_benchmark_get_score_keeps_experiments_apart(
 
     scores = mock_benchmark.get_score(results)
 
-    experiment = f"{model_name} (normalize_False)"
+    experiment = f"{model_name} (normalize=False)"
     assert set(scores) == {model_name, experiment}
     assert scores[model_name]["Mean(Task)"] == pytest.approx(
         MODELS_SCORES["Mean(Task)"][model_name]
