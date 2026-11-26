@@ -523,7 +523,7 @@ def clean_dataset(
         if split == "train":
             continue
         before_test = len(ds[split])
-        ds["test"] = filter_leakage(ds["train"], ds[split])
+        ds[split] = filter_leakage(ds["train"], ds[split])
         removed = before_test - len(ds[split])
         if removed > 0:
             is_changed = True
