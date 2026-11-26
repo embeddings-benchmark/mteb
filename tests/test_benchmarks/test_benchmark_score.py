@@ -213,6 +213,7 @@ def test_benchmark_get_score_keeps_experiments_apart(
     assert scores[experiment]["Rank"] == 2
 
 
+@_skip_if_datasets_too_old
 def test_tables_rank_experiments_apart(mock_mteb_cache: ResultCache):
     """The summary and per-task tables rank an experiment apart from the default run."""
     mock_benchmark = _make_benchmark()
