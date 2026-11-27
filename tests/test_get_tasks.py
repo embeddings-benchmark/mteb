@@ -95,36 +95,29 @@ def test_get_tasks_filtering():
                 )
 
 
-def test_get_tasks_single_string_filters():
-    """A single string is one value, not a sequence of characters."""
-    filters = {
-        "languages": "eng",
-        "script": "Latn",
-        "domains": "Legal",
-        "task_types": "Retrieval",
-        "categories": "t2t",
-        "modalities": "text",
-        "eval_splits": "test",
-    }
-    expected = [
-        t.metadata.name
-        for t in get_tasks(**{key: [value] for key, value in filters.items()})
-    ]
-    assert expected
-    assert [t.metadata.name for t in get_tasks(**filters)] == expected
-    assert [t.metadata.name for t in get_tasks(tasks="NFCorpus")] == ["NFCorpus"]
+@pytest.mark.parametrize(
+    "name",
+    [
+        "tasks",
+        "languages",
+        "script",
+        "domains",
+        "task_types",
+        "categories",
+        "modalities",
+        "eval_splits",
+    ],
+)
+def test_get_tasks_rejects_single_string(name: str):
+    """A single string would be read as a sequence of characters."""
+    with pytest.raises(TypeError, match=f"`{name}` must be a list of strings"):
+        get_tasks(**{name: "eng"})
 
 
-def test_get_task_single_string_filters():
-    task = get_task(
-        "MassiveIntentClassification",
-        languages="nob",
-        script="Latn",
-        eval_splits="test",
-        hf_subsets="nb",
-    )
-    assert task.hf_subsets == ["nb"]
-    assert task.eval_splits == ["test"]
+@pytest.mark.parametrize("name", ["languages", "script", "eval_splits", "hf_subsets"])
+def test_get_task_rejects_single_string(name: str):
+    with pytest.raises(TypeError, match=f"`{name}` must be a list of strings"):
+        get_task("MassiveIntentClassification", **{name: "nb"})
 
 
 @pytest.mark.parametrize("script", [["Cyrl"], None])

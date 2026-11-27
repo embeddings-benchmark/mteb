@@ -25,21 +25,13 @@ def test_get_tasks_size_differences(all_tasks: list[AbsTask]):
     assert len(filter_tasks(all_tasks, modalities=["text", "image"])) >= len(text_task)
 
 
-def test_filter_tasks_single_string_filters(all_tasks: list[AbsTask]):
-    """A single string is one value, not a sequence of characters."""
-    filters = {
-        "languages": "eng",
-        "script": "Latn",
-        "domains": "Legal",
-        "task_types": "Retrieval",
-        "categories": "t2t",
-        "modalities": "text",
-    }
-    expected = filter_tasks(
-        all_tasks, **{key: [value] for key, value in filters.items()}
-    )
-    assert expected
-    assert filter_tasks(all_tasks, **filters) == expected
+@pytest.mark.parametrize(
+    "name", ["languages", "script", "domains", "task_types", "categories", "modalities"]
+)
+def test_filter_tasks_rejects_single_string(all_tasks: list[AbsTask], name: str):
+    """A single string would be read as a sequence of characters."""
+    with pytest.raises(TypeError, match=f"`{name}` must be a list of strings"):
+        filter_tasks(all_tasks, **{name: "eng"})
 
 
 @pytest.mark.parametrize("languages", [["eng", "deu"], ["eng"], None])

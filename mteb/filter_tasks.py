@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING, TypeVar, cast, overload
+from typing import TYPE_CHECKING, overload
 
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.languages import LanguageScripts
@@ -19,14 +19,15 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-_T = TypeVar("_T")
 
-
-def _as_list(values: _T) -> _T:
-    """Wrap a single string in a list, so that it is not read as a sequence of characters."""
-    if isinstance(values, str):
-        return cast("_T", [values])
-    return values
+def _reject_str(**values: object) -> None:
+    """Raise if a filter is a single string, which would be read as a sequence of characters."""
+    for name, value in values.items():
+        if isinstance(value, str):
+            raise TypeError(
+                f"`{name}` must be a list of strings, got the string {value!r}. "
+                f"Pass [{value!r}] instead."
+            )
 
 
 @overload
@@ -111,12 +112,14 @@ def filter_tasks(  # noqa: PLR0913
         >>> text_image_tasks = filter_tasks(my_tasks, modalities=["text", "image"], exclusive_modality_filter=True)
 
     """
-    languages = _as_list(languages)
-    script = _as_list(script)
-    domains = _as_list(domains)
-    task_types = _as_list(task_types)
-    categories = _as_list(categories)
-    modalities = _as_list(modalities)
+    _reject_str(
+        languages=languages,
+        script=script,
+        domains=domains,
+        task_types=task_types,
+        categories=categories,
+        modalities=modalities,
+    )
 
     langs_to_keep = None
     if languages:
