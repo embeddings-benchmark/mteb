@@ -360,6 +360,7 @@ def test_scoped_summary_ranks_experiments_and_ignores_nan():
     ).rows() == [("better", 0.8, 1), ("", 0.2, 2)]
 
 
+@_skip_if_datasets_too_old
 def test_summary_embedding_dimensions_follow_each_run():
     frame = pl.DataFrame(
         {
