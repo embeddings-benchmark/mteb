@@ -237,6 +237,39 @@ def test_task_detail_keeps_complementary_experiment_scores():
     ] == [(None, 0.5, 0.9), ({"normalize": False}, 0.5, 0.1)]
 
 
+def test_task_detail_model_meta_follows_each_run():
+    pytest.importorskip("fastapi")
+    from mteb.api import frames
+    from mteb.api.adapters import model_meta_to_schema
+    from mteb.api.aggregators import build_task_scores
+    from mteb.models.model_implementations import MODEL_REGISTRY
+
+    task = "CataloniaTweetClassification"
+    raw = pl.DataFrame(
+        {
+            "model_name": [FULL_MODEL] * 2,
+            "experiments": [
+                None,
+                {"embed_dim": 128, "model_type": ["sparse"]},
+            ],
+            "task_name": [task] * 2,
+            "split": ["test"] * 2,
+            "subset": ["catalan"] * 2,
+            "score": [0.2, 0.8],
+        }
+    )
+    unified = frames._dedupe_unified(raw)
+    rows = {
+        r.experiments is not None: r.model
+        for r in build_task_scores(task, all_df=unified).rows
+    }
+    default = model_meta_to_schema(MODEL_REGISTRY[FULL_MODEL])
+    assert rows[False].embedding_dim == default.embedding_dim
+    assert rows[False].model_type == default.model_type
+    assert rows[True].embedding_dim == 128
+    assert rows[True].model_type == "sparse"
+
+
 def test_coverage_requires_one_complete_run():
     pytest.importorskip("fastapi")
     from mteb.api import frames, routes

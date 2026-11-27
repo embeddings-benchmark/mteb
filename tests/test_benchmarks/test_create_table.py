@@ -21,6 +21,7 @@ from mteb.benchmarks._create_table import (
     _create_per_language_table_from_benchmark_results,
     _create_per_task_table_from_benchmark_results,
     _create_summary_table,
+    _get_embedding_size,
     _incomplete_subset_pairs,
     _incomplete_task_pairs,
 )
@@ -357,6 +358,25 @@ def test_scoped_summary_ranks_experiments_and_ignores_nan():
     assert summary.df.sort("Rank (Borda)").select(
         _EXPERIMENT_ID_COL, "__cg__Language::Catalan", "Rank (Borda)"
     ).rows() == [("better", 0.8, 1), ("", 0.2, 2)]
+
+
+def test_summary_embedding_dimensions_follow_each_run():
+    frame = pl.DataFrame(
+        {
+            "model_name": [FULL_MODEL] * 2,
+            "experiments": [None, {"truncate_dim": 128, "embed_dim": 128}],
+            "task_name": [BANKING77] * 2,
+            "split": ["test"] * 2,
+            "subset": ["default"] * 2,
+            "score": [0.2, 0.8],
+        }
+    )
+    default_dim = _get_embedding_size(mteb.get_model_meta(FULL_MODEL).embed_dim)
+    summary = _create_summary_table(frame)
+    assert summary.df.sort("Rank (Borda)").select("Embedding Dimensions").rows() == [
+        (128,),
+        (default_dim,),
+    ]
 
 
 @pytest.mark.parametrize(

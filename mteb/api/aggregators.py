@@ -594,13 +594,18 @@ def build_task_scores(  # noqa: PLR0914
             trained_on = name in meta.training_datasets
         else:
             trained_on = None
+        run_meta = variants.get((model_name, eid)) if eid else None
         rows.append(
             TaskScoreRowSchema.model_construct(
                 rank=0,
-                model=model_meta_to_schema(meta),
+                model=(
+                    run_model_meta_to_schema(meta, run_meta)
+                    if run_meta
+                    else model_meta_to_schema(meta)
+                ),
                 score=score,
                 subset_scores=subset_scores,
-                experiments=variants.get((model_name, eid)),
+                experiments=run_meta,
                 benchmarks=list(hosting_benchmarks),
                 trained_on=trained_on,
             )
