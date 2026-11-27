@@ -18,6 +18,7 @@ from mteb.benchmarks._create_table import (
     _EXPERIMENT_ID_COL,
     _build_per_scope_pivot,
     _build_per_task_pivot,
+    _create_per_language_table_from_benchmark_results,
     _create_per_task_table_from_benchmark_results,
     _create_summary_table,
     _incomplete_subset_pairs,
@@ -102,6 +103,7 @@ def test_create_summary_table_nulls_mean_task_on_partial_split_coverage(
     assert rows[PARTIAL_MODEL]["Mean (TaskType)"] is None
 
 
+@_skip_if_datasets_too_old
 @pytest.mark.parametrize(
     "aggregation", [BenchmarkAggregation.MEAN_TASK, BenchmarkAggregation.MEAN_SUBSET]
 )
@@ -324,6 +326,7 @@ def test_create_summary_table_custom_groups_scoped_hand_computed(
     assert rows[PARTIAL_MODEL]["__cg__Language::Mixed"] is not None
 
 
+@_skip_if_datasets_too_old
 def test_scoped_summary_ranks_experiments_and_ignores_nan():
     frame = pl.DataFrame(
         {
@@ -354,3 +357,25 @@ def test_scoped_summary_ranks_experiments_and_ignores_nan():
     assert summary.df.sort("Rank (Borda)").select(
         _EXPERIMENT_ID_COL, "__cg__Language::Catalan", "Rank (Borda)"
     ).rows() == [("better", 0.8, 1), ("", 0.2, 2)]
+
+
+@pytest.mark.parametrize(
+    ("language_view", "expected"),
+    [
+        (["en"], [("", 0.9), ("multivec", 0.1)]),
+        ("all", [("multivec", 0.1, 0.8, 0.8), ("", 0.9, 0.2, 0.2)]),
+    ],
+)
+def test_per_language_table_separates_and_sorts_experiments(language_view, expected):
+    frame = pl.DataFrame(
+        {
+            "model_name": [FULL_MODEL] * 4,
+            _EXPERIMENT_ID_COL: ["", "", "multivec", "multivec"],
+            "language": [["en"], ["fr", "de"], ["en"], ["fr", "de"]],
+            "score": [0.9, 0.2, 0.1, 0.8],
+        }
+    )
+    table = _create_per_language_table_from_benchmark_results(frame, language_view)
+    languages = ["en", "fr", "de"] if language_view == "all" else language_view
+    assert table.select(_EXPERIMENT_ID_COL, *languages).rows() == expected
+    assert table["Model"].to_list() == [FULL_MODEL, FULL_MODEL]

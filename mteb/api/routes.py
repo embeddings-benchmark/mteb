@@ -66,6 +66,7 @@ from mteb.api.serialization import (
     serialize_bytes,
 )
 from mteb.api.settings import get_settings
+from mteb.benchmarks._create_table import _EXPERIMENT_ID_COL
 from mteb.benchmarks._leaderboard_menu import HOME_BENCHMARK_ENTRIES
 from mteb.filter_tasks import filter_tasks
 from mteb.get_tasks import _TASKS_REGISTRY, TASK_LIST
@@ -74,11 +75,13 @@ from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.types.statistics import DescriptiveStatsValue
 
 if TYPE_CHECKING:
-    from collections.abc import Callable, Container
+    from collections.abc import Callable, Container, Iterable, Mapping
 
+    from mteb.abstasks import AbsTask
     from mteb.api.serialization import (
         Serialized,
     )
+    from mteb.benchmarks.benchmark import Benchmark
 logger = logging.getLogger(__name__)
 # Root-level infra (health / metrics / asset proxies); not under /v1.
 infra_router = APIRouter()
@@ -153,7 +156,13 @@ def _num_models_map() -> dict[str, int]:
     if loaded is None:
         return {}
     frames, _ = loaded
-    expected_tasks = {b.name: len(b.tasks) for b in mteb.get_benchmarks()}
+    return _count_full_models_by_benchmark(frames, mteb.get_benchmarks())
+
+
+def _count_full_models_by_benchmark(
+    frames: dict[str, pl.DataFrame], benchmarks: Iterable[Benchmark]
+) -> dict[str, int]:
+    expected_tasks = {b.name: len(b.tasks) for b in benchmarks}
     out: dict[str, int] = {}
     for name, frame in frames.items():
         total = expected_tasks.get(name, 0)
@@ -164,10 +173,10 @@ def _num_models_map() -> dict[str, int]:
         fully_evaluated = (
             frame.lazy()
             .drop_nulls("score")
-            .group_by("model_name")
+            .group_by(["model_name", _EXPERIMENT_ID_COL])
             .agg(pl.col("task_name").n_unique().alias("n_tasks"))
             .filter(pl.col("n_tasks") >= total)
-            .select(pl.len())
+            .select(pl.col("model_name").n_unique())
             .collect()
             .item()
         )
@@ -182,10 +191,16 @@ def _task_num_models_map() -> dict[str, int]:
     if loaded is None:
         return {}
     _, unified = loaded
+    return _count_full_models_by_task(unified, _TASKS_REGISTRY)
+
+
+def _count_full_models_by_task(
+    unified: pl.DataFrame, tasks: Mapping[str, type[AbsTask]]
+) -> dict[str, int]:
     if unified.is_empty() or "task_name" not in unified.columns:
         return {}
     triples: list[tuple[str, str, str]] = []
-    for name, cls in _TASKS_REGISTRY.items():
+    for name, cls in tasks.items():
         splits = list(cls.metadata.eval_splits) or ["default"]
         subsets = list(cls.metadata.hf_subsets) or ["default"]
         for sp in splits:
@@ -205,7 +220,7 @@ def _task_num_models_map() -> dict[str, int]:
         unified.lazy()
         .drop_nulls("score")
         .join(expected_df.lazy(), on=["task_name", "split", "subset"], how="inner")
-        .group_by(["task_name", "model_name"])
+        .group_by(["task_name", "model_name", _EXPERIMENT_ID_COL])
         .agg(pl.len().alias("n_cells"))
         .join(expected_per_task, on="task_name", how="inner")
         .filter(pl.col("n_cells") >= pl.col("expected_cells"))

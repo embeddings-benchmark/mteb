@@ -1124,7 +1124,7 @@ def _create_per_language_table_from_benchmark_results(
 ) -> pl.DataFrame:
     """Create per-language table from a long polars pre-aggregation frame.
 
-    Returns a DataFrame with one row per model and one column per language.
+    Returns one row per model and experiment, with one score column per language.
 
     Args:
         pl_df: Long polars frame with at least ``model_name``, ``language`` (list[str]),
@@ -1146,7 +1146,8 @@ def _create_per_language_table_from_benchmark_results(
     # is selected, push the predicate *before* the explode by keeping only rows
     # whose language list intersects the selection — this avoids materialising
     # exploded rows we'll discard.
-    lazy = pl_df.lazy().select("model_name", "language", "score")
+    keys = ["model_name", _EXPERIMENT_ID_COL]
+    lazy = _ensure_experiment_id(pl_df).lazy().select(*keys, "language", "score")
     if language_view != "all":
         lazy = lazy.filter(
             pl.col("language").list.eval(pl.element().is_in(language_view)).list.any()
@@ -1157,15 +1158,15 @@ def _create_per_language_table_from_benchmark_results(
     # Streaming engine handles the explode → group_by chain on tens of millions of
     # post-explode rows ~3-4× faster than the default in-memory engine here.
     lang_df = (
-        lazy.group_by(["model_name", "language"])
+        lazy.group_by([*keys, "language"])
         .agg(pl.col("score").mean())
         .collect(engine="streaming")
     )
     if lang_df.is_empty():
         return _no_results_frame()
 
-    per_language = lang_df.pivot(on="language", index="model_name", values="score")
-    lang_cols = [c for c in per_language.columns if c != "model_name"]
+    per_language = lang_df.pivot(on="language", index=keys, values="score")
+    lang_cols = [c for c in per_language.columns if c not in keys]
     if not lang_cols:
         return _no_results_frame()
     per_language = per_language.filter(
@@ -1184,15 +1185,17 @@ def _create_per_language_table_from_benchmark_results(
         # ``pl.len()`` — lang_df may contain models whose aggregated scores
         # are all null and got dropped from per_language.
         borda_df = _borda_rank_from_long(
-            lang_df,
+            lang_df.drop_nulls("score"),
             partition_col="language",
             score_col="score",
             n_models=per_language.height,
         )
         per_language = (
-            per_language.join(borda_df, on="model_name", how="left")
+            per_language.join(borda_df, on=keys, how="left")
             .sort("Rank (Borda)")
             .drop("Rank (Borda)")
         )
 
-    return per_language.rename({"model_name": "Model"}).select(["Model", *lang_cols])
+    return per_language.rename({"model_name": "Model"}).select(
+        "Model", _EXPERIMENT_ID_COL, *lang_cols
+    )

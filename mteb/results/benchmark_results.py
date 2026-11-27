@@ -428,6 +428,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         - model_name: The name of the model.
         - task_name: The name of the task.
         - score: The main score of the model on the task.
+        - experiment_id: When experiments are present, identifies each run in long
+          format and adds a column level in wide format. Default runs use an empty string.
 
         In addition, the DataFrame can have the following columns depending on the aggregation level:
 
@@ -462,6 +464,10 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         columns = ["model_name"]
         if include_model_revision:
             columns.append("model_revision")
+
+        if df["_experiment_id"].ne("").any():
+            df = df.rename(columns={"_experiment_id": "experiment_id"})
+            columns.append("experiment_id")
 
         result = _aggregate_and_pivot(
             df,
