@@ -208,6 +208,7 @@ audio-flamingo-3 = ["accelerate>=0.26.0"]
 bidirlm-omni = ["librosa>=0.10.0"]
 # ViCLIP remote code; setuptools<81 for its `from pkg_resources import packaging`
 viclip = ["einops>=0.8.0", "timm>=1.0.15,<1.1.0", "ftfy>=6.0", "regex", "fvcore", "setuptools<81", "transformers<5"]
+hyper3-embed = ["sentence-transformers>=6.1.0", "transformers>=5.17.0,<6.0.0"]
 
 [dependency-groups]
 lint = [
@@ -612,6 +613,7 @@ conflicts = [
         { extra = "colnanovdr" },
         { extra = "pplx-embed-v2" }, # needs transformers>=5.4.0
         { extra = "chopper" }, # chopper-rag needs transformers>=4.48
+        { extra = "hyper3-embed" }, # Gemma 4 E2B + ST v6 custom module
     ],
 ]
 
