@@ -147,9 +147,8 @@ def test_build_summary_rows_strict_when_not_language_filtered():
     assert rows[0].scores_by_custom_group["WholeDim"]["G1"] == 0.5
 
 
-def test_build_task_scores_ignores_splits_outside_eval_splits(monkeypatch):
+def test_build_task_scores_ignores_splits_outside_eval_splits():
     pytest.importorskip("fastapi")
-    from mteb.api import frames
     from mteb.api.aggregators import build_task_scores
 
     task = "SprintDuplicateQuestions"
@@ -164,9 +163,8 @@ def test_build_task_scores_ignores_splits_outside_eval_splits(monkeypatch):
             "score": [0.6, 0.9, 0.7],
         }
     )
-    monkeypatch.setattr(frames, "_load_per_benchmark_frames", lambda: ({}, unified))
 
-    result = build_task_scores(task)
+    result = build_task_scores(task, all_df=unified)
 
     assert result.splits == ["test"]
     scores = {row.model.name: row.score for row in result.rows}
@@ -176,9 +174,8 @@ def test_build_task_scores_ignores_splits_outside_eval_splits(monkeypatch):
     )
 
 
-def test_build_task_scores_ignores_subsets_outside_hf_subsets(monkeypatch):
+def test_build_task_scores_ignores_subsets_outside_hf_subsets():
     pytest.importorskip("fastapi")
-    from mteb.api import frames
     from mteb.api.aggregators import build_task_scores
 
     task = "HUMEWikipediaRerankingMultilingual"
@@ -195,10 +192,156 @@ def test_build_task_scores_ignores_subsets_outside_hf_subsets(monkeypatch):
             "score": [0.6] * len(subsets) + [0.9] + [0.7] * len(subsets),
         }
     )
-    monkeypatch.setattr(frames, "_load_per_benchmark_frames", lambda: ({}, unified))
-
-    result = build_task_scores(task)
+    result = build_task_scores(task, all_df=unified)
 
     assert result.subsets == sorted(subsets)
     scores = {row.model.name: row.score for row in result.rows}
     assert scores == pytest.approx({FULL_MODEL: 0.6, other_model: 0.7})
+
+
+@pytest.mark.parametrize("stored_id", [None, "named-run"])
+def test_variant_kwargs_follow_table_experiment_id(stored_id: str | None):
+    pytest.importorskip("fastapi")
+    from mteb.api.aggregators import _extract_variant_kwargs
+
+    frame = pl.DataFrame(
+        {"model_name": [FULL_MODEL], "experiments": [{"normalize": False}]}
+    )
+    if stored_id:
+        frame = frame.with_columns(pl.lit(stored_id).alias("_experiment_id"))
+    assert _extract_variant_kwargs(frame) == {
+        (FULL_MODEL, stored_id or "normalize_False"): {"normalize": False}
+    }
+
+
+def test_task_detail_keeps_complementary_experiment_scores():
+    pytest.importorskip("fastapi")
+    from mteb.api import frames
+    from mteb.api.aggregators import build_task_scores
+
+    task = "CataloniaTweetClassification"
+    raw = pl.DataFrame(
+        {
+            "model_name": [FULL_MODEL] * 4,
+            "experiments": [None, None, {"normalize": False}, {"normalize": False}],
+            "task_name": [task] * 4,
+            "split": ["test"] * 4,
+            "subset": ["catalan", "spanish"] * 2,
+            "score": [0.9, 0.1, 0.1, 0.9],
+        }
+    )
+    unified = frames._dedupe_unified(raw)
+    rows = build_task_scores(task, all_df=unified).rows
+    assert [
+        (r.experiments, r.score, r.subset_scores["catalan"]["test"]) for r in rows
+    ] == [(None, 0.5, 0.9), ({"normalize": False}, 0.5, 0.1)]
+
+
+def test_task_detail_model_meta_follows_each_run():
+    pytest.importorskip("fastapi")
+    from mteb.api import frames
+    from mteb.api.adapters import model_meta_to_schema
+    from mteb.api.aggregators import build_task_scores
+    from mteb.models.model_implementations import MODEL_REGISTRY
+
+    task = "CataloniaTweetClassification"
+    raw = pl.DataFrame(
+        {
+            "model_name": [FULL_MODEL] * 2,
+            "experiments": [
+                None,
+                {"embed_dim": 128, "model_type": ["sparse"]},
+            ],
+            "task_name": [task] * 2,
+            "split": ["test"] * 2,
+            "subset": ["catalan"] * 2,
+            "score": [0.2, 0.8],
+        }
+    )
+    unified = frames._dedupe_unified(raw)
+    rows = {
+        r.experiments is not None: r.model
+        for r in build_task_scores(task, all_df=unified).rows
+    }
+    default = model_meta_to_schema(MODEL_REGISTRY[FULL_MODEL])
+    assert rows[False].embedding_dim == default.embedding_dim
+    assert rows[False].model_type == default.model_type
+    assert rows[True].embedding_dim == 128
+    assert rows[True].model_type == "sparse"
+
+
+def test_coverage_requires_one_complete_run():
+    pytest.importorskip("fastapi")
+    from mteb.api import frames, routes
+    from mteb.get_tasks import _TASKS_REGISTRY
+
+    task = "CataloniaTweetClassification"
+    other = "Banking77Classification"
+    benchmark = Benchmark(name="coverage", tasks=mteb.get_tasks([task, other]))
+    raw = pl.DataFrame(
+        {
+            "model_name": [FULL_MODEL] * 5,
+            "_experiment_id": ["", "", "named", "named", "named"],
+            "task_name": [task, task, task, task, other],
+            "subset": ["catalan", "catalan", "spanish", "spanish", "default"],
+            "split": ["test", "validation", "test", "validation", "test"],
+            "score": [0.5] * 5,
+        }
+    )
+    unified = frames._dedupe_unified(raw)
+    # In the benchmark frame each run covers a different task.
+    partial = raw.filter(
+        pl.col("_experiment_id").eq("") | (pl.col("task_name") == other)
+    )
+    assert routes._count_full_models_by_benchmark(
+        {"coverage": partial}, [benchmark]
+    ) == {"coverage": 0}
+    tasks = {task: _TASKS_REGISTRY[task], other: _TASKS_REGISTRY[other]}
+    assert routes._count_full_models_by_task(unified, tasks) == {other: 1}
+
+
+def test_experiment_kwargs_survive_summary_language_and_model_detail():
+    pytest.importorskip("fastapi")
+    from mteb.api import aggregators
+    from mteb.api.schemas import BenchmarkSummarySchema
+
+    task = "Banking77Classification"
+    bench = Benchmark(name="named-run-test", tasks=mteb.get_tasks([task]))
+    frame = pl.DataFrame(
+        {
+            "model_name": [FULL_MODEL] * 2,
+            "experiments": [{"normalize": False}, None],
+            "task_name": [task] * 2,
+            "split": ["test"] * 2,
+            "subset": ["default"] * 2,
+            "language": [["eng-Latn"]] * 2,
+            "score": [0.8, 0.2],
+        }
+    )
+    summary = bench._create_summary_table(frame)
+    rows = aggregators._build_summary_rows(
+        summary.df,
+        summary,
+        [],
+        {},
+        {},
+        {},
+        False,
+        variants_by_model=aggregators._extract_variant_kwargs(frame),
+    )
+    assert [(r.experiments, r.rank) for r in rows] == [
+        ({"normalize": False}, 1),
+        (None, 2),
+    ]
+    languages = aggregators._build_per_language_rows(frame)
+    assert sorted(
+        (r.scores_by_language["English"], r.experiments) for r in languages
+    ) == [(0.2, None), (0.8, {"normalize": False})]
+    payload = BenchmarkSummarySchema(
+        benchmark_name=bench.name, task_types=[], tasks=[task], tasks_meta=[], rows=rows
+    )
+    detail = aggregators._model_scores_from_summaries(FULL_MODEL, [(bench, payload)])
+    assert [(r.experiments, r.rank, r.mean_task) for r in detail.rows] == [
+        ({"normalize": False}, 1, 0.8),
+        (None, 2, 0.2),
+    ]

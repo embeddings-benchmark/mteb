@@ -486,3 +486,68 @@ def test_generate_model_card_with_table_and_benchmarks(
         assert output_row == golden_row, (
             f"Row {i} doesn't match.\nExpected: {golden_row}\nGot: {output_row}"
         )
+
+
+def test_aggregate_scores_preserve_colliding_experiment_labels(
+    benchmark_results: BenchmarkResults,
+):
+    base = benchmark_results.select_models(
+        ["mteb/baseline-random-encoder"]
+    ).model_results[0]
+    meta = mteb.get_model_meta(base.model_name)
+    runs = []
+    for kwargs in ({"a": "x, b=y"}, {"a": "x", "b": "y"}):
+        experiment = meta.model_copy(update={"experiment_kwargs": kwargs})
+        runs.append(
+            base.model_copy(
+                update={
+                    "model_meta": experiment,
+                    "experiment_name": experiment.experiment_name,
+                }
+            )
+        )
+    scores = BenchmarkResults(model_results=runs).get_aggregated_scores()
+    assert len(scores) == 2
+    assert f"{base.model_name} (a=x, b=y)" in scores
+
+
+@pytest.mark.parametrize("include_model_revision", [False, True])
+def test_dataframe_exports_each_experiment(include_model_revision):
+    model = "mteb/baseline-random-encoder"
+    runs = []
+    for experiment, score in [(None, 0.2), ("named", 0.8)]:
+        result = TaskResult(
+            dataset_revision="1",
+            task_name="SciFact",
+            mteb_version="2.27.0",
+            scores={
+                "test": [
+                    {
+                        "hf_subset": "default",
+                        "main_score": score,
+                        "languages": ["eng-Latn"],
+                    }
+                ]
+            },
+            evaluation_time=1.0,
+        )
+        runs.append(
+            ModelResult(
+                model_name=model,
+                model_revision="rev",
+                experiment_name=experiment,
+                task_results=[result],
+            )
+        )
+    results = BenchmarkResults(model_results=runs)
+    long = results.to_dataframe(
+        include_model_revision=include_model_revision, format="long"
+    )
+    assert dict(zip(long["experiment_id"], long["score"], strict=True)) == {
+        "": 0.2,
+        "named": 0.8,
+    }
+    wide = results.to_dataframe(include_model_revision=include_model_revision)
+    key = (model, "rev") if include_model_revision else (model,)
+    assert wide[(*key, "")].item() == 0.2
+    assert wide[(*key, "named")].item() == 0.8

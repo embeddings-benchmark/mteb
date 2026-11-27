@@ -574,20 +574,32 @@ def _join_model_parts(model_results: Iterable[ModelResult]) -> dict[str, ModelRe
             )
         )
 
-    labeled: dict[str, ModelResult] = {}
+    # Reserve default run names before assigning experiment display labels.
+    labeled = {
+        name: result
+        for (name, experiment), result in joined.items()
+        if experiment is None
+    }
     for (model_name, experiment_name), result in joined.items():
-        name = model_name
-        if experiment_name is not None:
-            parameters = experiment_name
-            if result.model_meta is not None:
-                parameters = (
-                    _serialize_experiment_kwargs_to_name(
-                        result.model_meta.experiment_kwargs,
-                        value_field_separator="=",
-                        kwargs_separator=", ",
-                    )
-                    or experiment_name
+        if experiment_name is None:
+            continue
+        parameters = experiment_name
+        if result.model_meta is not None:
+            parameters = (
+                _serialize_experiment_kwargs_to_name(
+                    result.model_meta.experiment_kwargs,
+                    value_field_separator="=",
+                    kwargs_separator=", ",
                 )
-            name = f"{model_name} ({parameters})"
+                or experiment_name
+            )
+        name = f"{model_name} ({parameters})"
+        if name in labeled:
+            base = f"{model_name} ({experiment_name})"
+            name = base
+            suffix = 2
+            while name in labeled:
+                name = f"{base} [{suffix}]"
+                suffix += 1
         labeled[name] = result
     return labeled
