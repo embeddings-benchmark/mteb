@@ -121,7 +121,10 @@ def registered_order_scores():
     scores = INSPIREExpressoAT2ARetrieval().evaluate(
         PositionSearch(), encode_kwargs={}
     )["default"]
-    return {key: scores[key] for key in ("recall_at_1", "ndcg_at_10")}
+    return {
+        key: scores[key]
+        for key in ("recall_at_1", "recall_at_10", "recall_at_50", "ndcg_at_10")
+    }
 
 
 def measure(scores, cases, gold, tie_order):
@@ -133,13 +136,12 @@ def measure(scores, cases, gold, tie_order):
         ranking = candidates[np.argsort(-values, kind="stable")]
         ranks.append(np.flatnonzero(np.isin(ranking, gold[i])) + 1)
     ranks = np.asarray(ranks)
-    return {
-        "recall_at_1": float(np.mean(ranks == 1)),
-        "ndcg_at_10": float(
-            np.mean(np.sum((ranks <= 10) / np.log2(1 + ranks), axis=1))
-            / (1 + 1 / np.log2(3))
-        ),
-    }, ranks[:, 0]
+    metrics = {f"recall_at_{k}": float(np.mean(ranks <= k)) for k in (1, 10, 50)}
+    metrics["ndcg_at_10"] = float(
+        np.mean(np.sum((ranks <= 10) / np.log2(1 + ranks), axis=1))
+        / (1 + 1 / np.log2(3))
+    )
+    return metrics, ranks[:, 0]
 
 
 def score_vectors(banks, panels, tie_order):
