@@ -39,9 +39,13 @@ class AllocineClassification(AbsTaskClassification):
 
         # Renommer la colonne d'entrée vers 'text' attendue par MTEB
         self.dataset = self.dataset.rename_columns({"review": "text"})
+
+        def _has_min_length(example: dict[str, Any]) -> bool:
+            return len(example["text"].strip()) >= 10
+
         # Filtrer les textes trop courts (MTEB exige min_text_length > 3)
         self.dataset = self.dataset.filter(
-            lambda x: len(x["text"].strip()) >= 10,
+            _has_min_length,
             num_proc=num_proc,
         )
         # Échantillonnage pour que l'évaluation reste rapide et standardisée
