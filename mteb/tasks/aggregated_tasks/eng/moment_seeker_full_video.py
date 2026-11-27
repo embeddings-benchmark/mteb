@@ -1,9 +1,5 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
-import numpy as np
-
 from mteb.abstasks.aggregate_task_metadata import AggregateTaskMetadata
 from mteb.abstasks.aggregated_task import AbsTaskAggregate
 from mteb.tasks.retrieval import (
@@ -17,12 +13,6 @@ from mteb.tasks.retrieval import (
     MomentSeekerTV2VGlobalLevelFullVideoRetrieval,
     MomentSeekerTV2VObjectLevelFullVideoRetrieval,
 )
-
-if TYPE_CHECKING:
-    from collections.abc import Mapping
-
-    from mteb.results import TaskResult
-    from mteb.types import HFSubset, ScoresDict
 
 _REFERENCE = "https://arxiv.org/abs/2502.12558"
 _BIBTEX = r"""
@@ -39,51 +29,6 @@ _BIBTEX = r"""
   year = {2025},
 }
 """
-
-# Queries per subtask (unanswerable queries included). Weighting by these pools the
-# score over queries, which is how the paper computes its per-level and overall columns.
-_N_QUERIES = {
-    "MomentSeekerT2VGlobalLevelFullVideoRetrieval": 74,
-    "MomentSeekerTI2VGlobalLevelFullVideoRetrieval": 156,
-    "MomentSeekerTV2VGlobalLevelFullVideoRetrieval": 156,
-    "MomentSeekerT2VEventLevelFullVideoRetrieval": 699,
-    "MomentSeekerTI2VEventLevelFullVideoRetrieval": 88,
-    "MomentSeekerTV2VEventLevelFullVideoRetrieval": 88,
-    "MomentSeekerT2VObjectLevelFullVideoRetrieval": 227,
-    "MomentSeekerTI2VObjectLevelFullVideoRetrieval": 156,
-    "MomentSeekerTV2VObjectLevelFullVideoRetrieval": 156,
-}
-
-
-class _QueryWeightedAggregate(AbsTaskAggregate):
-    """Average subtask scores weighted by query count instead of uniformly."""
-
-    def task_results_to_scores(
-        self, task_results: list[TaskResult]
-    ) -> dict[str, Mapping[HFSubset, ScoresDict]]:
-        scores = super().task_results_to_scores(task_results)
-        by_name = {
-            tr.task_name: tr
-            for tr in task_results
-            if tr.task_name in self.taskname_to_task
-        }
-        if set(by_name) != set(self.taskname_to_task):
-            return scores  # missing subtasks: the parent already set the score to None
-        names = list(self.taskname_to_task)
-        for split in self.metadata.eval_splits:
-            values = [
-                by_name[n]._get_score_fast(languages=["eng"], splits=[split])
-                for n in names
-            ]
-            weighted = float(np.average(values, weights=[_N_QUERIES[n] for n in names]))
-            scores[split] = {
-                "default": {
-                    self.metadata.main_score: weighted,
-                    "main_score": weighted,
-                }
-            }
-        return scores
-
 
 _FULL_GLOBAL = [
     MomentSeekerT2VGlobalLevelFullVideoRetrieval(),
@@ -104,12 +49,11 @@ _FULL_OBJECT = [
 ]
 
 
-class MomentSeekerGlobalLevelFullVideoRetrieval(_QueryWeightedAggregate):
+class MomentSeekerGlobalLevelFullVideoRetrieval(AbsTaskAggregate):
     metadata = AggregateTaskMetadata(
         name="MomentSeekerGlobalLevelFullVideoRetrieval",
         description=(
-            "MomentSeeker full-video retrieval, global-level moments (Causal Reasoning, Spatial Relation), averaged over the text, image+text and video+text "
-            "query types, weighted by query count as in the paper."
+            "MomentSeeker full-video retrieval, global-level moments (Causal Reasoning, Spatial Relation), averaged over the text, image+text and video+text query types."
         ),
         reference=_REFERENCE,
         tasks=_FULL_GLOBAL,
@@ -122,12 +66,11 @@ class MomentSeekerGlobalLevelFullVideoRetrieval(_QueryWeightedAggregate):
     )
 
 
-class MomentSeekerEventLevelFullVideoRetrieval(_QueryWeightedAggregate):
+class MomentSeekerEventLevelFullVideoRetrieval(AbsTaskAggregate):
     metadata = AggregateTaskMetadata(
         name="MomentSeekerEventLevelFullVideoRetrieval",
         description=(
-            "MomentSeeker full-video retrieval, event-level moments (Description Location, Action Recognition, Anomaly Detection), averaged over the text, image+text and video+text "
-            "query types, weighted by query count as in the paper."
+            "MomentSeeker full-video retrieval, event-level moments (Description Location, Action Recognition, Anomaly Detection), averaged over the text, image+text and video+text query types."
         ),
         reference=_REFERENCE,
         tasks=_FULL_EVENT,
@@ -140,12 +83,11 @@ class MomentSeekerEventLevelFullVideoRetrieval(_QueryWeightedAggregate):
     )
 
 
-class MomentSeekerObjectLevelFullVideoRetrieval(_QueryWeightedAggregate):
+class MomentSeekerObjectLevelFullVideoRetrieval(AbsTaskAggregate):
     metadata = AggregateTaskMetadata(
         name="MomentSeekerObjectLevelFullVideoRetrieval",
         description=(
-            "MomentSeeker full-video retrieval, object-level moments (Object Recognition, Object Location, Attribute Recognition, OCR), averaged over the text, image+text and video+text "
-            "query types, weighted by query count as in the paper."
+            "MomentSeeker full-video retrieval, object-level moments (Object Recognition, Object Location, Attribute Recognition, OCR), averaged over the text, image+text and video+text query types."
         ),
         reference=_REFERENCE,
         tasks=_FULL_OBJECT,
@@ -158,13 +100,13 @@ class MomentSeekerObjectLevelFullVideoRetrieval(_QueryWeightedAggregate):
     )
 
 
-class MomentSeekerFullVideoRetrieval(_QueryWeightedAggregate):
+class MomentSeekerFullVideoRetrieval(AbsTaskAggregate):
     metadata = AggregateTaskMetadata(
         name="MomentSeekerFullVideoRetrieval",
         description=(
             "MomentSeeker full-video retrieval: the average of the nine subtasks spanning three query types "
             "(text, image+text, video+text) and three moment levels (global, event, "
-            "object), weighted by query count as in the paper's overall score."
+            "object)."
         ),
         reference=_REFERENCE,
         tasks=_FULL_GLOBAL + _FULL_EVENT + _FULL_OBJECT,
