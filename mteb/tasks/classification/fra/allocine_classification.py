@@ -28,14 +28,7 @@ class AllocineClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        @article{theophile2020allocine,
-          title={Allocin{é}: a french dataset for sentiment analysis},
-          author={Bluche, Th{é}ophile},
-          journal={Hugging Face datasets},
-          year={2020}
-        }
-        """,
+        bibtex_citation="",
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:
