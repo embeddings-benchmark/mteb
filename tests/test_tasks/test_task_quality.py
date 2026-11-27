@@ -550,6 +550,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "IFIRNFCorpus",
         "IFIRScifact",
         "IFlyTek",
+        "INSPIREExpressoAT2ARetrieval",  # instructions recur across distinct reference recordings
         "IndicNLPNewsClassification",
         "IndonesianMongabayConservationClassification",
         "InfoSeekIT2ITRetrieval",
@@ -1050,6 +1051,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FSD2019Kaggle.v2",
         "GTZANGenre",  # repeated short clips sampled from the same tracks
         "GTZANGenreClustering",  # repeated short clips sampled from the same tracks
+        "INSPIREExpressoAT2ARetrieval",  # each reference recording has four different instructions
         "Kinetics400VA",  # multiple clips can share the same soundtrack/source video
         "Kinetics400VAZeroShot",
         "Kinetics600VA",
