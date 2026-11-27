@@ -688,7 +688,8 @@ class Benchmark:
             A dict mapping each model name to a dict whose keys are
             determined by
             [aggregations][mteb.benchmarks.benchmark.Benchmark.aggregations].
-            Possible keys include:
+            Results of an experiment are listed separately under
+            `"<model name> (<experiment name>)"`. Possible keys include:
 
             - `"Mean(Task)"`: mean score across all benchmark tasks (when
                 [MEAN_TASK][mteb.benchmarks.benchmark.BenchmarkAggregation.MEAN_TASK]
@@ -704,54 +705,41 @@ class Benchmark:
                 [PUBLIC_PRIVATE][mteb.benchmarks.benchmark.BenchmarkAggregation.PUBLIC_PRIVATE]
                 is enabled.
             - `"Rank"`: Borda count rank (1 = best). Each model earns
-                `n - rank` points per task; points are summed and the model
-                with the highest total is ranked 1. Matches the leaderboard.
-                Always present.
+                `n - rank` points per scored task, where `n` counts the runs
+                eligible for ranking. The run with the highest total is ranked
+                1. Always present, with `None` for runs without eligible scores.
         """
         from mteb.benchmarks._create_table import _get_borda_rank
+        from mteb.results.model_result import _join_model_parts
 
-        bench_results = results.join_revisions()
         scores: dict[str, dict[str, float | None]] = {}
         per_task_rows: dict[str, dict[str, float | None]] = {}
 
-        for model_result in bench_results:
-            per_task_rows[model_result.model_name] = {}
+        for name, model_result in _join_model_parts(results.join_revisions()).items():
             filtered = model_result.select_tasks(self.tasks).task_results
             try:
-                scores[model_result.model_name] = self._get_model_score(model_result)
+                scores[name] = self._get_model_score(model_result)
             except ValueError:
                 if raise_error:
                     raise
                 logger.warning(
                     "Some task results are missing. Filling results with None"
                 )
-                scores[model_result.model_name] = dict.fromkeys(self._score_keys())
-                continue
-
-            per_task_rows[model_result.model_name] = {
-                tr.task_name: tr.get_score() for tr in filtered
-            }
+                scores[name] = dict.fromkeys(self._score_keys())
+            per_task_rows[name] = {tr.task_name: tr.get_score() for tr in filtered}
+            scores[name]["Rank"] = None
 
         if per_task_rows:
-            per_task_df = pd.DataFrame.from_dict(per_task_rows, orient="index").reindex(
-                list(per_task_rows.keys())
-            )
-            if per_task_df.shape[1] > 0:
-                per_task_pl = pl.from_pandas(
-                    per_task_df.reset_index(names="model_name")
+            per_task_df = pd.DataFrame.from_dict(per_task_rows, orient="index")
+            task_cols = list(per_task_df.columns)
+            if task_cols:
+                ranked = (
+                    pl.from_pandas(per_task_df.reset_index(names="model_name"))
+                    .filter(pl.any_horizontal(pl.col(task_cols).is_not_null()))
+                    .select("model_name", _get_borda_rank(task_cols).alias("Rank"))
                 )
-                task_cols = list(per_task_df.columns)
-                borda_list = (
-                    per_task_pl.select(_get_borda_rank(task_cols)).to_series().to_list()
-                )
-                for name, rank in zip(per_task_df.index, borda_list, strict=True):
-                    scores[name]["Rank"] = int(rank)
-            else:
-                for model_scores in scores.values():
-                    model_scores["Rank"] = None
-        else:
-            for model_scores in scores.values():
-                model_scores["Rank"] = None
+                for name, rank in ranked.iter_rows():
+                    scores[name]["Rank"] = rank
 
         return scores
 

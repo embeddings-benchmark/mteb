@@ -13,7 +13,7 @@ class StanfordCarsClassification(AbsTaskClassification):
         reference="https://pure.mpg.de/rest/items/item_2029263/component/file_2029262/content",
         dataset={
             "path": "mteb/StanfordCars",
-            "revision": "09ffe9bc7864d3f1e851529e5c4b7e05601a04fb",
+            "revision": "6482538d737d7f5393f985596806453abbb67301",
         },
         type="ImageClassification",
         category="i2c",

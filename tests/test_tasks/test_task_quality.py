@@ -169,7 +169,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "IWSLT2017BitextMining",
         "IconclassClassification",
         "ImageCoDe",
+        "ImageCoDe.v2",
         "ImageCoDeT2IRetrieval",
+        "ImageCoDeT2IRetrieval.v2",
         "IndicCrosslingualSTS",
         "IndicLangClassification",
         "IndicNLPNewsClassification",
@@ -944,6 +946,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "GLAMI1MI2TRetrieval",
         "GLAMI1MT2IRetrieval",  # images recur across language subsets
         "ImageCoDeT2IRetrieval",
+        "ImageCoDeT2IRetrieval.v2",
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",
         "LLaVAIT2TRetrieval",
@@ -1162,6 +1165,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "AROVisualAttribution",  # correct + distractor attribution captions per example
         "AROVisualRelation",  # correct + distractor relation captions per example
         "ImageCoDe",  # multiple candidate images per example
+        "ImageCoDe.v2",  # multiple candidate images per example
         "SugarCrepe",  # correct + hard-negative captions per example
         "Winoground",  # exactly 2 texts and 2 images per example (400 samples -> 800 of each)
         # Genuine stats-generation inconsistency: unique_texts exceeds the

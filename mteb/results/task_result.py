@@ -52,6 +52,26 @@ logger = logging.getLogger(__name__)
 log_once = LogOnce(logger)
 
 
+def _parse_mteb_version_min(version_str: str | None) -> Version | None:
+    """Parse a stored mteb_version, which may be a range like "2.12.16-2.15.4".
+
+    Returns the minimum version of the range, or the parsed version for a
+    single version string. Returns None if the input is None or unparsable.
+    """
+    if version_str is None:
+        return None
+    try:
+        return Version(version_str)
+    except InvalidVersion:
+        pass
+    if "-" in version_str:
+        try:
+            return Version(version_str.split("-", 1)[0])
+        except InvalidVersion:
+            return None
+    return None
+
+
 class Criteria(HelpfulStrEnum):
     """Enum for criteria to check when merging TaskResult objects."""
 
@@ -408,7 +428,7 @@ class TaskResult(BaseModel):  # noqa: PLR0904
                     f"Error loading TaskResult from disk. You can try to load historic data by setting `load_historic_data=True`. Error: {e}"
                 ) from e
         data = json.loads(json_str)
-        min_version = cls._parse_mteb_version_min(data.get("mteb_version"))
+        min_version = _parse_mteb_version_min(data.get("mteb_version"))
         pre_1_11_load = (
             (min_version is not None and min_version < Version("1.11.0"))
             or "mteb_version" not in data
@@ -910,26 +930,6 @@ class TaskResult(BaseModel):  # noqa: PLR0904
         return merged_results
 
     @staticmethod
-    def _parse_mteb_version_min(version_str: str | None) -> Version | None:
-        """Parse a stored mteb_version, which may be a range like "2.12.16-2.15.4".
-
-        Returns the minimum version of the range, or the parsed version for a
-        single version string. Returns None if the input is None or unparsable.
-        """
-        if version_str is None:
-            return None
-        try:
-            return Version(version_str)
-        except InvalidVersion:
-            pass
-        if "-" in version_str:
-            try:
-                return Version(version_str.split("-", 1)[0])
-            except InvalidVersion:
-                return None
-        return None
-
-    @staticmethod
     def _compute_top_level_mteb_version(
         scores: dict[SplitName, list[ScoresDict]],
     ) -> str | None:
@@ -976,7 +976,11 @@ class TaskResult(BaseModel):  # noqa: PLR0904
             if splits not in self.scores:  # split it fully missing
                 missing_splits[splits] = task.hf_subsets
             if splits in self.scores:
-                hf_subsets = {score["hf_subset"] for score in self.scores[splits]}
+                hf_subsets = {
+                    score["hf_subset"]
+                    for score in self.scores[splits]
+                    if score.get("main_score") is not None
+                }
                 missing_subsets = list(set(task.hf_subsets) - hf_subsets)
                 if missing_subsets:
                     missing_splits[splits] = missing_subsets

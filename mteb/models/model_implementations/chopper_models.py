@@ -10,6 +10,12 @@ size (stride half a window), every window is scored, and then each document's be
 other candidates in one comparison. The whole text is read, and the final scores are comparable across candidates
 (long documents spread over several separate reads otherwise compare poorly: AlloprofReranking 0.571 -> 0.737).
 Pass `window_chars=None` to score full documents directly.
+
+A passage's relevance is relative to the other passages in the same read, so scores from separate reads compare poorly.
+Long candidate lists are therefore ranked in rounds: blocks of `block` (50) candidates in the given order, the best `keep`
+(25) of each block read together, then the best `reread` (10) of those read together once more (HotpotQAHardNegatives,
+top 100 of a first stage: NDCG@10 0.835 in one ranking vs 0.876 in rounds). Up to `block` candidates this is one plain read;
+`block=None, reread=None` gives one plain ranking.
 """
 
 from __future__ import annotations
@@ -59,15 +65,50 @@ class ChopperWrapper:
         revision: str | None = None,
         variant: str = "base",
         window_chars: int | None = 900,
+        block: int | None = 50,
+        keep: int = 25,
+        reread: int | None = 10,
         device: str | None = None,
         **kwargs: Any,
     ) -> None:
+        """Chopper as a reranker.
+
+        Args:
+            model_name: Hugging Face repository of the Chopper weights.
+            revision: Repository revision (unused; the weights are loaded by `chopper_rag`).
+            variant: Encoder variant inside the repository ("base" or "small").
+            window_chars: Documents longer than this many characters are split into half-overlapping windows; a
+                document is represented by its best window. None reads every document whole.
+            block: Candidate lists longer than this are ranked in rounds: blocks of `block` candidates are read
+                separately and the best `keep` of each block go on to the next round. None reads the whole list in
+                one pass. Must be at least 2.
+            keep: How many candidates of each block go on to the next round. Must be at least 1 and smaller than
+                `block`, so that every round shortens the list.
+            reread: After a block round, the best `reread` survivors are read together once more. None or 0
+                disables the re-read.
+            device: Torch device; "auto" (the default) picks CUDA when available.
+            **kwargs: Ignored.
+        """
+        if window_chars is not None and window_chars < 1:
+            raise ValueError(
+                f"window_chars must be positive or None, got {window_chars}"
+            )
+        if block is not None:
+            if block < 2:
+                raise ValueError(f"block must be at least 2 or None, got {block}")
+            if not 1 <= keep < block:
+                raise ValueError(
+                    f"keep must satisfy 1 <= keep < block ({block}), got {keep}"
+                )
+        if reread is not None and reread < 0:
+            raise ValueError(f"reread must be non-negative or None, got {reread}")
         from chopper_rag import Chopper
 
         self.model = Chopper.from_pretrained(
             repo=model_name, variant=variant, device=device or "auto"
         )
         self.window_chars = window_chars
+        self.block, self.keep, self.reread = block, keep, reread
 
     def predict(
         self,
@@ -98,6 +139,10 @@ class ChopperWrapper:
         return [text[i : i + w] for i in range(0, len(text) - step, step)]
 
     def _score(self, query: str, docs: list[str]) -> np.ndarray:
+        return self._tournament(query, docs)
+
+    def _read(self, query: str, docs: list[str]) -> np.ndarray:
+        """one comparison of `docs`: long documents by their best window, chosen among the windows of these docs"""
         windows = [self._windows(d) for d in docs]
         if all(len(w) == 1 for w in windows):
             return np.asarray(self.model.run(query, docs).passage_scores)
@@ -109,11 +154,39 @@ class ChopperWrapper:
             k += len(w)
         return np.asarray(self.model.run(query, best).passage_scores)
 
+    def _tournament(self, query: str, docs: list[str]) -> np.ndarray:
+        """Chopper's scores are relative to the passages read in the same pass, so a long candidate list is ranked
+        in rounds. While more than `block` candidates remain: read them in blocks of `block` (in the given order) and
+        keep the best `keep` of each block. Then read the survivors together and, after a block round, read the best
+        `reread` of them together once more. A list of up to `block` candidates gets one plain read. A candidate's
+        score is (rounds survived) + its p(KEEP) score in the last pass it was in, so every survivor ranks above
+        every candidate dropped earlier."""
+        out = np.zeros(len(docs), dtype=np.float64)
+        cur = list(range(len(docs)))
+
+        def read(idx: list[int], level: int) -> dict[int, float]:
+            s = self._read(query, [docs[i] for i in idx])
+            for i, v in zip(idx, s, strict=True):
+                out[i] = level + float(v)
+            return dict(zip(idx, s, strict=True))
+
+        level = 0
+        while self.block and len(cur) > self.block:
+            nxt = []
+            for b in range(0, len(cur), self.block):
+                sc = read(cur[b : b + self.block], level)
+                nxt += sorted(sc, key=lambda i: -sc[i])[: self.keep]
+            cur = sorted(nxt)
+            level += 1
+        sc = read(cur, level)
+        if self.reread and level > 0 and len(cur) > self.reread:
+            read(sorted(sorted(sc, key=lambda i: -sc[i])[: self.reread]), level + 1)
+        return out
+
 
 chopper_031b = ModelMeta(
     extra_requirements_groups=["chopper"],
     loader=ChopperWrapper,
-    loader_kwargs={"variant": "base", "window_chars": 900},
     name="wiiiktor/chopper-0.31B",
     revision="d551e53419da0169ebfea7b1eb99177c788c4f2d",
     release_date="2026-11-10",

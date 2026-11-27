@@ -12,7 +12,7 @@ import mteb
 from mteb import Benchmark
 from mteb.cache import ResultCache
 from mteb.cli.generate_model_card import generate_model_card
-from mteb.results import BenchmarkResults, ModelResult
+from mteb.results import BenchmarkResults, ModelResult, TaskResult
 
 _POLARS_TOO_OLD = Version(pl.__version__) < Version("1.40.0")
 
@@ -260,6 +260,103 @@ def test_benchmark_results_model_filters_keep_benchmark(cache_path: Path) -> Non
         assert df.loc[0, "Mean (Task)"] == pytest.approx(0.616616)
 
 
+@pytest.mark.parametrize(
+    ("other_version", "expected_revision"),
+    [
+        ("1.0.0", "resumed"),  # the range is newer
+        ("2.25.0", "other"),  # part of the range is older
+    ],
+)
+def test_join_revisions_compares_version_ranges(
+    other_version: str, expected_revision: str
+) -> None:
+    """A run resumed with a newer mteb stores a version range, which has to be compared like a single version."""
+
+    def _model_result(revision: str, version: str) -> ModelResult:
+        task_result = TaskResult(
+            dataset_revision="1",
+            task_name="NFCorpus",
+            mteb_version=version,
+            scores={
+                "test": [
+                    {
+                        "hf_subset": "default",
+                        "languages": ["eng-Latn"],
+                        "main_score": 0.5,
+                        "mteb_version": version.rsplit("-", maxsplit=1)[-1],
+                    }
+                ]
+            },
+            evaluation_time=1.0,
+        )
+        return ModelResult(
+            model_name="org/model-not-in-registry",
+            model_revision=revision,
+            task_results=[task_result],
+        )
+
+    results = BenchmarkResults(
+        model_results=[
+            _model_result("other", other_version),
+            _model_result("resumed", "2.20.0-2.27.0"),
+        ]
+    )
+
+    joined = results.join_revisions()
+
+    assert [m.model_revision for m in joined.model_results] == [expected_revision]
+
+
+def test_get_aggregated_scores_without_benchmark_joins_model_parts() -> None:
+    """Parts of a model kept from two revisions are combined, and an experiment stays apart."""
+
+    def _model_result(
+        revision: str, task_name: str, score: float, experiment_name: str | None = None
+    ) -> ModelResult:
+        task_result = TaskResult(
+            dataset_revision="1",
+            task_name=task_name,
+            mteb_version="2.27.0",
+            scores={
+                "test": [
+                    {
+                        "hf_subset": "default",
+                        "languages": ["eng-Latn"],
+                        "main_score": score,
+                    }
+                ]
+            },
+            evaluation_time=1.0,
+        )
+        return ModelResult(
+            model_name="org/model-not-in-registry",
+            model_revision=revision,
+            experiment_name=experiment_name,
+            task_results=[task_result],
+        )
+
+    results = BenchmarkResults(
+        model_results=[
+            _model_result("first", "NFCorpus", 0.2),
+            _model_result("second", "Banking77Classification", 0.8),
+            _model_result("first", "NFCorpus", 0.6, experiment_name="normalize_False"),
+        ]
+    )
+
+    scores = results.get_aggregated_scores()
+
+    assert scores == {
+        "org/model-not-in-registry": {
+            "Mean(Task)": pytest.approx(0.5),
+            "Mean(TaskType)": pytest.approx(0.5),
+        },
+        "org/model-not-in-registry (normalize_False)": {
+            "Mean(Task)": pytest.approx(0.6),
+            "Mean(TaskType)": pytest.approx(0.6),
+        },
+    }
+
+
 @pytest.mark.skipif(_POLARS_TOO_OLD, reason="requires polars >= 1.40.0")
 def test_join_revisions_keeps_benchmark(cache_path: Path) -> None:
     cache = ResultCache(cache_path)
@@ -389,3 +486,68 @@ def test_generate_model_card_with_table_and_benchmarks(
         assert output_row == golden_row, (
             f"Row {i} doesn't match.\nExpected: {golden_row}\nGot: {output_row}"
         )
+
+
+def test_aggregate_scores_preserve_colliding_experiment_labels(
+    benchmark_results: BenchmarkResults,
+):
+    base = benchmark_results.select_models(
+        ["mteb/baseline-random-encoder"]
+    ).model_results[0]
+    meta = mteb.get_model_meta(base.model_name)
+    runs = []
+    for kwargs in ({"a": "x, b=y"}, {"a": "x", "b": "y"}):
+        experiment = meta.model_copy(update={"experiment_kwargs": kwargs})
+        runs.append(
+            base.model_copy(
+                update={
+                    "model_meta": experiment,
+                    "experiment_name": experiment.experiment_name,
+                }
+            )
+        )
+    scores = BenchmarkResults(model_results=runs).get_aggregated_scores()
+    assert len(scores) == 2
+    assert f"{base.model_name} (a=x, b=y)" in scores
+
+
+@pytest.mark.parametrize("include_model_revision", [False, True])
+def test_dataframe_exports_each_experiment(include_model_revision):
+    model = "mteb/baseline-random-encoder"
+    runs = []
+    for experiment, score in [(None, 0.2), ("named", 0.8)]:
+        result = TaskResult(
+            dataset_revision="1",
+            task_name="SciFact",
+            mteb_version="2.27.0",
+            scores={
+                "test": [
+                    {
+                        "hf_subset": "default",
+                        "main_score": score,
+                        "languages": ["eng-Latn"],
+                    }
+                ]
+            },
+            evaluation_time=1.0,
+        )
+        runs.append(
+            ModelResult(
+                model_name=model,
+                model_revision="rev",
+                experiment_name=experiment,
+                task_results=[result],
+            )
+        )
+    results = BenchmarkResults(model_results=runs)
+    long = results.to_dataframe(
+        include_model_revision=include_model_revision, format="long"
+    )
+    assert dict(zip(long["experiment_id"], long["score"], strict=True)) == {
+        "": 0.2,
+        "named": 0.8,
+    }
+    wide = results.to_dataframe(include_model_revision=include_model_revision)
+    key = (model, "rev") if include_model_revision else (model,)
+    assert wide[(*key, "")].item() == 0.2
+    assert wide[(*key, "named")].item() == 0.8

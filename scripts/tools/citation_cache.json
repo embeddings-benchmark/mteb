@@ -11681,6 +11681,46 @@
                 "note": ""
             }
         },
+        "pont-tuset2020localized|10.1007/978-3-030-58558-7_38||connecting vision and language with localized narratives|2020": {
+            "stored_at": 1795296027.2633815,
+            "value": {
+                "verdict": "OK",
+                "found_title": "Connecting Vision and Language with Localized Narratives",
+                "source": "crossref:doi",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "lac2026neomme||2609.01657|neomme: a single-tower multimodal-native multilingual foundation encoder for efficient fine-tuning and inference|2026": {
+            "stored_at": 1795384355.0227911,
+            "value": {
+                "verdict": "OK",
+                "found_title": "NeoMME: A Single-Tower Multimodal-Native Multilingual Foundation Encoder for Efficient Fine-Tuning and Inference",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "wang2026evieevidencevectorinformedembeddingsvisual||2610.11553|evie: evidence-vector-informed embeddings for visual document retrieval|2026": {
+            "stored_at": 1795639024.324358,
+            "value": {
+                "verdict": "OK",
+                "found_title": "EVIE: Evidence-Vector-Informed Embeddings for Visual Document Retrieval",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "formal2026sparseupbetterrecipestraining||2611.09680|sparseup: towards better recipes for training modern learned sparse retrievers|2026": {
+            "stored_at": 1795640875.8359964,
+            "value": {
+                "verdict": "OK",
+                "found_title": "SPARSEUP: Towards Better Recipes for Training Modern Learned Sparse Retrievers",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
         "gideoni2026persistent||2610.25252|persistent representational misalignment induces vision-language model failures|2026": {
             "stored_at": 1792507101.716935,
             "value": {

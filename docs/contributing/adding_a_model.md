@@ -320,7 +320,7 @@ As it is an optional dependency, you can't use top-level dependencies, but will 
 
 ### Local Model Verification using mock tasks
 
-Before submitting your model implementation in a Pull Request, you must verify that the model integrates correctly with the benchmarking pipeline using the local verification helper `mock_run`. Mock tasks run locally, execute very quickly, and do not download large datasets.
+If you want to quickly check that your model supports the tasks compatible with its modalities and protocols and integrates correctly with the benchmarking pipeline, you can use the local verification helper `mock_run`. Mock tasks run locally, execute very quickly, and do not download large datasets.
 
 To run the local verification:
 
@@ -356,7 +356,7 @@ To run the local verification:
     mteb mock-run -m your_model_name
     ```
 
-    This prints a results summary table to the terminal and saves the markdown file `mteb_mock_run_results.md` in the directory you ran the command from. Please commit the resulting file with your PR.
+    This prints a results summary table to the terminal and saves the markdown file `mteb_mock_run_results.md` in the directory you ran the command from.
 
 ### Submitting your model as a PR
 

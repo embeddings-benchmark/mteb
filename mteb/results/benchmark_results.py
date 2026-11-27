@@ -11,7 +11,6 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 import pandas as pd
 import polars as pl
 from datasets import Dataset, load_dataset
-from packaging.version import InvalidVersion, Version
 from pydantic import BaseModel, ConfigDict
 from tqdm.auto import tqdm
 
@@ -19,15 +18,20 @@ from mteb.benchmarks.benchmark import Benchmark
 from mteb.models import ModelMeta
 from mteb.models.get_model_meta import get_model_metas
 from mteb.models.model_implementations import MODEL_REGISTRY
-from mteb.models.model_meta import _has_meaningful_value
+from mteb.models.model_meta import (
+    _has_meaningful_value,
+    _serialize_experiment_kwargs_to_name,
+)
 
-from .model_result import ModelResult, _aggregate_and_pivot
+from .model_result import ModelResult, _aggregate_and_pivot, _join_model_parts
+from .task_result import _parse_mteb_version_min
 
 if TYPE_CHECKING:
     from collections.abc import Callable, Iterable, Iterator
     from typing import Self
 
     import datasets
+    from packaging.version import Version
 
     from mteb.abstasks.abstask import AbsTask
     from mteb.abstasks.task_metadata import (
@@ -102,12 +106,12 @@ def _get_cached_model_metas() -> dict[str, str | None]:
 
 @functools.lru_cache(maxsize=10000)
 def _parse_version_cached(version_str: str | None) -> Version | None:
-    """Cache version parsing to avoid repeated parsing."""
+    """Cache version parsing to avoid repeated parsing. A version range is parsed as its lowest version."""
     if version_str is None:
         return None
     try:
-        return Version(version_str)
-    except (InvalidVersion, TypeError):
+        return _parse_mteb_version_min(version_str)
+    except TypeError:
         return None
 
 
@@ -255,10 +259,14 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
     def join_revisions(self) -> BenchmarkResults:
         """Join revisions of the same model.
 
-        In case of conflicts, the following rules are applied:
-        1) If the main revision is present, it is kept. The main revision is the defined in the models ModelMeta object.
-        2) If there is multiple revisions and some of them are None or na, they are filtered out.
-        3) If there is no main revision, we prefer the one run using the latest mteb version.
+        Results without scores are ignored. For each model, experiment, and task,
+        conflicting results are selected in the following order of priority:
+        1) Prefer the main revision defined in the model's ModelMeta object.
+        2) Prefer results with a parseable mteb version.
+        3) Prefer an explicit revision over a missing revision or "external".
+        4) Prefer the latest mteb version. Version ranges are compared by their
+           minimum version, so a partially older run does not outrank a run
+           evaluated entirely with a newer version.
 
         Returns:
             A new BenchmarkResults object with the revisions joined.
@@ -420,6 +428,8 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         - model_name: The name of the model.
         - task_name: The name of the task.
         - score: The main score of the model on the task.
+        - experiment_id: When experiments are present, identifies each run in long
+          format and adds a column level in wide format. Default runs use an empty string.
 
         In addition, the DataFrame can have the following columns depending on the aggregation level:
 
@@ -455,6 +465,10 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         if include_model_revision:
             columns.append("model_revision")
 
+        if df["_experiment_id"].ne("").any():
+            df = df.rename(columns={"_experiment_id": "experiment_id"})
+            columns.append("experiment_id")
+
         result = _aggregate_and_pivot(
             df,
             columns=columns,
@@ -484,6 +498,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         col_subset: list[Any] = []
         col_score: list[Any] = []
         col_experiments: list[Any] = []
+        experiment_ids: list[str] = []
 
         for model_result in bench_results:
             mn = model_result.model_name
@@ -515,6 +530,11 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                         continue
                     if _has_meaningful_value(value):
                         exp_kwargs[field] = value
+            experiment_id = (
+                model_result.experiment_name
+                or _serialize_experiment_kwargs_to_name(exp_kwargs)
+                or ""
+            )
             for task_result in model_result.task_results:
                 tn = task_result.task_name
                 for split, scores_list in task_result.scores.items():
@@ -527,6 +547,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                         col_subset.append(score_item.get("hf_subset", "default"))
                         col_score.append(score_item.get("main_score", None))
                         col_experiments.append(exp_kwargs)
+                        experiment_ids.append(experiment_id)
 
         if not col_model_name:
             return None
@@ -541,6 +562,7 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 "subset": col_subset,
                 "score": col_score,
                 "experiments": col_experiments,
+                "_experiment_id": experiment_ids,
             }
         )
         if include_model_revision is False:
@@ -637,7 +659,9 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
         the equivalent statistics directly from all task results.
 
         Returns:
-            A dict mapping each model name to a dict with the keys:
+            A dict mapping each model name to a dict with the keys below.
+            Results of an experiment are listed separately under
+            ``"<model name> (<experiment name>)"``.
 
             - ``"Mean(Task)"``: mean score across all (benchmark) tasks.
             - ``"Mean(TaskType)"``: mean of per-task-type means.
@@ -659,13 +683,12 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
             _compute_mean_task_type,
         )
 
-        bench_results = self.join_revisions()
         return {
-            model_result.model_name: {
+            name: {
                 "Mean(Task)": _compute_mean_task(model_result.task_results),
                 "Mean(TaskType)": _compute_mean_task_type(model_result.task_results),
             }
-            for model_result in bench_results
+            for name, model_result in _join_model_parts(self.join_revisions()).items()
         }
 
     def get_benchmark_result(self) -> pd.DataFrame:

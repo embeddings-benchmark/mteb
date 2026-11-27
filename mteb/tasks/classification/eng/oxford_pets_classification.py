@@ -13,7 +13,7 @@ class OxfordPetsClassification(AbsTaskClassification):
         reference="https://ieeexplore.ieee.org/abstract/document/6248092",
         dataset={
             "path": "mteb/OxfordPets",
-            "revision": "557b480fae8d69247be74d9503b378a09425096f",
+            "revision": "0aa151cd59d5b9bd21f78c2201b12d24f3c7fd4b",
         },
         type="ImageClassification",
         category="i2c",

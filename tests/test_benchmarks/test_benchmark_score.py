@@ -17,6 +17,7 @@ from mteb.benchmarks.benchmark import (
     CustomGroup,
     CustomGrouping,
 )
+from mteb.results import BenchmarkResults, ModelResult
 from tests.conftest import _skip_if_datasets_too_old
 
 pytestmark = pytest.mark.core
@@ -126,6 +127,160 @@ def test_benchmark_get_score_task_without_results_keeps_score_keys(
         assert model_scores["Mean(Task)"] is None
         assert model_scores["Mean(TaskType)"] is None
         assert model_scores["Retrieval"] is None
+        assert model_scores["Rank"] == (
+            2 if model_name == "mteb/baseline-random-encoder" else 1
+        )
+
+
+def test_benchmark_get_score_results_kept_from_two_revisions(
+    mock_mteb_cache: ResultCache,
+):
+    """A model whose task results are kept from two revisions is scored on all of them."""
+    mock_benchmark = _make_benchmark()
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+    mock_results = mock_mteb_cache.load_results().select_models([model_name])
+    (model_result,) = mock_results.join_revisions().select_tasks(mock_benchmark.tasks)
+    task_results = model_result.task_results
+    results = BenchmarkResults(
+        model_results=[
+            ModelResult(
+                model_name=model_name,
+                model_revision="first",
+                task_results=task_results[:1],
+            ),
+            ModelResult(
+                model_name=model_name,
+                model_revision="second",
+                task_results=task_results[1:],
+            ),
+        ]
+    )
+
+    scores = mock_benchmark.get_score(results)
+
+    assert scores[model_name]["Mean(Task)"] == pytest.approx(
+        MODELS_SCORES["Mean(Task)"][model_name]
+    )
+    assert scores[model_name]["Rank"] == 1
+
+
+def _results_with_experiment(
+    mock_mteb_cache: ResultCache, benchmark: Benchmark
+) -> BenchmarkResults:
+    """The default run of all-MiniLM-L6-v2, plus a `normalize=False` experiment of it
+    that has the random encoder's scores."""
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+    random_name = "mteb/baseline-random-encoder"
+    mock_results = mock_mteb_cache.load_results().select_models(
+        [model_name, random_name]
+    )
+    joined = mock_results.join_revisions().select_tasks(benchmark.tasks)
+    by_name = {model_result.model_name: model_result for model_result in joined}
+    experiment_meta = mteb.get_model_meta(model_name).model_copy(
+        update={"experiment_kwargs": {"normalize": False}}
+    )
+    return BenchmarkResults(
+        model_results=[
+            by_name[model_name],
+            ModelResult(
+                model_name=model_name,
+                model_revision=by_name[model_name].model_revision,
+                experiment_name=experiment_meta.experiment_name,
+                model_meta=experiment_meta,
+                task_results=by_name[random_name].task_results,
+            ),
+        ]
+    )
+
+
+def test_benchmark_get_score_keeps_experiments_apart(
+    mock_mteb_cache: ResultCache,
+):
+    """An experiment of a model is scored separately from the model's default run."""
+    mock_benchmark = _make_benchmark()
+    model_name = "sentence-transformers/all-MiniLM-L6-v2"
+    random_name = "mteb/baseline-random-encoder"
+    results = _results_with_experiment(mock_mteb_cache, mock_benchmark)
+
+    scores = mock_benchmark.get_score(results)
+
+    experiment = f"{model_name} (normalize=False)"
+    assert set(scores) == {model_name, experiment}
+    assert scores[model_name]["Mean(Task)"] == pytest.approx(
+        MODELS_SCORES["Mean(Task)"][model_name]
+    )
+    assert scores[experiment]["Mean(Task)"] == pytest.approx(
+        MODELS_SCORES["Mean(Task)"][random_name]
+    )
+    assert scores[model_name]["Rank"] == 1
+    assert scores[experiment]["Rank"] == 2
+
+
+def test_benchmark_get_score_leaves_experiment_without_complete_scores_unranked(
+    mock_mteb_cache: ResultCache,
+):
+    task_name = "PoemSentimentClassification.v2"
+    benchmark = Benchmark(name="one_task", tasks=mteb.get_tasks([task_name]))
+    model_name = "mteb/baseline-random-encoder"
+    results = (
+        mock_mteb_cache.load_results().join_revisions().select_tasks(benchmark.tasks)
+    )
+    by_name = {result.model_name: result for result in results}
+    default_run = by_name[model_name]
+    partial_run = by_name["sentence-transformers/all-MiniLM-L6-v2"]
+    experiment = ModelResult(
+        model_name=model_name,
+        model_revision=default_run.model_revision,
+        experiment_name="normalize_False",
+        task_results=partial_run.task_results,
+    )
+
+    scores = benchmark.get_score(
+        BenchmarkResults(model_results=[default_run, experiment])
+    )
+
+    assert scores[model_name]["Rank"] == 1
+    assert scores[f"{model_name} (normalize_False)"]["Rank"] is None
+
+
+@_skip_if_datasets_too_old
+@pytest.mark.parametrize("with_metadata", [True, False])
+def test_tables_rank_experiments_apart(
+    mock_mteb_cache: ResultCache, with_metadata: bool
+):
+    """The summary and per-task tables rank an experiment apart from the default run."""
+    mock_benchmark = _make_benchmark()
+    results = _results_with_experiment(mock_mteb_cache, mock_benchmark)
+    if not with_metadata:
+        results.model_results[1].model_meta = None
+    pl_df = results.select_tasks(mock_benchmark.tasks)._to_results_df(
+        mock_benchmark.tasks
+    )
+
+    summary = mock_benchmark._create_summary_table(pl_df).df
+    per_task = mock_benchmark._create_per_task_table(pl_df)
+
+    ranks = dict(summary.select("_experiment_id", "Rank (Borda)").iter_rows())
+    assert ranks == {"": 1, "normalize_False": 2}
+    assert per_task.get_column("_experiment_id").to_list() == ["", "normalize_False"]
+
+
+@_skip_if_datasets_too_old
+def test_missing_whole_task_keeps_experiment_rank(mock_mteb_cache: ResultCache):
+    benchmark = _make_benchmark()
+    results = _results_with_experiment(mock_mteb_cache, benchmark)
+    experiment = results.model_results[1]
+    experiment.task_results = experiment.task_results[:1]
+
+    scores = benchmark.get_score(results)
+    summary = benchmark._create_summary_table(
+        results._to_results_df(benchmark.tasks)
+    ).df
+    ranks = dict(summary.select("_experiment_id", "Rank (Borda)").iter_rows())
+    partial = scores[f"{experiment.model_name} (normalize=False)"]
+    assert partial["Mean(Task)"] is None
+    assert partial["Rank"] == ranks["normalize_False"] == 2
+    assert scores[experiment.model_name]["Rank"] == ranks[""] == 1
 
 
 def test_benchmark_get_score_task_without_results_keeps_custom_group_keys(
@@ -297,6 +452,7 @@ def test_benchmark_get_score_nulls_partial_split_and_subset_coverage(
     assert partial_scores["Mean(TaskType)"] is None
     assert partial_scores["Classification"] is None
     assert partial_scores["Mean(Subset)"] is None
+    assert partial_scores["Rank"] is not None
 
 
 def test_compute_mean_public_private(mock_mteb_cache: ResultCache):
