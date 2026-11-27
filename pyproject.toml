@@ -696,6 +696,10 @@ extend-ignore-words-re = [
     # dataset names
     "Matix",  # Docmatix (HF dataset)
     "ABOV",  # ABOV2IRetrieval (ABO + V2I)
+    "Allocine",
+    "allocine",
+    "Allociné",
+    "tblard",
 
 ]
 extend-ignore-re = [
@@ -751,6 +755,7 @@ extend-ignore-re = [
 ]
 
 [tool.typos.type.py.extend-identifiers]
+AllocineClassification = "AllocineClassification"
 BulgarianStoreReviewSentimentClassfication = "BulgarianStoreReviewSentimentClassfication"
 SciRepEvalFoSClassification = "SciRepEvalFoSClassification"
 FoS = "FoS"
