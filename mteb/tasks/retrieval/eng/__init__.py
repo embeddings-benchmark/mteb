@@ -258,7 +258,7 @@ from .hotpot_qa_retrieval import (
     HotpotQAHardNegatives,
     HotpotQAHardNegativesV2,
 )
-from .image_co_de_t2i_retrieval import ImageCoDeT2IRetrieval
+from .image_co_de_t2i_retrieval import ImageCoDeT2IRetrieval, ImageCoDeT2IRetrievalV2
 from .incompe_bench_retrieval import (
     IncompeBenchLenientRetrieval,
     IncompeBenchStrictRetrieval,
@@ -815,6 +815,7 @@ __all__ = [
     "IRPapersT2IRetrieval",
     "IRPapersT2ITRetrieval",
     "ImageCoDeT2IRetrieval",
+    "ImageCoDeT2IRetrievalV2",
     "IncompeBenchLenientRetrieval",
     "IncompeBenchStrictRetrieval",
     "InfoSeekIT2ITRetrieval",
