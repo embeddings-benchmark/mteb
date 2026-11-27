@@ -37,18 +37,18 @@ class AllocineClassification(AbsTaskClassification):
         if not isinstance(self.dataset, DatasetDict):
             raise TypeError("Dataset must be a DatasetDict")
 
-        # Renommer la colonne d'entrée vers 'text' attendue par MTEB
+        # Rename input column to 'text' expected by MTEB
         self.dataset = self.dataset.rename_columns({"review": "text"})
 
         def _has_min_length(example: dict[str, Any]) -> bool:
             return len(example["text"].strip()) >= 10
 
-        # Filtrer les textes trop courts (MTEB exige min_text_length > 3)
+        # Filter out overly short texts (MTEB requires min_text_length > 3)
         self.dataset = self.dataset.filter(
             _has_min_length,
             num_proc=num_proc,
         )
-        # Échantillonnage pour que l'évaluation reste rapide et standardisée
+        # Subsample to keep evaluation fast and standardized
         self.dataset = self.stratified_subsampling(
             self.dataset, seed=self.seed, splits=["train", "test"]
         )
