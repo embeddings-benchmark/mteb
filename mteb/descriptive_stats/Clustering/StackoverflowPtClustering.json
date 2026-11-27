@@ -1,0 +1,53 @@
+{
+    "test": {
+        "num_samples": 1478,
+        "text_statistics": {
+            "total_text_length": 73322,
+            "min_text_length": 15,
+            "average_text_length": 49.60893098782138,
+            "max_text_length": 135,
+            "unique_texts": 1478
+        },
+        "image_statistics": null,
+        "audio_statistics": null,
+        "video_statistics": null,
+        "labels_statistics": {
+            "min_labels_per_text": 1,
+            "average_label_per_text": 1.0,
+            "max_labels_per_text": 1,
+            "unique_labels": 10,
+            "labels": {
+                "python": {
+                    "count": 150
+                },
+                "java": {
+                    "count": 150
+                },
+                "php": {
+                    "count": 150
+                },
+                "javascript": {
+                    "count": 150
+                },
+                "android": {
+                    "count": 150
+                },
+                "mysql": {
+                    "count": 150
+                },
+                "c#": {
+                    "count": 150
+                },
+                "html": {
+                    "count": 150
+                },
+                "css": {
+                    "count": 128
+                },
+                "c": {
+                    "count": 150
+                }
+            }
+        }
+    }
+}

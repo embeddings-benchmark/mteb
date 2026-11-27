@@ -16,6 +16,7 @@ from .multilingual import *
 from .nld import *
 from .nob import *
 from .pol import *
+from .por import *
 from .rus import *
 from .slk import *
 from .spa import *

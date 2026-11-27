@@ -658,6 +658,8 @@ binary = false
 locale = "en"
 extend-ignore-words-re = [
     "Classfication", # misspelled task name
+    "Astronomia", # Portuguese category name (WikipediaPTCategoriesClusteringP2P)
+    "Administrativo", # Portuguese legal area (JurisTCUClusteringP2P)
     "nd", # license
     # authors
     "Stap",
