@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from collections.abc import Iterator
 
     import torch
+    from PIL.Image import Image
     from sentence_transformers.multi_vector_encoder.modules import (
         HierarchicalTokenPooling,
     )
@@ -29,19 +30,24 @@ if TYPE_CHECKING:
 
 
 def _format_passage_batches(inputs: DataLoader[BatchedInput]) -> Iterator[BatchedInput]:
-    """Format titles and bodies before the encoder drops corpus metadata."""
     for batch in inputs:
         if "title" in batch and "body" in batch:
             columns = cast("dict[str, list[str]]", batch)
             texts = [
-                f"title: {title} | text: {body}" if title else text
-                for title, body, text in zip(
-                    columns["title"], columns["body"], columns["text"], strict=True
-                )
+                f"title: {title or ''} | text: {body}"
+                for title, body in zip(columns["title"], columns["body"], strict=True)
             ]
             yield cast("BatchedInput", {**columns, "text": texts})
         else:
             yield batch
+
+
+def _limit_image(image: Image, max_side: int | None) -> Image:
+    if max_side is None or max(image.size) <= max_side:
+        return image
+    image = image.copy()
+    image.thumbnail((max_side, max_side))
+    return image
 
 
 class FridaV2(AbsEncoder):
@@ -56,6 +62,7 @@ class FridaV2(AbsEncoder):
         vector_type: Literal["single_vector", "multi_vector"] = "multi_vector",
         embed_dim: int | None = None,
         token_pooling: dict[str, Any] | None = None,
+        max_image_size: int | None = 2000,
         **kwargs: Any,
     ) -> None:
         from sentence_transformers import SentenceTransformer
@@ -77,6 +84,7 @@ class FridaV2(AbsEncoder):
             dict(token_pooling) if token_pooling is not None else None
         )
         self.embed_dim = embed_dim
+        self.max_image_size = max_image_size
         self.vector_type = vector_type
         self.model = SentenceTransformer(
             model_name,
@@ -138,6 +146,12 @@ class FridaV2(AbsEncoder):
         def encode_batch(
             rows: list[dict[str, Any]], **batch_kwargs: Any
         ) -> Array | list[torch.Tensor]:
+            rows = [
+                {**row, "image": _limit_image(row["image"], self.max_image_size)}
+                if "image" in row
+                else row
+                for row in rows
+            ]
             if dense:
                 return cast(
                     "Array", encode(rows, truncate_dim=self.embed_dim, **batch_kwargs)
