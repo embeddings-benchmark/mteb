@@ -22,6 +22,7 @@ from mteb.mocks.mock_tasks import (
 from mteb.models.cache_wrappers.cache_backend_protocol import CacheBackendProtocol
 from mteb.models.cache_wrappers.cache_backends.faiss_cache import FaissCache
 from mteb.models.cache_wrappers.cache_backends.numpy_cache import NumpyCache
+from mteb.models.cache_wrappers.cache_backends.usearch_cache import USearchCache
 from mteb.models.cache_wrappers.cache_wrapper import CachedEmbeddingWrapper
 from mteb.models.model_implementations.random_baseline import RandomEncoderBaseline
 from mteb.models.models_protocols import EncoderProtocol
@@ -133,6 +134,7 @@ class TestCachedEmbeddingWrapper:
         [
             NumpyCache,
             FaissCache,
+            USearchCache,
         ],
     )
     def test_caching_functionality(  # noqa: PLR0914
@@ -143,6 +145,8 @@ class TestCachedEmbeddingWrapper:
                 import faiss  # noqa: F401
             except ImportError:
                 pytest.skip("faiss is not installed")
+        if cache_backend is USearchCache:
+            pytest.importorskip("usearch")
 
         # Create a dummy model
         dummy_model = DummyModel("test_model", revision=None)
@@ -228,10 +232,13 @@ class TestCachedEmbeddingWrapper:
             assert (cache_dir / second_task_metadata.name / "vectors.npy").exists()
             assert (cache_dir / second_task_metadata.name / "index.json").exists()
         else:
+            vector_file = (
+                "vectors.usearch" if cache_backend is USearchCache else "vectors.faiss"
+            )
             assert (cache_dir / first_task_metadata.name / "index.json").exists()
-            assert (cache_dir / first_task_metadata.name / "vectors.faiss").exists()
+            assert (cache_dir / first_task_metadata.name / vector_file).exists()
             assert (cache_dir / second_task_metadata.name / "index.json").exists()
-            assert (cache_dir / second_task_metadata.name / "vectors.faiss").exists()
+            assert (cache_dir / second_task_metadata.name / vector_file).exists()
 
         # Pass first dataloader with second task metadata - should compute new embeddings
         first_task_embeddings_new_meta = wrapped_model.encode(
@@ -407,12 +414,14 @@ class TestCachedEmbeddingWrapper:
 
 
 @pytest.mark.parametrize("n_first", [1, 3])
-@pytest.mark.parametrize("cache_backend", [NumpyCache, FaissCache])
+@pytest.mark.parametrize("cache_backend", [NumpyCache, FaissCache, USearchCache])
 def test_cache_reload_and_grow(
     tmp_path: Path, n_first: int, cache_backend: type[CacheBackendProtocol]
 ):
     if cache_backend is FaissCache:
         pytest.importorskip("faiss")
+    if cache_backend is USearchCache:
+        pytest.importorskip("usearch")
 
     items = [{"text": f"item {i}"} for i in range(n_first + 3)]
     vectors = np.random.default_rng(0).random((len(items), 4), dtype=np.float32)
@@ -535,3 +544,22 @@ def test_wrapper_caches_multimodal_items(tmp_path: Path):
         assert dummy_model.call_count == first_run_call_count
     finally:
         wrapped_model.close()
+
+
+def test_usearch_cache_duplicate_items_keep_vectors_aligned(tmp_path: Path):
+    pytest.importorskip("usearch")
+
+    items = [{"text": "a"}, {"text": "a"}, {"text": "b"}]
+    vectors = np.random.default_rng(0).random((3, 4), dtype=np.float32)
+
+    cache = USearchCache(tmp_path)
+    cache.add(items, vectors)
+    cache.save()
+    cache.close()
+
+    cache = USearchCache(tmp_path)
+    np.testing.assert_allclose(cache.get_vector({"text": "a"}), vectors[0])
+    np.testing.assert_allclose(cache.get_vector({"text": "b"}), vectors[2])
+    assert cache.get_vector({"text": "c"}) is None
+    with pytest.raises(ValueError, match="dimension"):
+        cache.add([{"text": "d"}], np.zeros((1, 5), dtype=np.float32))
