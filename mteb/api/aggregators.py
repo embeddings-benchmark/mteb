@@ -48,12 +48,14 @@ from mteb.models.model_implementations import MODEL_REGISTRY
 from mteb.models.model_meta import _has_meaningful_value
 
 if TYPE_CHECKING:
+    from collections.abc import Iterable
+
     from mteb.api.schemas import (
         BenchmarkSchema,
-        ModelMetaSchema,
         TaskMetaSchema,
     )
     from mteb.benchmarks._create_table import SummaryTable
+    from mteb.benchmarks.benchmark import Benchmark
     from mteb.cache.result_cache import ResultCache
 
 logger = logging.getLogger(__name__)
@@ -525,7 +527,9 @@ def _task_to_hosting_benchmarks() -> dict[str, list[str]]:
     return out
 
 
-def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
+def build_task_scores(  # noqa: PLR0914
+    name: str, all_df: pl.DataFrame | None = None
+) -> TaskScoresSchema:
     """Per-model scores for a single task across every benchmark hosting it.
 
     ``subset_scores`` is nested ``{subset: {split: score}}`` so the UI can pivot
@@ -533,16 +537,17 @@ def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
     splits per subset), but only when the model covers every (subset, split);
     ``null`` otherwise so partial-coverage models can't outrank full-coverage peers.
     """
-    from mteb.api.frames import _load_per_benchmark_frames
-
     cls = _TASKS_REGISTRY[name]
     task_meta = task_to_meta_schema(cls)
 
     hosting_benchmarks = list(_task_to_hosting_benchmarks().get(name, ()))
 
-    # Use the all-results frame so multilingual tasks aren't trimmed to one
-    # benchmark's locale selection.
-    _, all_df = _load_per_benchmark_frames()
+    if all_df is None:
+        from mteb.api.frames import _load_per_benchmark_frames
+
+        # Use the all-results frame so multilingual tasks aren't trimmed to one
+        # benchmark's locale selection.
+        _, all_df = _load_per_benchmark_frames()
     task_frame = all_df.filter(pl.col("task_name") == name)
     eval_splits = list(cls.metadata.eval_splits)
     if eval_splits:
@@ -551,26 +556,24 @@ def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
     if hf_subsets:
         task_frame = task_frame.filter(pl.col("subset").is_in(hf_subsets))
 
-    # model_name -> subset -> split -> score
-    seen: dict[str, dict[str, dict[str, float]]] = {}
+    # (model, experiment) -> subset -> split -> score
+    seen: dict[tuple[str, str], dict[str, dict[str, float]]] = {}
     all_subsets: set[str] = set()
     all_splits: set[str] = set()
     if not task_frame.is_empty():
-        # Unified frame is already deduped per (model, task, split, subset).
-        deduped = task_frame.drop_nulls("score")
+        # Each score belongs to a single run, task, split, and subset.
+        deduped = _ensure_experiment_id(task_frame).drop_nulls("score")
         all_subsets = set(deduped["subset"].unique().to_list())
         all_splits = set(deduped["split"].unique().to_list())
-        model_names = deduped["model_name"].to_list()
-        subset_col = deduped["subset"].to_list()
-        split_col = deduped["split"].to_list()
-        score_col = deduped["score"].to_list()
-        for mn, subset, split, s in zip(
-            model_names, subset_col, split_col, score_col, strict=True
-        ):
-            seen.setdefault(mn, {}).setdefault(subset, {})[split] = s
+        for mn, eid, subset, split, cell_score in deduped.select(
+            "model_name", _EXPERIMENT_ID_COL, "subset", "split", "score"
+        ).iter_rows():
+            seen.setdefault((mn, eid), {}).setdefault(subset, {})[split] = cell_score
 
+    variants = _extract_variant_kwargs(task_frame)
     rows: list[TaskScoreRowSchema] = []
-    for model_name, subset_scores in seen.items():
+    for model_name, eid in sorted(seen):
+        subset_scores = seen[model_name, eid]
         meta = MODEL_REGISTRY.get(model_name)
         if meta is None:
             continue
@@ -591,12 +594,18 @@ def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
             trained_on = name in meta.training_datasets
         else:
             trained_on = None
+        run_meta = variants.get((model_name, eid)) if eid else None
         rows.append(
             TaskScoreRowSchema.model_construct(
                 rank=0,
-                model=model_meta_to_schema(meta),
+                model=(
+                    run_model_meta_to_schema(meta, run_meta)
+                    if run_meta
+                    else model_meta_to_schema(meta)
+                ),
                 score=score,
                 subset_scores=subset_scores,
+                experiments=run_meta,
                 benchmarks=list(hosting_benchmarks),
                 trained_on=trained_on,
             )
@@ -622,16 +631,18 @@ def build_task_scores(name: str) -> TaskScoresSchema:  # noqa: PLR0914
 
 
 # Tracks ``_summary_schemas``; must evict in lockstep if that ever gains a cap.
-_summary_row_indices: dict[str, dict[str, SummaryRowSchema]] = {}
+_summary_row_indices: dict[str, dict[str, list[SummaryRowSchema]]] = {}
 
 
 def _summary_row_index(
     bench_name: str, summary: BenchmarkSummarySchema
-) -> dict[str, SummaryRowSchema]:
-    """Cached ``{model_name -> row}`` for O(1) lookups in ``build_model_scores``."""
+) -> dict[str, list[SummaryRowSchema]]:
+    """Cached ``{model_name -> runs}`` for O(1) lookups in ``build_model_scores``."""
     cached = _summary_row_indices.get(bench_name)
     if cached is None:
-        cached = {r.model.name: r for r in summary.rows}
+        cached = {}
+        for row in summary.rows:
+            cached.setdefault(row.model.name, []).append(row)
         _summary_row_indices[bench_name] = cached
     return cached
 
@@ -649,40 +660,41 @@ async def build_model_scores(name: str) -> ModelScoresSchema:
         *(get_summary(b.name) for b in all_benchmarks),
         return_exceptions=True,
     )
+    return _model_scores_from_summaries(name, zip(all_benchmarks, results, strict=True))
 
-    model_meta: ModelMetaSchema | None = None
+
+def _model_scores_from_summaries(
+    name: str,
+    bench_summaries: Iterable[tuple[Benchmark, BenchmarkSummarySchema | BaseException]],
+) -> ModelScoresSchema:
+    meta = MODEL_REGISTRY[name]
+    default_meta = None
     rows: list[ModelScoreRowSchema] = []
 
-    for bench, summary in zip(all_benchmarks, results, strict=True):
+    for bench, summary in bench_summaries:
         if isinstance(summary, BaseException):
             continue
-        row = _summary_row_index(bench.name, summary).get(name)
-        if row is None:
-            continue
-        if model_meta is None:
-            model_meta = row.model
-        rows.append(
-            ModelScoreRowSchema.model_construct(
-                benchmark_name=bench.name,
-                benchmark_display_name=bench.display_name or bench.name,
-                rank=row.rank,
-                total_models=len(summary.rows),
-                mean_task=row.mean_task,
-                mean_task_type=row.mean_task_type,
-                zero_shot_pct=row.zero_shot_pct,
-                task_types=summary.task_types,
-                scores_by_task_type=row.scores_by_task_type,
+        for row in _summary_row_index(bench.name, summary).get(name, []):
+            if default_meta is None and not row.experiments:
+                default_meta = row.model
+            rows.append(
+                ModelScoreRowSchema.model_construct(
+                    experiments=row.experiments,
+                    benchmark_name=bench.name,
+                    benchmark_display_name=bench.display_name or bench.name,
+                    rank=row.rank,
+                    total_models=len(summary.rows),
+                    mean_task=row.mean_task,
+                    mean_task_type=row.mean_task_type,
+                    zero_shot_pct=row.zero_shot_pct,
+                    task_types=summary.task_types,
+                    scores_by_task_type=row.scores_by_task_type,
+                )
             )
-        )
-
-    if model_meta is None:
-        meta = MODEL_REGISTRY.get(name)
-        if meta is None:
-            raise KeyError(name)
-        model_meta = model_meta_to_schema(meta)
-
     rows.sort(key=lambda r: r.rank)
-    return ModelScoresSchema(model=model_meta, rows=rows)
+    return ModelScoresSchema(
+        model=default_meta or model_meta_to_schema(meta), rows=rows
+    )
 
 
 Bucket = tuple[float, float | None]
@@ -724,6 +736,7 @@ async def build_benchmark_leaders(
                 rank=row.rank,
                 model=LeaderModelSchema.model_construct(
                     name=row.model.name,
+                    experiments=row.experiments,
                     model_type=row.model.model_type,
                 ),
                 mean_task=score,

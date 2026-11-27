@@ -653,9 +653,41 @@ def _order_summary_cols(
     return joint_table.select([c for c in ordering if c in joint_table.columns])
 
 
+def _run_embedding_dims(pl_df: pl.DataFrame) -> pl.DataFrame | None:
+    """``(model_name, _experiment_id) -> Embedding Dimensions`` for runs with their own ``embed_dim``.
+
+    A run can override the registry's ``embed_dim`` (folded into ``experiments``
+    by ``BenchmarkResults._build_pre_agg_df``); the model-level metadata join
+    would otherwise show the default run's value for every run of the model.
+    """
+    if "experiments" not in pl_df.columns:
+        return None
+    runs = (
+        _ensure_experiment_id(pl_df)
+        .select("model_name", _EXPERIMENT_ID_COL, "experiments")
+        .filter(pl.col("experiments").is_not_null())
+        .unique(subset=["model_name", _EXPERIMENT_ID_COL])
+    )
+    dims = [
+        (mn, eid, _get_embedding_size(exp.get("embed_dim")))
+        for mn, eid, exp in runs.iter_rows()
+        if exp and exp.get("embed_dim") is not None
+    ]
+    return pl.DataFrame(
+        dims,
+        schema={
+            "model_name": pl.Utf8,
+            _EXPERIMENT_ID_COL: pl.Utf8,
+            "_run_embed_dim": pl.Int64,
+        },
+        orient="row",
+    )
+
+
 def _attach_model_metadata(
     joint_table: pl.DataFrame,
     task_names_key: tuple[str, ...] | None = None,
+    run_embedding_dims: pl.DataFrame | None = None,
 ) -> pl.DataFrame:
     """Filter to models with valid metadata and attach the standard summary columns.
 
@@ -673,11 +705,23 @@ def _attach_model_metadata(
     meta_df = (
         _meta_df_no_zs() if task_names_key is None else _meta_df_with_zs(task_names_key)
     )
-    return (
-        joint_table.join(meta_df, on="model_name", how="inner")
-        .drop("_model_link")
-        .rename({"model_name": "Model"})
-    )
+    joined = joint_table.join(meta_df, on="model_name", how="inner")
+    if run_embedding_dims is not None and not run_embedding_dims.is_empty():
+        joined = (
+            joined.join(
+                run_embedding_dims,
+                on=["model_name", _EXPERIMENT_ID_COL],
+                how="left",
+            )
+            .with_columns(
+                pl.coalesce(
+                    pl.col("_run_embed_dim").cast(pl.Int64),
+                    pl.col("Embedding Dimensions").cast(pl.Int64),
+                ).alias("Embedding Dimensions")
+            )
+            .drop("_run_embed_dim")
+        )
+    return joined.drop("_model_link").rename({"model_name": "Model"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -777,6 +821,7 @@ def _finalize_summary(
     sort_by: str | Sequence[str] | None,
     rank_column_name: str | None,
     custom_group_cols_by_dim: dict[str, list[str]] | None = None,
+    run_embedding_dims: pl.DataFrame | None = None,
 ) -> SummaryTable:
     """Attach model metadata, sort, rank, order columns, wrap in SummaryTable.
 
@@ -799,13 +844,19 @@ def _finalize_summary(
         custom_group_cols_by_dim: dimension name -> ordered custom-group
             column names, surfaced after ``type_cols``. Empty/``None`` hides
             them entirely (mirrors ``type_cols``).
+        run_embedding_dims: ``(model_name, _experiment_id) -> Embedding
+            Dimensions`` for runs with their own ``embed_dim``, see
+            [_run_embedding_dims][mteb.benchmarks._create_table._run_embedding_dims].
+            ``None`` keeps the model-level value for every run.
 
     Returns:
         SummaryTable: Ready-to-style summary with metadata attached and
             columns laid out in the canonical order.
     """
     joint_table = _attach_model_metadata(
-        joint_table, task_names_key=tuple(sorted(task_cols))
+        joint_table,
+        task_names_key=tuple(sorted(task_cols)),
+        run_embedding_dims=run_embedding_dims,
     )
     if sort_by is not None:
         sort_cols = [sort_by] if isinstance(sort_by, str) else list(sort_by)
@@ -1078,6 +1129,7 @@ def _create_summary_table(  # noqa: PLR0914
         sort_by=sort_by,
         rank_column_name=rank_column_name,
         custom_group_cols_by_dim=custom_group_cols_by_dim,
+        run_embedding_dims=_run_embedding_dims(pl_df),
     )
 
 
@@ -1124,7 +1176,7 @@ def _create_per_language_table_from_benchmark_results(
 ) -> pl.DataFrame:
     """Create per-language table from a long polars pre-aggregation frame.
 
-    Returns a DataFrame with one row per model and one column per language.
+    Returns one row per model and experiment, with one score column per language.
 
     Args:
         pl_df: Long polars frame with at least ``model_name``, ``language`` (list[str]),
@@ -1146,7 +1198,8 @@ def _create_per_language_table_from_benchmark_results(
     # is selected, push the predicate *before* the explode by keeping only rows
     # whose language list intersects the selection — this avoids materialising
     # exploded rows we'll discard.
-    lazy = pl_df.lazy().select("model_name", "language", "score")
+    keys = ["model_name", _EXPERIMENT_ID_COL]
+    lazy = _ensure_experiment_id(pl_df).lazy().select(*keys, "language", "score")
     if language_view != "all":
         lazy = lazy.filter(
             pl.col("language").list.eval(pl.element().is_in(language_view)).list.any()
@@ -1157,15 +1210,15 @@ def _create_per_language_table_from_benchmark_results(
     # Streaming engine handles the explode → group_by chain on tens of millions of
     # post-explode rows ~3-4× faster than the default in-memory engine here.
     lang_df = (
-        lazy.group_by(["model_name", "language"])
+        lazy.group_by([*keys, "language"])
         .agg(pl.col("score").mean())
         .collect(engine="streaming")
     )
     if lang_df.is_empty():
         return _no_results_frame()
 
-    per_language = lang_df.pivot(on="language", index="model_name", values="score")
-    lang_cols = [c for c in per_language.columns if c != "model_name"]
+    per_language = lang_df.pivot(on="language", index=keys, values="score")
+    lang_cols = [c for c in per_language.columns if c not in keys]
     if not lang_cols:
         return _no_results_frame()
     per_language = per_language.filter(
@@ -1184,15 +1237,17 @@ def _create_per_language_table_from_benchmark_results(
         # ``pl.len()`` — lang_df may contain models whose aggregated scores
         # are all null and got dropped from per_language.
         borda_df = _borda_rank_from_long(
-            lang_df,
+            lang_df.drop_nulls("score"),
             partition_col="language",
             score_col="score",
             n_models=per_language.height,
         )
         per_language = (
-            per_language.join(borda_df, on="model_name", how="left")
+            per_language.join(borda_df, on=keys, how="left")
             .sort("Rank (Borda)")
             .drop("Rank (Borda)")
         )
 
-    return per_language.rename({"model_name": "Model"}).select(["Model", *lang_cols])
+    return per_language.rename({"model_name": "Model"}).select(
+        "Model", _EXPERIMENT_ID_COL, *lang_cols
+    )
