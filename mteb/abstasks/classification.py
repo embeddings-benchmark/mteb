@@ -229,6 +229,7 @@ class AbsTaskClassification(AbsTask):
         timer: TimingStack,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
+        self._reset_rng()
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
 
@@ -339,6 +340,7 @@ class AbsTaskClassification(AbsTask):
         timer: TimingStack,
         **kwargs: Any,
     ) -> FullClassificationMetrics:
+        self._reset_rng()
         if self.train_split != hf_split:
             raise ValueError(
                 f"Performing {self.n_splits}-fold cross validation, but the dataset has a train (`{self.train_split}`) and test split (`{hf_split}`)! Set `is_cross_validation` to False, and retry."

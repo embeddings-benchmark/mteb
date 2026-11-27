@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import logging
+import random
 import tempfile
 import time
 import warnings
@@ -169,6 +170,15 @@ class AbsTask(ABC):  # noqa: PLR0904
             num_proc: Number of processes to use for the transformation.
             kwargs: Additional keyword arguments passed to the load_dataset function. Keep for forward compatibility.
         """
+
+    def _reset_rng(self) -> None:
+        """Reset task sampling before each subset and split.
+
+        Evaluation samples must not depend on earlier evaluations, subset order,
+        or subsets skipped when resuming. Leave global and model RNGs untouched.
+        """
+        self.rng_state = random.Random(self.seed)
+        self.np_rng = np.random.default_rng(self.seed)
 
     def evaluate(
         self,

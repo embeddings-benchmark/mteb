@@ -103,6 +103,7 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         timer: TimingStack,
         **kwargs: Any,
     ) -> FullMultilabelClassificationMetrics:
+        self._reset_rng()
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
 

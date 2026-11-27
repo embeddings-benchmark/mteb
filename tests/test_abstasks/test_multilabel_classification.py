@@ -4,6 +4,8 @@ import json
 from typing import TYPE_CHECKING, Any
 
 import pytest
+from datasets import Dataset, DatasetDict
+from sklearn.neighbors import KNeighborsClassifier
 
 import mteb
 from mteb.mocks.mock_tasks import MockMultilabelClassification
@@ -45,3 +47,29 @@ def test_max_eval_samples_caps_the_scored_rows(
 
     assert len(predictions) == task.n_experiments
     assert all(len(experiment) == expected_rows for experiment in predictions)
+
+
+class _SampledTrainMultilabelClassification(MockMultilabelClassification):
+    # one neighbor and two rows per label out of a larger train split, so the score
+    # depends on which training rows are drawn
+    samples_per_label = 2
+    evaluator_model = KNeighborsClassifier(n_neighbors=1)
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        split = Dataset.from_dict(
+            {
+                "text": [f"This is sentence number {i}" for i in range(12)],
+                "label": [[i % 3] for i in range(12)],
+            }
+        )
+        self.dataset = DatasetDict({"train": split, "test": split})
+        self.data_loaded = True
+
+
+def test_evaluating_twice_gives_the_same_scores():
+    # the training rows are drawn per subset, so nothing carries over from one
+    # evaluation of the same task object to the next
+    task = _SampledTrainMultilabelClassification()
+    model = mteb.get_model_meta("mteb/baseline-random-encoder")
+    first, second = (mteb.evaluate(model, task, cache=None)[0] for _ in range(2))
+    assert first.scores == second.scores

@@ -77,6 +77,7 @@ class AbsTaskClusteringLegacy(AbsTask):
         timer: TimingStack,
         **kwargs: Any,
     ) -> ScoresDict:
+        self._reset_rng()
         if not isinstance(model, EncoderProtocol):
             raise TypeError("Expected model to be an instance of EncoderProtocol")
 
