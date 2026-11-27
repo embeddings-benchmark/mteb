@@ -57,7 +57,10 @@ def bb25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
     import bm25s
     import Stemmer
 
-    from mteb.models.model_implementations.bm25 import _retrieve_bm25s
+    from mteb.models.model_implementations.bm25 import (
+        _retrieve_bm25s,
+        _token_pattern,
+    )
 
     class BB25Search:
         """Bayesian BM25 search using bm25s as the BM25 backend.
@@ -109,7 +112,12 @@ def bb25_loader(model_name: str, **kwargs: Any) -> SearchProtocol:
 
         def _encode(self, texts: list[str]) -> Tokenized:
             """Tokenize texts using bm25s. Not to be confused with EncoderProtocol.encode()."""
-            return bm25s.tokenize(texts, stopwords=self.stopwords, stemmer=self.stemmer)
+            return bm25s.tokenize(
+                texts,
+                stopwords=self.stopwords,
+                stemmer=self.stemmer,
+                token_pattern=_token_pattern(),
+            )
 
         def index(
             self,
