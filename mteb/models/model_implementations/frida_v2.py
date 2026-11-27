@@ -223,7 +223,7 @@ def _load_token_pooling(
 
 frida_v2 = ModelMeta(
     loader=FridaV2,
-    name="no_model_name/available",
+    name="ai-forever/FRIDA-Embeddings-V2-2B",
     revision="no_revision_available",
     release_date="2026-11-28",
     languages=["rus-Cyrl", "eng-Latn"],
