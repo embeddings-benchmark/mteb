@@ -4,6 +4,7 @@ from io import BytesIO
 from pathlib import Path
 from typing import Any
 
+import pyarrow.parquet as pq
 import pytest
 from datasets import Audio, Dataset
 
@@ -25,14 +26,14 @@ def expresso(tmp_path, monkeypatch):
         "document": Dataset.from_dict(
             {
                 "audio_id": list("abcde"),
-                "audio": [wav(i) for i in range(5)],
+                "audio": [dict(wav(i), path=f"source-{i}.wav") for i in range(5)],
                 "speaker": ["actor"] * 5,
             }
         ),
         "query": Dataset.from_dict(
             {
                 "audio_id": ["ref", "ref"],
-                "audio": [wav(12), wav(12)],
+                "audio": [dict(wav(12), path="ref.wav")] * 2,
                 "text": ["transcript", "transcript"],
                 "instruction": ["same style", "same speaker whispering"],
                 "positive_documents": [["c", "d"], ["a", "b"]],
@@ -64,12 +65,20 @@ def expresso(tmp_path, monkeypatch):
     return task
 
 
+def document_ids(corpus):
+    by_waveform = {wav(i)["bytes"]: letter for i, letter in enumerate("abcde")}
+    return {
+        by_waveform[row["audio"]["bytes"]]: row["id"]
+        for row in corpus.cast_column("audio", Audio(decode=False))
+    }
+
+
 class FullGallerySearch:
     mteb_model_meta = mteb.get_model_meta("mteb/baseline-random-encoder")
 
     def index(self, corpus, **kwargs: Any):
         assert set(corpus.column_names) == {"id", "audio"}
-        assert list(corpus["id"]) == list("abcde")
+        self.ids = document_ids(corpus)
 
     def search(self, queries, *, top_ranked, top_k, **kwargs: Any):
         assert top_ranked is None
@@ -80,57 +89,104 @@ class FullGallerySearch:
             wav(12),
             wav(12),
         ]
-        assert list(queries["text"]) == ["same style", "same speaker whispering"]
-        return {qid: dict(e=0.0, d=1.0, c=2.0, b=3.0, a=4.0) for qid in queries["id"]}
+        assert set(queries["text"]) == {"same style", "same speaker whispering"}
+        return {
+            qid: {self.ids[doc]: float(i) for i, doc in enumerate("edcba")}
+            for qid in queries["id"]
+        }
+
+
+def test_model_inputs_hide_release_ids_file_paths_and_row_order(expresso, tmp_path):
+    split = expresso.dataset["default"]["test"]
+    corpus = split["corpus"].cast_column("audio", Audio(decode=False))
+    queries = split["queries"].cast_column("audio", Audio(decode=False))
+    assert not set(corpus["id"]).intersection("abcde")
+    assert not set(queries["id"]).intersection(("q00000", "q00001", "ref"))
+    assert all(item["path"] is None for item in [*corpus["audio"], *queries["audio"]])
+    assert [item["bytes"] for item in corpus["audio"]] != [
+        wav(i)["bytes"] for i in range(5)
+    ]
+    assert list(corpus["id"]) == sorted(corpus["id"])
+    assert list(queries["id"]) == sorted(queries["id"])
+    for kind in ("document", "query"):
+        path = tmp_path / f"{kind}.parquet"
+        table = pq.read_table(path)
+        pq.write_table(table.take(list(reversed(range(len(table))))), path)
+    reordered = mteb.get_task(expresso.metadata.name)
+    reordered.load_data()
+    other = reordered.dataset["default"]["test"]
+    for side in ("corpus", "queries"):
+        assert split[side].data.table.equals(other[side].data.table)
+    assert split["relevant_docs"] == other["relevant_docs"]
+    assert split["top_ranked"] == other["top_ranked"]
 
 
 def test_official_exclusions_are_private_and_precede_top_k(expresso, tmp_path: Path):
     split = expresso.dataset["default"]["test"]
+    docs = document_ids(split["corpus"])
+    queries = split["queries"]
+    qids = dict(zip(queries["text"], queries["id"], strict=True))
+    style, whisper = qids["same style"], qids["same speaker whispering"]
     assert split["relevant_docs"] == {
-        "q00000": {"c": 1, "d": 1},
-        "q00001": {"a": 1, "b": 1},
+        style: {docs["c"]: 1, docs["d"]: 1},
+        whisper: {docs["a"]: 1, docs["b"]: 1},
     }
-    assert split["top_ranked"] == {"q00000": ["c", "d", "e"], "q00001": ["a", "b", "e"]}
+    assert split["top_ranked"] == {
+        style: sorted(docs[letter] for letter in "cde"),
+        whisper: sorted(docs[letter] for letter in "abe"),
+    }
     scores = expresso.evaluate(
         FullGallerySearch(), split="test", encode_kwargs={}, prediction_folder=tmp_path
     )
     assert scores["default"]["ndcg_at_2"] == 1.0
     predictions = json.loads(expresso._predictions_path(tmp_path).read_text())
     assert predictions["default"]["test"] == {
-        "q00000": {"c": 2.0, "d": 1.0},
-        "q00001": {"a": 4.0, "b": 3.0},
+        style: {docs["c"]: 2.0, docs["d"]: 1.0},
+        whisper: {docs["a"]: 4.0, docs["b"]: 3.0},
     }
 
 
-@pytest.mark.parametrize(
-    "invalid_scores",
-    [
-        {"a": 4.0, "b": 3.0, "c": 2.0, "d": 1.0},
-        {"a": 4.0, "b": 3.0, "c": 2.0, "d": 1.0, "unknown": 0.0},
-        {"a": 4.0, "b": 3.0, "c": 2.0, "d": 1.0, "e": float("nan")},
-    ],
-)
-def test_rejects_incomplete_gallery_scores(expresso, invalid_scores):
+@pytest.mark.parametrize("error", ["missing", "unknown", "nonfinite"])
+def test_rejects_incomplete_gallery_scores(expresso, error):
     class PartialSearch(FullGallerySearch):
         def search(self, queries, **kwargs: Any):
             result = super().search(queries, **kwargs)
-            result["q00000"] = invalid_scores
+            scores = next(iter(result.values()))
+            if error == "nonfinite":
+                scores[self.ids["e"]] = float("nan")
+            else:
+                value = scores.pop(self.ids["e"])
+                if error == "unknown":
+                    scores["unknown"] = value
             return result
 
     with pytest.raises(ValueError, match="every corpus document"):
         expresso.evaluate(PartialSearch(), split="test", encode_kwargs={})
 
 
-def test_score_ties_at_cutoff_follow_trec_eval(expresso, tmp_path):
-    class TiedSearch(FullGallerySearch):
-        def search(self, queries, **kwargs: Any):
-            return {qid: dict.fromkeys("abcde", 1.0) for qid in queries["id"]}
+@pytest.mark.parametrize(
+    "use_position", [False, True], ids=["constant", "row-position"]
+)
+def test_input_free_rankings_follow_content_id_order(expresso, tmp_path, use_position):
+    class NoInputSearch:
+        mteb_model_meta = FullGallerySearch.mteb_model_meta
 
-    expresso.evaluate(TiedSearch(), encode_kwargs={}, prediction_folder=tmp_path)
+        def index(self, corpus, **kwargs: Any):
+            self.scores = {
+                doc: float(index if use_position else 1)
+                for index, doc in enumerate(corpus["id"])
+            }
+
+        def search(self, queries, *, top_k, top_ranked, **kwargs: Any):
+            assert top_ranked is None and top_k == len(self.scores)
+            return dict.fromkeys(queries["id"], self.scores)
+
+    expresso.evaluate(NoInputSearch(), encode_kwargs={}, prediction_folder=tmp_path)
     predictions = json.loads(expresso._predictions_path(tmp_path).read_text())
     rankings = predictions["default"]["test"]
-    assert list(rankings["q00000"]) == ["e", "d"]
-    assert list(rankings["q00001"]) == ["e", "b"]
+    candidates = expresso.dataset["default"]["test"]["top_ranked"]
+    for qid, eligible in candidates.items():
+        assert list(rankings[qid]) == sorted(eligible, reverse=True)[:2]
 
 
 def test_external_shortlist_cannot_replace_official_candidates(expresso, tmp_path):

@@ -7,9 +7,9 @@
         "documents_text_statistics": null,
         "documents_image_statistics": null,
         "documents_audio_statistics": {
-            "total_duration_seconds": 19151.169874999978,
+            "total_duration_seconds": 19151.169874999992,
             "min_duration_seconds": 1.6849166666666666,
-            "average_duration_seconds": 4.960157957782952,
+            "average_duration_seconds": 4.960157957782956,
             "max_duration_seconds": 17.606833333333334,
             "unique_audios": 3861,
             "average_sampling_rate": 24000.0,
@@ -27,9 +27,9 @@
         },
         "queries_image_statistics": null,
         "queries_audio_statistics": {
-            "total_duration_seconds": 4035.7986666666743,
+            "total_duration_seconds": 4035.7986666666766,
             "min_duration_seconds": 2.3837916666666668,
-            "average_duration_seconds": 5.0447483333333425,
+            "average_duration_seconds": 5.044748333333346,
             "max_duration_seconds": 13.257125,
             "unique_audios": 200,
             "average_sampling_rate": 24000.0,
