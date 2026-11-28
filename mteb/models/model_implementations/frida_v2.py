@@ -80,9 +80,9 @@ class FridaV2(AbsEncoder):
         if dense and token_pooling is not None:
             raise ValueError("Token pooling requires the multi_vector head.")
 
-        self.token_pooling = _load_token_pooling(token_pooling)
+        self.token_pooling = _load_token_pooling(token_pooling_args)
         self._token_pooling_config = (
-            dict(token_pooling) if token_pooling is not None else None
+            dict(token_pooling_args) if token_pooling_args is not None else None
         )
         self.embed_dim = embed_dim
         self.max_image_size = max_image_size
