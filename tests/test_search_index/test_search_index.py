@@ -107,21 +107,28 @@ def test_faiss_euclidean_reranking_candidate_lengths(
     assert scores[1] == pytest.approx([-1] if second_candidates else [])
 
 
-def test_faiss_reranking_missing_query_in_top_ranked(tmp_path: Path) -> None:
-    """Evaluation preserves empty results for queries without reranking candidates."""
+@pytest.mark.parametrize("candidates", ["missing", "empty"])
+def test_faiss_reranking_missing_query_in_top_ranked(
+    tmp_path: Path, candidates: str
+) -> None:
+    """Evaluation excludes queries without reranking candidates before FAISS search."""
     pytest.importorskip("faiss", reason="faiss is not installed")
     task = MockRerankingTask()
     task.load_data()
-    del task.dataset["default"]["test"]["top_ranked"]["q2"]
+    top_ranked = task.dataset["default"]["test"]["top_ranked"]
+    if candidates == "missing":
+        del top_ranked["q2"]
+    else:
+        top_ranked["q2"] = []
     model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = SearchEncoderWrapper(model, index_backend=FaissSearchIndex(model))
 
-    with pytest.warns(UserWarning, match="No top-ranked documents for query q2"):
-        mteb.evaluate(wrapper, task, prediction_folder=tmp_path, cache=None)
+    mteb.evaluate(wrapper, task, prediction_folder=tmp_path, cache=None)
 
     with task._predictions_path(tmp_path).open(encoding="utf-8") as f:
         predictions = json.load(f)["default"]["test"]
 
-    assert set(predictions) == {"q1", "q2"}
+    assert set(predictions) == {"q1"}
     assert set(predictions["q1"]) == {"d1", "d2"}
-    assert predictions["q2"] == {}
+    assert set(task.dataset["default"]["test"]["queries"]["id"]) == {"q1"}
+    assert set(task.dataset["default"]["test"]["relevant_docs"]) == {"q1"}
