@@ -27,6 +27,6 @@ class GeoreviewClusteringP2P(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Identify the organization category based on the reviews",
+        bibtex_citation=None,
     )

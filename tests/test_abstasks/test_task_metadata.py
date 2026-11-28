@@ -8,6 +8,7 @@ from pydantic import ValidationError
 import mteb
 from mteb.abstasks.task_metadata import (
     _TASKTYPE2SIMPLIFIEDTASKTYPE,
+    NoBibtexSpecified,
     TaskMetadata,
     TaskType,
 )
@@ -351,6 +352,7 @@ def test_extract_bibtex_title(bibtex_citation, expected_title):
 @pytest.mark.parametrize(
     "bibtex_citation",
     [
+        NoBibtexSpecified,
         pytest.param(None, id="none"),
         pytest.param("", id="empty"),
         pytest.param(" ", id="single-space"),

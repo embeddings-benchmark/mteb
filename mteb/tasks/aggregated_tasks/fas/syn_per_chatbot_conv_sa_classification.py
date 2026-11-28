@@ -34,5 +34,5 @@ class SynPerChatbotConvSAClassification(AbsTaskAggregate):
         main_score="accuracy",
         type="Classification",
         eval_splits=["test"],
-        bibtex_citation=""" """,
+        bibtex_citation=None,
     )

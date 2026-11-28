@@ -11740,6 +11740,16 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "verma2026rteb|||{rteb}: an overfitting-resistant benchmark for embedding model evaluation|2026": {
+            "stored_at": 1795552169.3093278,
+            "value": {
+                "verdict": "NOT_FOUND",
+                "found_title": "Covariate-menu overfitting in policy learning: evidence from a published heterogeneity benchmark",
+                "source": "crossref:title",
+                "similarity": 0.42424242424242425,
+                "note": "no close title match found"
+            }
         }
     }
 }

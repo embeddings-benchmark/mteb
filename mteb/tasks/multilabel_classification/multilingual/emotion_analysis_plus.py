@@ -69,8 +69,8 @@ class EmotionAnalysisPlus(AbsTaskMultilabelClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="",
         superseded_by="EmotionAnalysisPlus.v2",
+        bibtex_citation=None,
     )
     # Published results score the whole evaluation split, so the cap stays off to keep them comparable.
     max_eval_samples: int | None = None
@@ -139,7 +139,7 @@ class EmotionAnalysisPlusV2(AbsTaskMultilabelClassification):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="",
         adapted_from=["EmotionAnalysisPlus"],
+        bibtex_citation=None,
     )
     max_eval_samples = 3000

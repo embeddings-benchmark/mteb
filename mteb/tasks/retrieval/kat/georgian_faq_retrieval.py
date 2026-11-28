@@ -28,5 +28,5 @@ class GeorgianFAQRetrieval(AbsTaskRetrieval):
         license="not specified",
         annotations_creators="derived",
         dialect=[],
-        bibtex_citation="",
+        bibtex_citation=None,
     )

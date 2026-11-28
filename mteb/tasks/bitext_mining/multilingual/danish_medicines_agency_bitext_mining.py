@@ -24,5 +24,5 @@ class DanishMedicinesAgencyBitextMining(AbsTaskBitextMining):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
+        bibtex_citation=None,
     )

@@ -27,11 +27,11 @@ class TV2Nordretrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt={
             "query": "Given a summary of a Danish news article retrieve the corresponding news article"
         },
         task_subtypes=["Article retrieval"],
+        bibtex_citation=None,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

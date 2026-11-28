@@ -30,7 +30,7 @@ class HUMEWikipediaRerankingMultilingual(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Given a query, rerank the Wikipedia passages by their relevance to the query",
         adapted_from=["WikipediaRerankingMultilingual"],
+        bibtex_citation=None,
     )

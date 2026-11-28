@@ -4,10 +4,12 @@ import json
 import logging
 import re
 from collections.abc import Sequence
+from enum import Enum
 from pathlib import Path
 from typing import (
     TYPE_CHECKING,
     Any,
+    Final,
     Literal,
     Required,
     cast,
@@ -435,6 +437,15 @@ class MetadataDatasetDict(TypedDict, total=False):
     trust_remote_code: bool
 
 
+class CitationStatus(Enum):
+    """Status of a task citation that has not been checked."""
+
+    UNSPECIFIED = -1
+
+
+NoBibtexSpecified: Final = CitationStatus.UNSPECIFIED
+
+
 class TaskMetadata(BaseModel):
     """Metadata for a task.
 
@@ -463,9 +474,9 @@ class TaskMetadata(BaseModel):
         sample_creation: The method of text creation. Includes "found", "created", "machine-translated", "machine-translated and verified", and
             "machine-translated and localized".
         prompt: The prompt used for the task. Can be a string or a dictionary containing the query and passage prompts.
-        bibtex_citation: The BibTeX citation for the dataset. Should be an empty string if no citation is available. As non-existing citations can
-            cause authors citing the work to be penalized, we recommend to use an empty string if no citation is available. Similarly, if no article
-            exist, we recommend to use an empty string instead of citing e.g. the dataset's website. It is allowed to cite multiple articles.
+        bibtex_citation: The BibTeX citation for the dataset. Use None if no article exists after checking,
+            rather than citing the dataset website. The default, NoBibtexSpecified, means the citation
+            has not been checked and fails citation validation. It is allowed to cite multiple articles.
         adapted_from: Registered MTEB task names this task is adapted (translated, sampled, etc.) from.
         is_public: Whether the dataset is publicly available. If False (closed/private), a HuggingFace token is required to run the datasets.
         contributed_by: The name of the organization or individual who contributed the dataset. This is especially useful for private datasets
@@ -502,7 +513,7 @@ class TaskMetadata(BaseModel):
     dialect: list[str] | None = None
 
     sample_creation: SampleCreationMethod | None = None
-    bibtex_citation: str | None = None
+    bibtex_citation: str | None | CitationStatus = NoBibtexSpecified
     adapted_from: Sequence[str] | None = None
     is_public: bool = True
     contributed_by: str | None = None
@@ -601,7 +612,13 @@ class TaskMetadata(BaseModel):
             getattr(self, field_name) is not None
             for field_name in self.__class__.model_fields
             if field_name
-            not in ["prompt", "adapted_from", "contributed_by", "superseded_by"]  # noqa: PLR6201
+            not in [  # noqa: PLR6201
+                "prompt",
+                "adapted_from",
+                "contributed_by",
+                "superseded_by",
+                "bibtex_citation",
+            ]
         )
 
     @property
@@ -614,7 +631,7 @@ class TaskMetadata(BaseModel):
     def intext_citation(self, include_cite: bool = True) -> str:
         """Create an in-text citation for the dataset."""
         cite = ""
-        if self.bibtex_citation and self.bibtex_citation.strip():
+        if isinstance(self.bibtex_citation, str) and self.bibtex_citation.strip():
             cite = f"{self.bibtex_citation.split(',')[0].split('{')[1]}"
         if include_cite and cite:
             # check for whitespace in the citation
@@ -783,7 +800,9 @@ class TaskMetadata(BaseModel):
             DatasetCardData(**dataset_card_data_params),
             # parameters for readme generation
             dict(
-                citation=self.bibtex_citation,
+                citation=self.bibtex_citation
+                if isinstance(self.bibtex_citation, str)
+                else None,
                 dataset_description=self.description,
                 dataset_reference=formatted_reference,
                 descriptive_stats=descriptive_stats,
@@ -829,7 +848,7 @@ class TaskMetadata(BaseModel):
     def _format_reference(self) -> str | None:
         """Format the reference as a markdown link with the paper title from BibTeX."""
         title = None
-        if self.bibtex_citation:
+        if isinstance(self.bibtex_citation, str):
             title = self._extract_bibtex_title(self.bibtex_citation)
 
         if title and self.reference:

@@ -24,6 +24,6 @@ class HUMEWikiCitiesClustering(AbsTaskClusteringLegacy):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         adapted_from=["WikiCitiesClustering"],
+        bibtex_citation=None,
     )

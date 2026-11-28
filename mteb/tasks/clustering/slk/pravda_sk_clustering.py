@@ -33,8 +33,8 @@ class PravdaSKTagClustering(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Identify the topic or theme of the given text.",
+        bibtex_citation=None,
     )
 
     def dataset_transform(self, **kwargs: Any) -> None:
@@ -82,8 +82,8 @@ class PravdaSKURLClustering(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Identify the topic or theme of the given text.",
+        bibtex_citation=None,
     )
 
     def dataset_transform(self, **kwargs: Any) -> None:

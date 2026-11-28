@@ -93,5 +93,6 @@
     "xing_han_lu_2024": "Correct as cited (Hugging Face's own citation, https://doi.org/10.57967/hf/2247), DataCite drops the revision suffix from the title",
     "ypsilantis2021met": "Correct as cited (NeurIPS Datasets and Benchmarks 2021, https://datasets-benchmarks-proceedings.neurips.cc/paper_files/paper/2021/hash/5f93f983524def3dca464469d2cf9f3e-Abstract-round2.html), indexes date it 2022",
     "yuksekgonul2023and": "Correct as cited (ICLR 2023, https://openreview.net/forum?id=KRLUvxh8uaX), indexes date the preprint 2022",
-    "zotova-etal-2020-multilingual": "Correct as cited (LREC 2020, https://aclanthology.org/2020.lrec-1.171/)"
+    "zotova-etal-2020-multilingual": "Correct as cited (LREC 2020, https://aclanthology.org/2020.lrec-1.171/)",
+    "verma2026rteb": "Correct"
 }

@@ -234,7 +234,11 @@ class TaskMetaSchema(_CamelModel):
             modalities=metadata.modalities,
             description=metadata.description,
             reference=metadata.reference,
-            citation=metadata.bibtex_citation,
+            citation=(
+                metadata.bibtex_citation
+                if isinstance(metadata.bibtex_citation, str)
+                else None
+            ),
             is_public=metadata.is_public,
             source_dataset=metadata.dataset["path"],
             license=metadata.license,

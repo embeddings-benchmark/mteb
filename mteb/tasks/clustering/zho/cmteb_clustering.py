@@ -237,9 +237,9 @@ class ThuNewsClusteringFastS2S(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Identify the topic or theme of the given news articles based on the titles",
         adapted_from=["ThuNewsClusteringS2S"],
+        bibtex_citation=None,
     )
 
     def dataset_transform(
@@ -290,9 +290,9 @@ class ThuNewsClusteringFastP2P(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Identify the topic or theme of the given news articles based on the titles and contents",
         adapted_from=["ThuNewsClusteringP2P"],
+        bibtex_citation=None,
     )
 
     def dataset_transform(

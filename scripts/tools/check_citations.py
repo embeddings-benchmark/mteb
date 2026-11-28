@@ -70,7 +70,12 @@ def citations() -> dict[str, tuple[Entry, set[str]]]:
     it is checked on its own.
     """
     cited_works: list[tuple[str, str | None]] = [
-        (task.metadata.name, task.metadata.bibtex_citation)
+        (
+            task.metadata.name,
+            task.metadata.bibtex_citation
+            if isinstance(task.metadata.bibtex_citation, str)
+            else None,
+        )
         for task in mteb.get_tasks(
             exclude_superseded=False, exclude_aggregate=False, exclude_beta=False
         )

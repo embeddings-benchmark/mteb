@@ -40,6 +40,6 @@ class CQADupstackRetrievalFa(AbsTaskAggregate):
         main_score="ndcg_at_10",
         type="Retrieval",  # since everything is retrieval - otherwise it would be "Aggregated"
         eval_splits=["test"],
-        bibtex_citation=""" """,
         adapted_from=["CQADupstackRetrieval"],
+        bibtex_citation=None,
     )

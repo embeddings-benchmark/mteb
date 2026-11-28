@@ -34,7 +34,7 @@ class SlovakNLI(AbsTaskPairClassification):
         dialect=[],
         sample_creation="created",
         prompt="Given a premise, retrieve a hypothesis that is entailed by the premise",
-        bibtex_citation="",
+        bibtex_citation=None,
     )
 
     def dataset_transform(self, **kwargs: Any):

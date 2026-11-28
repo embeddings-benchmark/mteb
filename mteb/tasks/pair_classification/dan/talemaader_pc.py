@@ -24,7 +24,7 @@ class TalemaaderPC(AbsTaskPairClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="",
+        bibtex_citation=None,
     )
 
     def dataset_transform(
