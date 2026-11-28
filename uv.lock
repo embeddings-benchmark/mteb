@@ -7854,7 +7854,6 @@ gritlm = [
     { name = "gritlm" },
 ]
 hyper3-embed = [
-    { name = "sentence-transformers", version = "6.1.0", source = { registry = "https://pypi.org/simple" } },
     { name = "transformers", version = "5.20.2", source = { registry = "https://pypi.org/simple" } },
 ]
 image = [
@@ -8371,7 +8370,6 @@ requires-dist = [
     { name = "scipy", specifier = ">=1.14.0" },
     { name = "sentence-transformers", specifier = ">=3.0.0" },
     { name = "sentence-transformers", marker = "extra == 'colnanovdr'", specifier = ">=6.0.0" },
-    { name = "sentence-transformers", marker = "extra == 'hyper3-embed'", specifier = ">=6.1.0" },
     { name = "sentence-transformers", marker = "extra == 'jina'", specifier = ">=3.1.0,<5.4.0" },
     { name = "sentence-transformers", marker = "extra == 'multimodal-sbert'", specifier = ">=5.4.0" },
     { name = "sentence-transformers", marker = "extra == 'nemotron-3-5-vl'", specifier = ">=6.1.0" },
