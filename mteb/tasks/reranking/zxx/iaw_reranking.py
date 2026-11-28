@@ -8,7 +8,7 @@ from mteb.abstasks.task_metadata import TaskMetadata
 
 _DATASET = {
     "path": "mteb/IAW",
-    "revision": "__REVISION__",
+    "revision": "f94e2ba83b6fc79820ba4d7bfd8bac17a6b5e4d0",
 }
 _REFERENCE = "https://arxiv.org/abs/2303.13800"
 _BIBTEX = r"""
