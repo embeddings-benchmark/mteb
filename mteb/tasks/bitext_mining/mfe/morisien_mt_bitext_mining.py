@@ -17,7 +17,7 @@ class MorisienMTBitextMining(AbsTaskBitextMining):
             "revision": "45f511e86cc511a422a130f2d23a2697e279efa2",
         },
         description=(
-            "Machine translation test set aligning Mauritian Creole (Kreol Morisien) with English and French, "
+            "Human-aligned parallel text test set pairing Mauritian Creole (Kreol Morisien) with English and French, "
             "from the held-out test split of MorisienMT."
         ),
         reference="https://arxiv.org/abs/2206.02421",
