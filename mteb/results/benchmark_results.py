@@ -444,7 +444,10 @@ class BenchmarkResults(BaseModel):  # noqa: PLR0904
                 - "split": Aggregates the scores by split. The DataFrame will have one row per model, task and split.
                 - "task": Aggregates the scores by task. The DataFrame will have one row per model and task.
                 - "language": Aggregates the scores by language. The DataFrame will have one row per model and language.
-            aggregation_fn: The function to use for aggregation. If None, the mean will be used.
+            aggregation_fn: The function to use for aggregation. If None, the mean will be used, and a task (or a
+                split for "split") with a missing score is NaN instead of the mean of the scores it has. For
+                "language", such a task is left out of the mean. A score is missing when it is NaN, like the
+                splits and subsets that `select_tasks` adds for results that don't have them.
             include_model_revision: If True, the model revision will be included in the DataFrame. If False, it will be excluded.
                 If there are multiple revisions for the same model, they will be joined using the `join_revisions` method.
             format: The format of the DataFrame. Can be one of:

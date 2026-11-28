@@ -551,3 +551,47 @@ def test_dataframe_exports_each_experiment(include_model_revision):
     key = (model, "rev") if include_model_revision else (model,)
     assert wide[(*key, "")].item() == 0.2
     assert wide[(*key, "named")].item() == 0.8
+
+
+@pytest.mark.parametrize("include_model_revision", [False, True])
+def test_to_dataframe_nulls_partly_evaluated_tasks(
+    benchmark_results: BenchmarkResults, include_model_revision: bool
+):
+    # In the mock cache all-MiniLM-L6-v2 has no test/catalan score for this task.
+    partial = "sentence-transformers/all-MiniLM-L6-v2"
+    full = "mteb/baseline-random-encoder"
+    task = mteb.get_task("CataloniaTweetClassification")
+    results = (
+        benchmark_results.select_models([partial, full])
+        .join_revisions()
+        .select_tasks([task])
+    )
+
+    def scores(
+        level: str, by: tuple[str, ...] = (), aggregation_fn=None
+    ) -> dict[tuple[str, ...], float]:
+        df = results.to_dataframe(
+            aggregation_level=level,
+            aggregation_fn=aggregation_fn,
+            include_model_revision=include_model_revision,
+            format="long",
+        )
+        rows = df[["model_name", *by, "score"]].itertuples(index=False)
+        return {tuple(keys): score for *keys, score in rows}
+
+    task_scores = scores("task")
+    assert pd.isna(task_scores[(partial,)])
+    assert task_scores[(full,)] == pytest.approx(0.3373515)
+
+    split_scores = scores("split", by=("split",))
+    assert pd.isna(split_scores[(partial, "test")])
+    assert split_scores[(partial, "validation")] == pytest.approx(0.444954)
+
+    language_scores = scores("language", by=("language",))
+    assert pd.isna(language_scores[(partial, "cat-Latn")])
+    assert pd.isna(language_scores[(partial, "spa-Latn")])
+    assert language_scores[(full, "cat-Latn")] == pytest.approx(0.339179)
+
+    # A custom aggregation still gets every score, missing ones included.
+    custom = scores("task", aggregation_fn=lambda task_scores: task_scores.mean())
+    assert custom[(partial,)] == pytest.approx(0.451613)

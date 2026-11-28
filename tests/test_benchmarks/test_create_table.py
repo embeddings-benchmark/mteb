@@ -392,6 +392,9 @@ def test_per_language_table_separates_and_sorts_experiments(language_view, expec
         {
             "model_name": [FULL_MODEL] * 4,
             _EXPERIMENT_ID_COL: ["", "", "multivec", "multivec"],
+            "task_name": [BANKING77, BORNHOLM] * 2,
+            "split": ["test"] * 4,
+            "subset": ["default"] * 4,
             "language": [["en"], ["fr", "de"], ["en"], ["fr", "de"]],
             "score": [0.9, 0.2, 0.1, 0.8],
         }
@@ -400,3 +403,18 @@ def test_per_language_table_separates_and_sorts_experiments(language_view, expec
     languages = ["en", "fr", "de"] if language_view == "all" else language_view
     assert table.select(_EXPERIMENT_ID_COL, *languages).rows() == expected
     assert table["Model"].to_list() == [FULL_MODEL, FULL_MODEL]
+
+
+@_skip_if_datasets_too_old
+def test_per_language_table_leaves_out_partly_evaluated_tasks(
+    mock_mteb_cache: ResultCache,
+):
+    # PARTIAL_MODEL has no test/catalan score for CATALONIA.
+    pl_df = _task_frame(mock_mteb_cache, [CATALONIA, BANKING77])
+    table = _create_per_language_table_from_benchmark_results(pl_df, "all")
+    rows = {r["Model"]: r for r in table.to_dicts()}
+
+    assert rows[PARTIAL_MODEL]["cat-Latn"] is None
+    assert rows[PARTIAL_MODEL]["spa-Latn"] is None
+    assert rows[PARTIAL_MODEL]["eng-Latn"] == pytest.approx(0.800422)
+    assert rows[FULL_MODEL]["cat-Latn"] == pytest.approx(0.339179)

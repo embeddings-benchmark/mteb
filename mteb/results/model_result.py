@@ -50,6 +50,24 @@ def _aggregate_and_pivot(
     output_format: Literal["wide", "long"],
     aggregation_fn: Callable[[list[Score]], Any] | str | None,
 ) -> pd.DataFrame:
+    if aggregation_fn is None and aggregation_level != "subset":
+        # A (split, subset) without a result has a NaN score. Mask the rest of
+        # its task (its split, for "split") too, so the task gets NaN instead
+        # of the mean of the scores it has and a language mean skips it, like
+        # the leaderboard tables (#5101).
+        task_keys = (
+            ["task_name", "split"] if aggregation_level == "split" else ["task_name"]
+        )
+        incomplete = (
+            df["score"]
+            .isna()
+            .groupby(
+                [df[c] for c in [*columns, *task_keys]], dropna=False, observed=True
+            )
+            .transform("any")
+        )
+        df = df.assign(score=df["score"].mask(incomplete))
+
     if aggregation_level == "subset":
         index_columns = ["task_name", "split", "subset"]
 
@@ -343,7 +361,10 @@ class ModelResult(BaseModel):
                 - "subset"/None: No aggregation will be done. The DataFrame will have one row per model, task, split and subset.
                 - "split": Aggregates the scores by split. The DataFrame will have one row per model, task and split.
                 - "task": Aggregates the scores by task. The DataFrame will have one row per model and task.
-            aggregation_fn: The function to use for aggregation. If None, the mean will be used.
+            aggregation_fn: The function to use for aggregation. If None, the mean will be used, and a task (or a
+                split for "split") with a missing score is NaN instead of the mean of the scores it has. A score is
+                missing when it is NaN, like the splits and subsets that `select_tasks` adds for results that
+                don't have them.
             include_model_revision: If True, the model revision will be included in the DataFrame. If False, it will be excluded.
             format: The format of the DataFrame. Can be one of:
                 - "wide": The DataFrame will be of shape (number of tasks, number of models). Scores will be in the cells.

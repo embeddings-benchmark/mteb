@@ -1177,10 +1177,12 @@ def _create_per_language_table_from_benchmark_results(
     """Create per-language table from a long polars pre-aggregation frame.
 
     Returns one row per model and experiment, with one score column per language.
+    A task the model and experiment only partly covered is left out of their
+    language means, as in the per-task table.
 
     Args:
-        pl_df: Long polars frame with at least ``model_name``, ``language`` (list[str]),
-            and ``score`` columns.
+        pl_df: Long polars frame with at least ``model_name``, ``task_name``,
+            ``split``, ``subset``, ``language`` (list[str]) and ``score`` columns.
         language_view: List of languages to include, or ``"all"`` for every language
             present in the results.
 
@@ -1199,7 +1201,11 @@ def _create_per_language_table_from_benchmark_results(
     # whose language list intersects the selection — this avoids materialising
     # exploded rows we'll discard.
     keys = ["model_name", _EXPERIMENT_ID_COL]
-    lazy = _ensure_experiment_id(pl_df).lazy().select(*keys, "language", "score")
+    pl_df = _ensure_experiment_id(pl_df)
+    pl_df = _null_incomplete_scores(
+        pl_df, _incomplete_task_pairs(pl_df), keys=(*keys, "task_name")
+    )
+    lazy = pl_df.lazy().select(*keys, "language", "score")
     if language_view != "all":
         lazy = lazy.filter(
             pl.col("language").list.eval(pl.element().is_in(language_view)).list.any()

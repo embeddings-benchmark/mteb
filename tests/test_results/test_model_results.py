@@ -155,3 +155,35 @@ def test_modalities_from_task_results() -> None:
         "CIFAR10ZeroShot",
         "Banking77Classification",
     ]
+
+
+def test_to_dataframe_nulls_partly_evaluated_task() -> None:
+    task = mteb.get_task("CataloniaTweetClassification")
+    task_result = TaskResult(
+        dataset_revision=task.metadata.revision,
+        task_name=task.metadata.name,
+        mteb_version="2.27.0",
+        evaluation_time=1.0,
+        scores={
+            "validation": [
+                {"main_score": 0.4, "hf_subset": "spanish", "languages": ["spa-Latn"]},
+                {"main_score": 0.6, "hf_subset": "catalan", "languages": ["cat-Latn"]},
+            ],
+            # no test/catalan score
+            "test": [
+                {"main_score": 0.8, "hf_subset": "spanish", "languages": ["spa-Latn"]}
+            ],
+        },
+    )
+    model_result = ModelResult(
+        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        model_revision="8b3219a92973c328a8e22fadcfa821b5dc75636a",
+        task_results=[task_result],
+    ).select_tasks([task])
+
+    task_df = model_result.to_dataframe(format="long")
+    assert pd.isna(task_df["score"].item())
+    split_df = model_result.to_dataframe(aggregation_level="split", format="long")
+    split_scores = dict(zip(split_df["split"], split_df["score"], strict=True))
+    assert pd.isna(split_scores["test"])
+    assert split_scores["validation"] == pytest.approx(0.5)
