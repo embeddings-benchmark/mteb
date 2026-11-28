@@ -14,7 +14,7 @@ from mteb._log_once import LogOnce
 from mteb.abstasks import (
     AbsTask,
 )
-from mteb.filter_tasks import filter_tasks
+from mteb.filter_tasks import _reject_str, filter_tasks
 from mteb.languages import LanguageScripts
 
 if TYPE_CHECKING:
@@ -284,6 +284,10 @@ def get_tasks(  # noqa: PLR0913, PLR0917
         >>> get_tasks(languages=["eng"], tasks=["WikipediaRetrievalMultilingual"], eval_splits=["test"])
         >>> get_tasks(tasks=["STS22"], languages=["eng"], exclusive_language_filter=True) # don't include multilingual subsets containing English
     """
+    _reject_str(
+        tasks=tasks, languages=languages, script=script, eval_splits=eval_splits
+    )
+
     # validate up front so the error is not swallowed as a skipped task below
     LanguageScripts.from_languages_and_scripts(languages, script)
 
@@ -367,6 +371,13 @@ def get_task(
     Examples:
         >>> get_task("BornholmBitextMining")
     """
+    _reject_str(
+        languages=languages,
+        script=script,
+        eval_splits=eval_splits,
+        hf_subsets=hf_subsets,
+    )
+
     if task_name in _TASK_RENAMES:
         _task_name = _TASK_RENAMES[task_name]
         msg = f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."

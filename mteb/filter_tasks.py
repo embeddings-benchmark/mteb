@@ -20,6 +20,16 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def _reject_str(**values: object) -> None:
+    """Raise if a filter is a single string, which would be read as a sequence of characters."""
+    for name, value in values.items():
+        if isinstance(value, str):
+            raise TypeError(
+                f"`{name}` must be a list of strings, got the string {value!r}. "
+                f"Pass [{value!r}] instead."
+            )
+
+
 @overload
 def filter_tasks(
     tasks: Iterable[AbsTask],
@@ -102,6 +112,15 @@ def filter_tasks(  # noqa: PLR0913
         >>> text_image_tasks = filter_tasks(my_tasks, modalities=["text", "image"], exclusive_modality_filter=True)
 
     """
+    _reject_str(
+        languages=languages,
+        script=script,
+        domains=domains,
+        task_types=task_types,
+        categories=categories,
+        modalities=modalities,
+    )
+
     langs_to_keep = None
     if languages:
         langs_to_keep = LanguageScripts.from_languages_and_scripts(languages, script)

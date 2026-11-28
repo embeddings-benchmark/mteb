@@ -95,6 +95,31 @@ def test_get_tasks_filtering():
                 )
 
 
+@pytest.mark.parametrize(
+    "name",
+    [
+        "tasks",
+        "languages",
+        "script",
+        "domains",
+        "task_types",
+        "categories",
+        "modalities",
+        "eval_splits",
+    ],
+)
+def test_get_tasks_rejects_single_string(name: str):
+    """A single string would be read as a sequence of characters."""
+    with pytest.raises(TypeError, match=f"`{name}` must be a list of strings"):
+        get_tasks(**{name: "eng"})
+
+
+@pytest.mark.parametrize("name", ["languages", "script", "eval_splits", "hf_subsets"])
+def test_get_task_rejects_single_string(name: str):
+    with pytest.raises(TypeError, match=f"`{name}` must be a list of strings"):
+        get_task("MassiveIntentClassification", **{name: "nb"})
+
+
 @pytest.mark.parametrize("script", [["Cyrl"], None])
 @pytest.mark.parametrize("task_types", [["Classification"], ["Clustering"], None])
 @pytest.mark.parametrize("modalities", [["text"], ["image"], None])
