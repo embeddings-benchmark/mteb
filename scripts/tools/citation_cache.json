@@ -11720,6 +11720,26 @@
                 "similarity": 1.0,
                 "note": ""
             }
+        },
+        "kriz2025multivent20massivemultilingual||2410.11619|multivent 2.0: a massive multilingual benchmark for event-centric video retrieval|2025": {
+            "stored_at": 1795864780.1595354,
+            "value": {
+                "verdict": "OK",
+                "found_title": "MultiVENT 2.0: A Massive Multilingual Benchmark for Event-Centric Video Retrieval",
+                "source": "arxiv:id",
+                "similarity": 1.0,
+                "note": ""
+            }
+        },
+        "dixit2026foleybench|||foleybench: a benchmark for video-to-audio models|2026": {
+            "stored_at": 1795864885.1806967,
+            "value": {
+                "verdict": "OK",
+                "found_title": "FoleyBench: A Benchmark for Video-to-Audio Models",
+                "source": "crossref:title",
+                "similarity": 1.0,
+                "note": ""
+            }
         }
     }
 }
