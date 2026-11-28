@@ -2,6 +2,7 @@ from datasets import Dataset, DatasetDict
 
 from mteb.abstasks.clustering import AbsTaskClustering
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.tasks.classification.multilingual.sib200_classification import _LANGS_V3
 
 _LANGS = {
     "ace_Latn": ["ace-Latn"],
@@ -229,6 +230,7 @@ class SIB200ClusteringFast(AbsTaskClustering):
         annotations_creators="expert-annotated",  # expert annotated for English --> human translations
         dialect=[],
         sample_creation="human-translated and localized",
+        superseded_by="SIB200ClusteringS2S.v2",
         bibtex_citation=r"""
 @inproceedings{adelani-etal-2024-sib,
   address = {St. Julian{'}s, Malta},
@@ -272,3 +274,50 @@ Purver, Matthew},
         self.dataset = DatasetDict(ds)
         for lang in self.hf_subsets:
             self.dataset[lang] = self.dataset[lang].class_encode_column("labels")
+
+
+class SIB200ClusteringFastV2(SIB200ClusteringFast):
+    """SIB-200 clustering on the 14-topic `mteb/sib200.v3` data, which also contains the 8 language configs
+    (among them `arb_Arab`, Modern Standard Arabic) that the first task definition left out."""
+
+    # largest test split (arb_Arab and most configs); configs with fewer test sentences are embedded whole
+    max_document_to_embed = 1225
+
+    metadata = TaskMetadata(
+        name="SIB200ClusteringS2S.v2",
+        description=(
+            "SIB-200 is a topic classification dataset based on Flores-200, human-translated into 205 language "
+            "variants. This clustering task uses the 14-topic version (`mteb/sib200.v3`, the same data as "
+            "SIB200Classification.v3) and, unlike SIB200ClusteringS2S, includes all 205 language-script pairs "
+            "such as Modern Standard Arabic (arb_Arab)."
+        ),
+        reference="https://arxiv.org/abs/2309.07445",
+        dataset={
+            "path": "mteb/sib200.v3",
+            "revision": "4b3a328cb8d7f78de58780c2194c9a1443786795",
+        },
+        type="Clustering",
+        category="t2c",
+        modalities=["text"],
+        eval_splits=["test"],
+        eval_langs=_LANGS_V3,
+        main_score="v_measure",
+        date=("2023-09-14", "2024-01-27"),
+        domains=["News", "Written"],
+        task_subtypes=["Thematic clustering"],
+        license="cc-by-4.0",
+        annotations_creators="expert-annotated",  # expert annotated for English --> human translations
+        dialect=[],
+        sample_creation="human-translated and localized",
+        bibtex_citation=SIB200ClusteringFast.metadata.bibtex_citation,
+        adapted_from=["SIB200ClusteringS2S"],
+    )
+
+    def dataset_transform(
+        self,
+        num_proc: int | None = None,
+    ):
+        for lang in self.hf_subsets:
+            self.dataset[lang] = self.dataset[lang].rename_columns(
+                {"label": "labels", "text": "sentences"}
+            )
