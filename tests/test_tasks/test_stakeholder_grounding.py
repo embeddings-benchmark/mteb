@@ -115,7 +115,10 @@ class _InMemoryStakeholderGrounding(StakeholderGrounding):
                 ("1-B", texts[1:], 50),
             ]
         ]
-        self.dataset = {"rai": DatasetDict({"test": Dataset.from_list(arrangements)})}
+        self.dataset = {
+            subset: DatasetDict({"test": Dataset.from_list(arrangements)})
+            for subset in self.metadata.eval_langs
+        }
         self.dataset_transform()
         self.data_loaded = True
 
