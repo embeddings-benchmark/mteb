@@ -3498,6 +3498,74 @@ MTEB_THA = Benchmark(
     contacts=["anusoft"],
 )
 
+MTEB_ARA = Benchmark(
+    name="MTEB(ara, v1)",
+    aliases=["MTEB(ara)"],
+    display_name="Arabic",
+    icon="https://github.com/lipis/flag-icons/raw/260c91531be024944c6514130c5defb2ebb02b7d/flags/4x3/arab.svg",
+    tasks=MTEBTasks(
+        (
+            # Subsets are listed explicitly: several of these tasks are multilingual, and a plain
+            # `languages=["ara"]` filter would also pull in pairs such as MLQA ara-deu or the
+            # Belebele dialect and romanized variants. Cross-lingual subsets are Arabic <-> English only.
+            # Retrieval (Arabic queries and documents, plus Arabic <-> English cross-lingual subsets)
+            get_task(
+                "MIRACLRetrievalHardNegatives.v2",
+                hf_subsets=["ar"],
+                eval_splits=["dev"],
+            ),
+            get_task("XQuADRetrieval", hf_subsets=["ar"], eval_splits=["validation"]),
+            get_task(
+                "MLQARetrieval",
+                hf_subsets=["ara-ara", "ara-eng", "eng-ara"],
+                eval_splits=["test"],
+            ),
+            get_task(
+                "BelebeleRetrieval",
+                hf_subsets=[
+                    "arb_Arab-arb_Arab",
+                    "arb_Arab-eng_Latn",
+                    "eng_Latn-arb_Arab",
+                ],
+                eval_splits=["test"],
+            ),
+            get_task(
+                "XPQARetrieval",
+                hf_subsets=["ara-ara", "eng-ara"],
+                eval_splits=["test"],
+            ),
+            get_task("WebFAQRetrieval", hf_subsets=["ara"], eval_splits=["test"]),
+            # Reranking
+            get_task("NamaaMrTydiReranking"),
+            # STS
+            get_task("STS17", hf_subsets=["ar-ar", "en-ar"], eval_splits=["test"]),
+            get_task("STS22.v2", hf_subsets=["ar"], eval_splits=["test"]),
+            get_task("SemRel24STS", hf_subsets=["arb"], eval_splits=["test"]),
+            # Pair classification
+            get_task("XNLI", hf_subsets=["ar"], eval_splits=["test"]),
+            get_task("ArEntail"),
+            # Classification
+            get_task("AJGT.v2"),
+            get_task("TweetEmotionClassification.v2"),
+            get_task("TweetSarcasmClassification.v2"),
+            get_task("HotelReviewSentimentClassification.v2"),
+            # Clustering
+            get_task("SIB200ClusteringS2S.v2", hf_subsets=["arb_Arab"]),
+            # Bitext mining (Arabic <-> English only)
+            get_task(
+                "FloresBitextMining",
+                hf_subsets=["arb_Arab-eng_Latn", "eng_Latn-arb_Arab"],
+                eval_splits=["devtest"],
+            ),
+            get_task("Tatoeba", hf_subsets=["ara-eng"], eval_splits=["test"]),
+        )
+    ),
+    description="Arabic text embedding quality across retrieval, reranking, STS, pair classification, classification, clustering and Arabic-English bitext mining. Tasks use human-written or human-translated data; machine-translated and LM-generated tasks are excluded.",
+    reference=None,
+    citation=None,
+    contacts=["mahmoudzahran01"],
+)
+
 JINA_VDR = Benchmark(
     name="JinaVDR",
     display_name="Jina Visual Document Retrieval",
