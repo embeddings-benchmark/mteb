@@ -5,6 +5,16 @@ from mteb.models.model_implementations.pylate_models import (
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SparseEncoderWrapper
 
+sparseup_citation = r"""@misc{formal2026sparseupbetterrecipestraining,
+      title={SPARSEUP: Towards Better Recipes for Training Modern Learned Sparse Retrievers},
+      author={Thibault Formal and Pierre Erbacher and Cosimo Rulli and Paulo Roberto Moura Junior},
+      year={2026},
+      eprint={2611.09680},
+      archivePrefix={arXiv},
+      primaryClass={cs.IR},
+      url={https://arxiv.org/abs/2611.09680},
+}"""
+
 linkup_sparseup_embed_v1 = ModelMeta(
     loader=SparseEncoderWrapper,
     loader_kwargs=dict(
@@ -14,12 +24,12 @@ linkup_sparseup_embed_v1 = ModelMeta(
     model_type=["sparse"],
     languages=["eng-Latn"],
     open_weights=True,
-    revision="08314498d4f6a3a205b930ab9f27001404ea94b8",
+    revision="04c7b582719af01ea6ce4f17c3271db80e23709e",
     release_date="2026-09-16",
-    n_parameters=188391300,
+    n_parameters=149_656_770,
     n_embedding_parameters=38684160,
-    memory_usage_mb=719,
-    max_tokens=512,  # documents are truncated to 512 tokens and queries to 128 by the model itself
+    memory_usage_mb=571,
+    max_tokens=512,
     embed_dim=50370,
     license="apache-2.0",
     reference="https://huggingface.co/Linkup-Platform/linkup-sparseup-embed-v1",
@@ -30,6 +40,74 @@ linkup_sparseup_embed_v1 = ModelMeta(
     superseded_by=None,
     public_training_code=None,
     public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning",
-    # fine-tuned from LateOn-unsupervised on the DenseOn/LateOn fine-tuning mixture
     training_datasets=denseon_lateon_unsupervised_data | denseon_lateon_supervised_data,
+    citation=sparseup_citation,
+)
+
+linkup_sparseup_embed_v2_training_data = denseon_lateon_unsupervised_data | {
+    "FiQA2018",
+    "HotpotQA",
+    "NQ",
+    "MSMARCO",
+    "FEVER",
+    "MIRACLRetrieval",
+    "MultiLongDocRetrieval",
+}
+
+linkup_sparseup_embed_v2 = ModelMeta(
+    loader=SparseEncoderWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
+    name="Linkup-Platform/linkup-sparseup-embed-v2",
+    model_type=["sparse"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="7165075edb8c7e5e6d1125aa8a6a753d3c50c5d8",
+    release_date="2026-11-24",
+    n_parameters=149_656_770,
+    n_embedding_parameters=38_684_160,
+    memory_usage_mb=571,
+    max_tokens=8192,
+    embed_dim=50370,
+    license="apache-2.0",
+    reference="https://huggingface.co/Linkup-Platform/linkup-sparseup-embed-v2",
+    similarity_fn_name=ScoringFunction.DOT_PRODUCT,
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    use_instructions=False,
+    adapted_from="Linkup-Platform/linkup-sparseup-embed-v2-pretrain",
+    superseded_by=None,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-fine-tuning-filtered-en",
+    training_datasets=linkup_sparseup_embed_v2_training_data,
+    citation=sparseup_citation,
+)
+
+linkup_sparseup_embed_v2_pretrain = ModelMeta(
+    loader=SparseEncoderWrapper,
+    loader_kwargs=dict(
+        trust_remote_code=True,
+    ),
+    name="Linkup-Platform/linkup-sparseup-embed-v2-pretrain",
+    model_type=["sparse"],
+    languages=["eng-Latn"],
+    open_weights=True,
+    revision="16f9db6bfc229a9286a1e27824b6ec82d3b5bea1",
+    release_date="2026-11-24",
+    n_parameters=149_656_770,
+    n_embedding_parameters=38_684_160,
+    memory_usage_mb=571,
+    max_tokens=8192,
+    embed_dim=50370,
+    license="apache-2.0",
+    reference="https://huggingface.co/Linkup-Platform/linkup-sparseup-embed-v2-pretrain",
+    similarity_fn_name=ScoringFunction.DOT_PRODUCT,
+    framework=["Sentence Transformers", "PyTorch", "Transformers", "safetensors"],
+    use_instructions=False,
+    adapted_from="answerdotai/ModernBERT-base",
+    superseded_by=None,
+    public_training_code=None,
+    public_training_data="https://huggingface.co/datasets/lightonai/embeddings-pre-training-curated",
+    training_datasets=denseon_lateon_unsupervised_data,
+    citation=sparseup_citation,
 )

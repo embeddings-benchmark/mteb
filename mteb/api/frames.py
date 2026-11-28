@@ -15,6 +15,7 @@ from huggingface_hub import HfApi
 import mteb
 from mteb.api._errors import FRAME_LOAD_ERRORS
 from mteb.api.settings import get_settings
+from mteb.benchmarks._create_table import _EXPERIMENT_ID_COL, _ensure_experiment_id
 from mteb.cache.result_cache import ResultCache
 from mteb.results.benchmark_results import BenchmarkResults
 
@@ -33,7 +34,10 @@ def get_cache() -> ResultCache:
 # Bump when the on-disk parquet schema changes so old caches are rebuilt.
 # v3: model_meta's model_type/embed_dim/output_dtypes folded into the
 # `experiments` struct column (no more separate `model_meta` column).
-_CACHE_SCHEMA_VERSION = 3
+# v4: preserve the stored experiment ID even when experiment kwargs are absent.
+# v5: the unified task frame retains separate rows per experiment.
+# v6: keep the experiment kwargs in the unified frame for task-detail responses.
+_CACHE_SCHEMA_VERSION = 6
 
 _UNIFIED_SCHEMA = {
     "model_name": pl.Utf8,
@@ -41,18 +45,23 @@ _UNIFIED_SCHEMA = {
     "split": pl.Utf8,
     "subset": pl.Utf8,
     "score": pl.Float64,
+    _EXPERIMENT_ID_COL: pl.Utf8,
 }
 
 
 def _dedupe_unified(combined: pl.DataFrame) -> pl.DataFrame:
-    """One row per (model, task, split, subset) with max score across duplicate revisions."""
+    """One row per (model, experiment, task, split, subset) with max score across duplicate revisions."""
     if combined.is_empty():
         return pl.DataFrame(schema=_UNIFIED_SCHEMA)
+    aggregates = [pl.col("score").max()]
+    if "experiments" in combined.columns:
+        aggregates.append(pl.col("experiments").drop_nulls().first())
     return (
-        combined.lazy()
+        _ensure_experiment_id(combined)
+        .lazy()
         .drop_nulls("score")
-        .group_by(["model_name", "task_name", "split", "subset"])
-        .agg(pl.col("score").max())
+        .group_by(["model_name", _EXPERIMENT_ID_COL, "task_name", "split", "subset"])
+        .agg(aggregates)
         .collect(engine="streaming")
     )
 
@@ -265,6 +274,8 @@ def _load_per_benchmark_frames() -> tuple[dict[str, pl.DataFrame], pl.DataFrame]
         all_results = cache._load_from_cache(rebuild=True)
         combined = all_results._to_results_df()
 
+    if not combined.is_empty():
+        combined = _ensure_experiment_id(combined)
     loaded = BenchmarkResults.split_leaderboard_frame(combined)
     empty = pl.DataFrame(schema=dict(combined.schema))
     for bench in mteb.get_benchmarks():

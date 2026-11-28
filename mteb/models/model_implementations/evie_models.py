@@ -119,6 +119,17 @@ _EVIE_LANGUAGES = [
     "por-Latn",
 ]
 
+_CITATION = """
+@misc{wang2026evieevidencevectorinformedembeddingsvisual,
+    title={EVIE: Evidence-Vector-Informed Embeddings for Visual Document Retrieval},
+    author={Zifei Wang and Wei Wen and Qiang Ji and Qian-Wen Zhang and Ruizhi Qiao and Xing Sun},
+    year={2026},
+    eprint={2610.11553},
+    archivePrefix={arXiv},
+    primaryClass={cs.IR},
+    url={https://arxiv.org/abs/2610.11553},
+}"""
+
 evie_8b = ModelMeta(
     loader=EvieWrapper,
     loader_kwargs=dict(
@@ -145,6 +156,7 @@ evie_8b = ModelMeta(
     use_instructions=False,
     training_datasets=EVIE_TRAINING_DATA,
     extra_requirements_groups=["evie"],
+    citation=_CITATION,
 )
 
 evie_4_5b = ModelMeta(
@@ -175,4 +187,5 @@ evie_4_5b = ModelMeta(
     use_instructions=False,
     training_datasets=EVIE_TRAINING_DATA,
     extra_requirements_groups=["evie"],
+    citation=_CITATION,
 )

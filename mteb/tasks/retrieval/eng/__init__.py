@@ -225,6 +225,14 @@ from .flickr_audio_image_retrieval import (
     FlickrAudioToImageRetrieval,
     FlickrImageToAudioRetrieval,
 )
+from .foleybench_retrieval import (
+    FoleyBenchA2VRetrieval,
+    FoleyBenchLongA2VRetrieval,
+    FoleyBenchLongV2ARetrieval,
+    FoleyBenchLongVT2ARetrieval,
+    FoleyBenchV2ARetrieval,
+    FoleyBenchVT2ARetrieval,
+)
 from .forb_i2i_retrieval import FORBI2I, FORBI2IV2
 from .giga_speech import (
     GigaSpeechA2TRetrieval,
@@ -258,7 +266,7 @@ from .hotpot_qa_retrieval import (
     HotpotQAHardNegatives,
     HotpotQAHardNegativesV2,
 )
-from .image_co_de_t2i_retrieval import ImageCoDeT2IRetrieval
+from .image_co_de_t2i_retrieval import ImageCoDeT2IRetrieval, ImageCoDeT2IRetrievalV2
 from .incompe_bench_retrieval import (
     IncompeBenchLenientRetrieval,
     IncompeBenchStrictRetrieval,
@@ -788,6 +796,12 @@ __all__ = [
     "Flickr30kT2IRetrieval",
     "FlickrAudioToImageRetrieval",
     "FlickrImageToAudioRetrieval",
+    "FoleyBenchA2VRetrieval",
+    "FoleyBenchLongA2VRetrieval",
+    "FoleyBenchLongV2ARetrieval",
+    "FoleyBenchLongVT2ARetrieval",
+    "FoleyBenchV2ARetrieval",
+    "FoleyBenchVT2ARetrieval",
     "GLDv2I2IRetrieval",
     "GLDv2I2TRetrieval",
     "GigaSpeechA2TRetrieval",
@@ -815,6 +829,7 @@ __all__ = [
     "IRPapersT2IRetrieval",
     "IRPapersT2ITRetrieval",
     "ImageCoDeT2IRetrieval",
+    "ImageCoDeT2IRetrievalV2",
     "IncompeBenchLenientRetrieval",
     "IncompeBenchStrictRetrieval",
     "InfoSeekIT2ITRetrieval",

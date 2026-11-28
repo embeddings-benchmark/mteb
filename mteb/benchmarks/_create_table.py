@@ -189,6 +189,9 @@ def _borda_rank_from_long(
 ) -> pl.DataFrame:
     """Long-form Borda rank — returns ``(model_name, "Rank (Borda)")``.
 
+    When ``pl_df`` has an ``_experiment_id`` column, each experiment of a
+    model is ranked as its own row and the result also has that column.
+
     Replaces the wide-form ``_get_borda_rank`` for callers with the long
     results frame. For a 100-task benchmark, the wide form builds a 100-node
     horizontal expression tree; this version uses a single ``rank().over()``
@@ -205,13 +208,16 @@ def _borda_rank_from_long(
     frame includes models that got filtered out of the wide pivot (e.g.
     per-language path where a model's entire language list explodes to
     null scores). When ``None``, defaults to ``pl_df``'s distinct model
-    count, which matches when no models are all-null.
+    (and experiment) count, which matches when no models are all-null.
     """
+    keys = [model_col]
+    if _EXPERIMENT_ID_COL in pl_df.columns:
+        keys.append(_EXPERIMENT_ID_COL)
     if n_models is None:
-        n_models = pl_df.get_column(model_col).n_unique()
+        n_models = pl_df.select(keys).n_unique()
     return (
         pl_df.lazy()
-        .group_by([model_col, partition_col])
+        .group_by([*keys, partition_col])
         .agg(pl.col(score_col).mean())
         .with_columns(
             pl.col(score_col)
@@ -219,7 +225,7 @@ def _borda_rank_from_long(
             .over(partition_col)
             .alias("_r")
         )
-        .group_by(model_col)
+        .group_by(keys)
         .agg((n_models - pl.col("_r")).sum().alias("_b"))
         .with_columns(
             pl.col("_b")
@@ -227,7 +233,7 @@ def _borda_rank_from_long(
             .cast(pl.Int64)
             .alias("Rank (Borda)")
         )
-        .select(model_col, "Rank (Borda)")
+        .select(*keys, "Rank (Borda)")
         .collect()
     )
 
@@ -395,7 +401,7 @@ def _build_per_task_pivot(
     """
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return None
-    pl_df = _ensure_experiment_id(pl_df)
+    pl_df = _ensure_experiment_id(pl_df).with_columns(pl.col("score").fill_nan(None))
     per_task_long = pl_df.group_by(["model_name", _EXPERIMENT_ID_COL, "task_name"]).agg(
         pl.col("score").mean()
     )
@@ -418,6 +424,19 @@ def _build_per_task_pivot(
     if per_task.is_empty():
         return None
     return per_task, task_cols
+
+
+def _borda_rank_from_task_pivot(
+    per_task: pl.DataFrame, task_cols: list[str]
+) -> pl.DataFrame:
+    """Rank the task scores that survived the pivot's coverage filters."""
+    scores = per_task.unpivot(
+        on=task_cols,
+        index=["model_name", _EXPERIMENT_ID_COL],
+        variable_name="task_name",
+        value_name="score",
+    ).drop_nulls("score")
+    return _borda_rank_from_long(scores, n_models=per_task.height)
 
 
 def _get_means_per_types(
@@ -477,16 +496,19 @@ def _build_per_scope_pivot(pl_df: pl.DataFrame) -> _ScopePivot | None:
     """
     if pl_df.is_empty() or "model_name" not in pl_df.columns:
         return None
-    per_scope_long = pl_df.group_by(["model_name", "task_name", "subset", "split"]).agg(
-        pl.col("score").mean()
+    keys = ["model_name", _EXPERIMENT_ID_COL]
+    per_scope_long = (
+        _ensure_experiment_id(pl_df)
+        .group_by([*keys, "task_name", "subset", "split"])
+        .agg(pl.col("score").mean())
     )
     keyed = per_scope_long.with_columns(
         (pl.col("task_name") + "::" + pl.col("subset") + "::" + pl.col("split")).alias(
             "_tss"
         )
     )
-    wide = keyed.pivot(on="_tss", index="model_name", values="score")
-    cols = {c for c in wide.columns if c != "model_name"}
+    wide = keyed.pivot(on="_tss", index=keys, values="score")
+    cols = set(wide.columns).difference(keys)
     if not cols:
         return None
     return _ScopePivot(wide=wide, cols=cols)
@@ -631,9 +653,41 @@ def _order_summary_cols(
     return joint_table.select([c for c in ordering if c in joint_table.columns])
 
 
+def _run_embedding_dims(pl_df: pl.DataFrame) -> pl.DataFrame | None:
+    """``(model_name, _experiment_id) -> Embedding Dimensions`` for runs with their own ``embed_dim``.
+
+    A run can override the registry's ``embed_dim`` (folded into ``experiments``
+    by ``BenchmarkResults._build_pre_agg_df``); the model-level metadata join
+    would otherwise show the default run's value for every run of the model.
+    """
+    if "experiments" not in pl_df.columns:
+        return None
+    runs = (
+        _ensure_experiment_id(pl_df)
+        .select("model_name", _EXPERIMENT_ID_COL, "experiments")
+        .filter(pl.col("experiments").is_not_null())
+        .unique(subset=["model_name", _EXPERIMENT_ID_COL])
+    )
+    dims = [
+        (mn, eid, _get_embedding_size(exp.get("embed_dim")))
+        for mn, eid, exp in runs.iter_rows()
+        if exp and exp.get("embed_dim") is not None
+    ]
+    return pl.DataFrame(
+        dims,
+        schema={
+            "model_name": pl.Utf8,
+            _EXPERIMENT_ID_COL: pl.Utf8,
+            "_run_embed_dim": pl.Int64,
+        },
+        orient="row",
+    )
+
+
 def _attach_model_metadata(
     joint_table: pl.DataFrame,
     task_names_key: tuple[str, ...] | None = None,
+    run_embedding_dims: pl.DataFrame | None = None,
 ) -> pl.DataFrame:
     """Filter to models with valid metadata and attach the standard summary columns.
 
@@ -651,11 +705,23 @@ def _attach_model_metadata(
     meta_df = (
         _meta_df_no_zs() if task_names_key is None else _meta_df_with_zs(task_names_key)
     )
-    return (
-        joint_table.join(meta_df, on="model_name", how="inner")
-        .drop("_model_link")
-        .rename({"model_name": "Model"})
-    )
+    joined = joint_table.join(meta_df, on="model_name", how="inner")
+    if run_embedding_dims is not None and not run_embedding_dims.is_empty():
+        joined = (
+            joined.join(
+                run_embedding_dims,
+                on=["model_name", _EXPERIMENT_ID_COL],
+                how="left",
+            )
+            .with_columns(
+                pl.coalesce(
+                    pl.col("_run_embed_dim").cast(pl.Int64),
+                    pl.col("Embedding Dimensions").cast(pl.Int64),
+                ).alias("Embedding Dimensions")
+            )
+            .drop("_run_embed_dim")
+        )
+    return joined.drop("_model_link").rename({"model_name": "Model"})
 
 
 @dataclass(frozen=True, slots=True)
@@ -755,6 +821,7 @@ def _finalize_summary(
     sort_by: str | Sequence[str] | None,
     rank_column_name: str | None,
     custom_group_cols_by_dim: dict[str, list[str]] | None = None,
+    run_embedding_dims: pl.DataFrame | None = None,
 ) -> SummaryTable:
     """Attach model metadata, sort, rank, order columns, wrap in SummaryTable.
 
@@ -777,13 +844,19 @@ def _finalize_summary(
         custom_group_cols_by_dim: dimension name -> ordered custom-group
             column names, surfaced after ``type_cols``. Empty/``None`` hides
             them entirely (mirrors ``type_cols``).
+        run_embedding_dims: ``(model_name, _experiment_id) -> Embedding
+            Dimensions`` for runs with their own ``embed_dim``, see
+            [_run_embedding_dims][mteb.benchmarks._create_table._run_embedding_dims].
+            ``None`` keeps the model-level value for every run.
 
     Returns:
         SummaryTable: Ready-to-style summary with metadata attached and
             columns laid out in the canonical order.
     """
     joint_table = _attach_model_metadata(
-        joint_table, task_names_key=tuple(sorted(task_cols))
+        joint_table,
+        task_names_key=tuple(sorted(task_cols)),
+        run_embedding_dims=run_embedding_dims,
     )
     if sort_by is not None:
         sort_cols = [sort_by] if isinstance(sort_by, str) else list(sort_by)
@@ -907,7 +980,7 @@ def _create_summary_table(  # noqa: PLR0914
     per_task_aggs = [pl.col("score").mean()]
     if has_is_public:
         per_task_aggs.append(pl.col("is_public").first())
-    pl_df = _ensure_experiment_id(pl_df)
+    pl_df = _ensure_experiment_id(pl_df).with_columns(pl.col("score").fill_nan(None))
     per_task_long = pl_df.group_by(["model_name", _EXPERIMENT_ID_COL, "task_name"]).agg(
         *per_task_aggs
     )
@@ -986,15 +1059,14 @@ def _create_summary_table(  # noqa: PLR0914
     ).with_columns(_skipna_false_mean(type_cols).alias(mean_task_type_col))
 
     if custom_group_exprs:
+        keys = ["model_name", _EXPERIMENT_ID_COL]
         custom_group_source = (
-            per_task.join(scope_pivot.wide, on="model_name", how="left")
+            per_task.join(scope_pivot.wide, on=keys, how="left")
             if scope_pivot is not None
             else per_task
         )
-        custom_group_table = custom_group_source.select(
-            "model_name", *custom_group_exprs
-        )
-        joint_table = joint_table.join(custom_group_table, on="model_name", how="left")
+        custom_group_table = custom_group_source.select(*keys, *custom_group_exprs)
+        joint_table = joint_table.join(custom_group_table, on=keys, how="left")
 
     # Mean (Subset) + subset-partition Borda only when the benchmark actually
     # wants subset weighting — costs an extra group_by we'd otherwise skip.
@@ -1020,16 +1092,23 @@ def _create_summary_table(  # noqa: PLR0914
         joint_table = joint_table.join(
             subset_mean, on=["model_name", _EXPERIMENT_ID_COL], how="left"
         )
-        keyed = per_subset_long.with_columns(
+        visible_subsets = per_subset_long.join(
+            per_task.select("model_name", _EXPERIMENT_ID_COL),
+            on=["model_name", _EXPERIMENT_ID_COL],
+            how="semi",
+        )
+        keyed = visible_subsets.with_columns(
             (pl.col("task_name") + "::" + pl.col("subset")).alias("_ts")
         )
         borda_df = _borda_rank_from_long(
             keyed, partition_col="_ts", n_models=per_task.height
         )
     else:
-        borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
+        borda_df = _borda_rank_from_task_pivot(per_task, task_cols)
 
-    joint_table = joint_table.join(borda_df, on="model_name", how="left")
+    joint_table = joint_table.join(
+        borda_df, on=["model_name", _EXPERIMENT_ID_COL], how="left"
+    )
 
     drop_cols: list[str] = []
     for agg in BenchmarkAggregation:
@@ -1050,6 +1129,7 @@ def _create_summary_table(  # noqa: PLR0914
         sort_by=sort_by,
         rank_column_name=rank_column_name,
         custom_group_cols_by_dim=custom_group_cols_by_dim,
+        run_embedding_dims=_run_embedding_dims(pl_df),
     )
 
 
@@ -1078,12 +1158,12 @@ def _create_per_task_table_from_benchmark_results(
         return _no_results_frame()
     per_task, task_cols = pivot
 
-    borda_df = _borda_rank_from_long(pl_df, n_models=per_task.height)
+    borda_df = _borda_rank_from_task_pivot(per_task, task_cols)
     select_cols = ["Model"]
     if _EXPERIMENT_ID_COL in per_task.columns:
         select_cols.append(_EXPERIMENT_ID_COL)
     return (
-        per_task.join(borda_df, on="model_name", how="left")
+        per_task.join(borda_df, on=["model_name", _EXPERIMENT_ID_COL], how="left")
         .sort("Rank (Borda)")
         .rename({"model_name": "Model"})
         .select([*select_cols, *task_cols])
@@ -1096,7 +1176,7 @@ def _create_per_language_table_from_benchmark_results(
 ) -> pl.DataFrame:
     """Create per-language table from a long polars pre-aggregation frame.
 
-    Returns a DataFrame with one row per model and one column per language.
+    Returns one row per model and experiment, with one score column per language.
 
     Args:
         pl_df: Long polars frame with at least ``model_name``, ``language`` (list[str]),
@@ -1118,7 +1198,8 @@ def _create_per_language_table_from_benchmark_results(
     # is selected, push the predicate *before* the explode by keeping only rows
     # whose language list intersects the selection — this avoids materialising
     # exploded rows we'll discard.
-    lazy = pl_df.lazy().select("model_name", "language", "score")
+    keys = ["model_name", _EXPERIMENT_ID_COL]
+    lazy = _ensure_experiment_id(pl_df).lazy().select(*keys, "language", "score")
     if language_view != "all":
         lazy = lazy.filter(
             pl.col("language").list.eval(pl.element().is_in(language_view)).list.any()
@@ -1129,15 +1210,15 @@ def _create_per_language_table_from_benchmark_results(
     # Streaming engine handles the explode → group_by chain on tens of millions of
     # post-explode rows ~3-4× faster than the default in-memory engine here.
     lang_df = (
-        lazy.group_by(["model_name", "language"])
+        lazy.group_by([*keys, "language"])
         .agg(pl.col("score").mean())
         .collect(engine="streaming")
     )
     if lang_df.is_empty():
         return _no_results_frame()
 
-    per_language = lang_df.pivot(on="language", index="model_name", values="score")
-    lang_cols = [c for c in per_language.columns if c != "model_name"]
+    per_language = lang_df.pivot(on="language", index=keys, values="score")
+    lang_cols = [c for c in per_language.columns if c not in keys]
     if not lang_cols:
         return _no_results_frame()
     per_language = per_language.filter(
@@ -1156,15 +1237,17 @@ def _create_per_language_table_from_benchmark_results(
         # ``pl.len()`` — lang_df may contain models whose aggregated scores
         # are all null and got dropped from per_language.
         borda_df = _borda_rank_from_long(
-            lang_df,
+            lang_df.drop_nulls("score"),
             partition_col="language",
             score_col="score",
             n_models=per_language.height,
         )
         per_language = (
-            per_language.join(borda_df, on="model_name", how="left")
+            per_language.join(borda_df, on=keys, how="left")
             .sort("Rank (Borda)")
             .drop("Rank (Borda)")
         )
 
-    return per_language.rename({"model_name": "Model"}).select(["Model", *lang_cols])
+    return per_language.rename({"model_name": "Model"}).select(
+        "Model", _EXPERIMENT_ID_COL, *lang_cols
+    )
