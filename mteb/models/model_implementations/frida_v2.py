@@ -61,7 +61,8 @@ class FridaV2(AbsEncoder):
         *,
         vector_type: Literal["single_vector", "multi_vector"] = "multi_vector",
         embed_dim: int | None = None,
-        token_pooling: dict[str, Any] | None = None,
+        token_pooling: Literal["HierarchicalTokenPooling"] | None = None,
+        token_pooling_args: dict[str, Any] | None = None,
         max_image_size: int | None = 2000,
         **kwargs: Any,
     ) -> None:
