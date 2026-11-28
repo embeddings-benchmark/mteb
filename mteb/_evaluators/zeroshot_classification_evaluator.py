@@ -7,7 +7,6 @@ from mteb._create_dataloaders import (
     _create_dataloader_from_texts,
     create_dataloader,
 )
-from mteb.similarity_functions import similarity
 
 from .evaluator import Evaluator
 
@@ -97,8 +96,7 @@ class ZeroShotClassificationEvaluator(Evaluator):
             subset=self.hf_subset,
             log_message="Running zero-shot classification - Evaluating accuracy...",
         ):
-            if self.task_metadata.modalities == ["image", "text"]:
-                probs = similarity(text_label_embeddings, input_embeddings)
-            else:
-                probs = model.similarity(input_embeddings, text_label_embeddings)
+            probs = model.similarity(input_embeddings, text_label_embeddings)
+            if hasattr(probs, "cpu"):  # scored with numpy, which has no bfloat16
+                probs = probs.float().cpu()
         return probs
