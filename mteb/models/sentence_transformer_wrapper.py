@@ -574,7 +574,8 @@ def _run_scoring_head_in_fp32(model: CrossEncoder) -> None:
     are already rounded before any later upcast and nearby scores tie.
     """
     import torch
-    import torch.nn.functional as F
+
+    from mteb.models._fp32_scoring_head import FP32ScoringHead, TokenLogitUpcast
 
     # sentence-transformers < 4 keeps the transformers model on `.model` and has no `num_labels`
     root = (
@@ -582,29 +583,6 @@ def _run_scoring_head_in_fp32(model: CrossEncoder) -> None:
     )
     if not isinstance(root, torch.nn.Module):
         return
-
-    class FP32ScoringHead(torch.nn.Linear):
-        """Keep the scoring projection in FP32, including under caller autocast."""
-
-        def __init__(self, linear: torch.nn.Linear) -> None:
-            super().__init__(
-                linear.in_features,
-                linear.out_features,
-                bias=linear.bias is not None,
-                device=linear.weight.device,
-                dtype=torch.float32,
-            )
-            self.load_state_dict(linear.state_dict())
-            self.train(linear.training)
-
-        def forward(self, inputs: torch.Tensor) -> torch.Tensor:
-            # a later model.half() / .to(bf16) also casts this head, so upcast here too
-            with torch.autocast(device_type=inputs.device.type, enabled=False):
-                return F.linear(
-                    inputs.float(),
-                    self.weight.float(),
-                    None if self.bias is None else self.bias.float(),
-                )
 
     def upcast(name: str) -> None:
         head = root.get_submodule(name)
@@ -650,22 +628,10 @@ def _run_scoring_head_in_fp32(model: CrossEncoder) -> None:
             }
         )
 
-        def upcast_token_logits(
-            module: torch.nn.Linear,
-            args: tuple[torch.Tensor, ...],
-            output: torch.Tensor,
-        ) -> torch.Tensor:
-            with torch.autocast(device_type=output.device.type, enabled=False):
-                bias = None if module.bias is None else module.bias[token_ids].float()
-                rows = F.linear(args[0].float(), module.weight[token_ids].float(), bias)
-            output = output.float()
-            output[..., token_ids] = rows
-            return output
-
         logger.info(
             f"Computing the LogitScore logits {token_ids} in float32 to avoid tied scores."
         )
-        lm_head.register_forward_hook(upcast_token_logits)
+        lm_head.register_forward_hook(TokenLogitUpcast(token_ids))
         return
 
     num_labels = getattr(model, "num_labels", None) or getattr(
