@@ -629,6 +629,10 @@ def evaluate(  # noqa: PLR0913
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
         )
 
+    # The modality checks and the evaluation each iterate over the tasks.
+    if not isinstance(tasks, (AbsTask, Benchmark)):
+        tasks = list(tasks)
+
     if num_proc is None and _has_non_text_task(tasks):
         logger.info(
             "`num_proc` is not set, so data loading runs in a single process. Consider setting `num_proc` (e.g. `mteb.evaluate(..., num_proc=4)`) to speed up data loading. "

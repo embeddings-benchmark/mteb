@@ -77,6 +77,23 @@ def test_evaluate_w_multiple_tasks(model: EncoderProtocol, tasks: list[AbsTask])
     assert len(results) == len(tasks), "should return exactly one result per task"
 
 
+@pytest.mark.parametrize("num_proc", [None, 1])
+def test_evaluate_task_iterator(num_proc: int | None):
+    tasks = [MockClassificationTask(), MockRetrievalTask()]
+    results = mteb.evaluate(
+        MockSentenceTransformer(),
+        iter(tasks),
+        cache=None,
+        co2_tracker=False,
+        num_proc=num_proc,
+    )
+
+    assert [result.task_name for result in results] == [
+        task.metadata.name for task in tasks
+    ]
+    assert [result.get_score() for result in results] == pytest.approx([1, 0.63093])
+
+
 def test_evaluate_w_no_tasks():
     model = mteb.get_model("mteb/baseline-random-encoder")
     results = mteb.evaluate(model, [], cache=None)
