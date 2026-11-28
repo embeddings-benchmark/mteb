@@ -79,6 +79,8 @@ class FridaV2(AbsEncoder):
             )
         if dense and token_pooling is not None:
             raise ValueError("Token pooling requires the multi_vector head.")
+        if token_pooling_args is not None and token_pooling is None:
+            raise ValueError("Token pooling args passed without `token_pooling`.")
 
         self.token_pooling = _load_token_pooling(token_pooling_args)
         self._token_pooling_config = (
@@ -105,13 +107,6 @@ class FridaV2(AbsEncoder):
             self._mteb_model_meta = None
             return
         dense = self.vector_type == "single_vector"
-        experiment_kwargs = dict(meta.experiment_kwargs or {})
-        if dense:
-            experiment_kwargs["vector_type"] = self.vector_type
-        else:
-            experiment_kwargs.pop("vector_type", None)
-        if self._token_pooling_config is not None:
-            experiment_kwargs["token_pooling"] = self._token_pooling_config
         self._mteb_model_meta = meta.model_copy(
             update={
                 "embed_dim": self.embed_dim or self._supported_dims,
@@ -121,7 +116,6 @@ class FridaV2(AbsEncoder):
                 "similarity_fn_name": (
                     ScoringFunction.COSINE if dense else ScoringFunction.MAX_SIM
                 ),
-                "experiment_kwargs": experiment_kwargs or None,
             },
             deep=True,
         )
