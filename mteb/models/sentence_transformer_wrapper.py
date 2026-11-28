@@ -574,9 +574,8 @@ def _run_scoring_head_in_fp32(model: CrossEncoder) -> None:
     are already rounded before any later upcast and nearby scores tie.
     """
     import torch
-    import torch.nn.functional as F
 
-    from mteb.models._fp32_scoring_head import FP32ScoringHead
+    from mteb.models._fp32_scoring_head import FP32ScoringHead, TokenLogitUpcast
 
     # sentence-transformers < 4 keeps the transformers model on `.model` and has no `num_labels`
     root = (
@@ -629,22 +628,10 @@ def _run_scoring_head_in_fp32(model: CrossEncoder) -> None:
             }
         )
 
-        def upcast_token_logits(
-            module: torch.nn.Linear,
-            args: tuple[torch.Tensor, ...],
-            output: torch.Tensor,
-        ) -> torch.Tensor:
-            with torch.autocast(device_type=output.device.type, enabled=False):
-                bias = None if module.bias is None else module.bias[token_ids].float()
-                rows = F.linear(args[0].float(), module.weight[token_ids].float(), bias)
-            output = output.float()
-            output[..., token_ids] = rows
-            return output
-
         logger.info(
             f"Computing the LogitScore logits {token_ids} in float32 to avoid tied scores."
         )
-        lm_head.register_forward_hook(upcast_token_logits)
+        lm_head.register_forward_hook(TokenLogitUpcast(token_ids))
         return
 
     num_labels = getattr(model, "num_labels", None) or getattr(

@@ -29,3 +29,27 @@ class FP32ScoringHead(torch.nn.Linear):
                 self.weight.float(),
                 None if self.bias is None else self.bias.float(),
             )
+
+
+class TokenLogitUpcast:
+    """Forward hook recomputing the given vocabulary logits of a low-precision lm_head in fp32.
+
+    A module-level class so spawn can pickle the hook along with the model.
+    """
+
+    def __init__(self, token_ids: list[int]) -> None:
+        self.token_ids = token_ids
+
+    def __call__(
+        self,
+        module: torch.nn.Linear,
+        args: tuple[torch.Tensor, ...],
+        output: torch.Tensor,
+    ) -> torch.Tensor:
+        token_ids = self.token_ids
+        with torch.autocast(device_type=output.device.type, enabled=False):
+            bias = None if module.bias is None else module.bias[token_ids].float()
+            rows = F.linear(args[0].float(), module.weight[token_ids].float(), bias)
+        output = output.float()
+        output[..., token_ids] = rows
+        return output
