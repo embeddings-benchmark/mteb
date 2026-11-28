@@ -59,6 +59,41 @@ def _load_momentseeker(task: AbsTaskRetrieval, direction: str) -> None:
     task.data_loaded = True
 
 
+_FULL_DATASET_PATH = "mteb/MomentSeeker"
+_FULL_DATASET_REVISION = "0db42133671d39236813d76c4323d3f230f2bc6a"
+_FULL_DESCRIPTION = (
+    "MomentSeeker full-video retrieval. The corpus is the 271 complete source videos "
+    "(1,200 s on average, re-encoded to 360p with audio), and a video is relevant to "
+    "a query if it contains the annotated answer moment. This is a video-identification "
+    "variant of the benchmark; the MomentSeeker*Reranking tasks follow the paper's "
+    "within-video chunk protocol. "
+)
+
+
+def _load_full(task: AbsTaskRetrieval, subset: str) -> None:
+    """Load the full-video corpus plus one direction-level subset (queries are shared with the reranking tasks)."""
+    if task.data_loaded:
+        return
+    path = task.metadata.dataset["path"]
+    revision = task.metadata.dataset["revision"]
+    corpus = load_dataset(path, "full-corpus", split="test", revision=revision)
+    queries = load_dataset(path, f"{subset}-queries", split="test", revision=revision)
+    qrels_ds = load_dataset(
+        path, f"{subset}-full-qrels", split="test", revision=revision
+    )
+    qrels: dict[str, dict[str, int]] = {}
+    for row in qrels_ds:
+        qrels.setdefault(row["query-id"], {})[row["corpus-id"]] = int(row["score"])
+    task.dataset = {
+        "default": {
+            "test": RetrievalSplitData(
+                corpus=corpus, queries=queries, relevant_docs=qrels, top_ranked=None
+            )
+        }
+    }
+    task.data_loaded = True
+
+
 class MomentSeekerTI2VRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="MomentSeekerTI2VRetrieval",
@@ -85,6 +120,7 @@ class MomentSeekerTI2VRetrieval(AbsTaskRetrieval):
             "query": "Given the question and the reference image, retrieve the video segment that answers it."
         },
         is_beta=True,
+        superseded_by="MomentSeekerReranking",
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
@@ -117,7 +153,299 @@ class MomentSeekerTV2VRetrieval(AbsTaskRetrieval):
             "query": "Given the question and the reference clip, retrieve the video segment that answers it."
         },
         is_beta=True,
+        superseded_by="MomentSeekerReranking",
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
         _load_momentseeker(self, "tv2v")
+
+
+class MomentSeekerT2VGlobalLevelFullVideoRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MomentSeekerT2VGlobalLevelFullVideoRetrieval",
+        description=(
+            _FULL_DESCRIPTION
+            + "Queries are text questions. This subtask covers global-level moments (Causal Reasoning, Spatial Relation)."
+        ),
+        reference=_REFERENCE,
+        dataset={"path": _FULL_DATASET_PATH, "revision": _FULL_DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="t2v",
+        modalities=["text", "video"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map_at_5",
+        date=("2025-01-01", "2025-12-01"),
+        domains=["Scene", "Entertainment", "Egocentric"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Given the question, retrieve the video that answers it."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_full(self, "t2v-global")
+
+
+class MomentSeekerTI2VGlobalLevelFullVideoRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MomentSeekerTI2VGlobalLevelFullVideoRetrieval",
+        description=(
+            _FULL_DESCRIPTION
+            + "Queries combine a text question with a reference image. This subtask covers global-level moments (Causal Reasoning, Spatial Relation)."
+        ),
+        reference=_REFERENCE,
+        dataset={"path": _FULL_DATASET_PATH, "revision": _FULL_DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="it2v",
+        modalities=["image", "text", "video"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map_at_5",
+        date=("2025-01-01", "2025-12-01"),
+        domains=["Scene", "Entertainment", "Egocentric"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Given the question and the reference image, retrieve the video that answers it."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_full(self, "ti2v-global")
+
+
+class MomentSeekerTV2VGlobalLevelFullVideoRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MomentSeekerTV2VGlobalLevelFullVideoRetrieval",
+        description=(
+            _FULL_DESCRIPTION
+            + "Queries combine a text question with a reference video clip. This subtask covers global-level moments (Causal Reasoning, Spatial Relation)."
+        ),
+        reference=_REFERENCE,
+        dataset={"path": _FULL_DATASET_PATH, "revision": _FULL_DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="vt2v",
+        modalities=["video", "text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map_at_5",
+        date=("2025-01-01", "2025-12-01"),
+        domains=["Scene", "Entertainment", "Egocentric"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Given the question and the reference clip, retrieve the video that answers it."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_full(self, "tv2v-global")
+
+
+class MomentSeekerT2VEventLevelFullVideoRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MomentSeekerT2VEventLevelFullVideoRetrieval",
+        description=(
+            _FULL_DESCRIPTION
+            + "Queries are text questions. This subtask covers event-level moments (Description Location, Action Recognition, Anomaly Detection)."
+        ),
+        reference=_REFERENCE,
+        dataset={"path": _FULL_DATASET_PATH, "revision": _FULL_DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="t2v",
+        modalities=["text", "video"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map_at_5",
+        date=("2025-01-01", "2025-12-01"),
+        domains=["Scene", "Entertainment", "Egocentric"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Given the question, retrieve the video that answers it."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_full(self, "t2v-event")
+
+
+class MomentSeekerTI2VEventLevelFullVideoRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MomentSeekerTI2VEventLevelFullVideoRetrieval",
+        description=(
+            _FULL_DESCRIPTION
+            + "Queries combine a text question with a reference image. This subtask covers event-level moments (Description Location, Action Recognition, Anomaly Detection)."
+        ),
+        reference=_REFERENCE,
+        dataset={"path": _FULL_DATASET_PATH, "revision": _FULL_DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="it2v",
+        modalities=["image", "text", "video"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map_at_5",
+        date=("2025-01-01", "2025-12-01"),
+        domains=["Scene", "Entertainment", "Egocentric"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Given the question and the reference image, retrieve the video that answers it."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_full(self, "ti2v-event")
+
+
+class MomentSeekerTV2VEventLevelFullVideoRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MomentSeekerTV2VEventLevelFullVideoRetrieval",
+        description=(
+            _FULL_DESCRIPTION
+            + "Queries combine a text question with a reference video clip. This subtask covers event-level moments (Description Location, Action Recognition, Anomaly Detection)."
+        ),
+        reference=_REFERENCE,
+        dataset={"path": _FULL_DATASET_PATH, "revision": _FULL_DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="vt2v",
+        modalities=["video", "text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map_at_5",
+        date=("2025-01-01", "2025-12-01"),
+        domains=["Scene", "Entertainment", "Egocentric"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Given the question and the reference clip, retrieve the video that answers it."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_full(self, "tv2v-event")
+
+
+class MomentSeekerT2VObjectLevelFullVideoRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MomentSeekerT2VObjectLevelFullVideoRetrieval",
+        description=(
+            _FULL_DESCRIPTION
+            + "Queries are text questions. This subtask covers object-level moments (Object Recognition, Object Location, Attribute Recognition, OCR)."
+        ),
+        reference=_REFERENCE,
+        dataset={"path": _FULL_DATASET_PATH, "revision": _FULL_DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="t2v",
+        modalities=["text", "video"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map_at_5",
+        date=("2025-01-01", "2025-12-01"),
+        domains=["Scene", "Entertainment", "Egocentric"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Given the question, retrieve the video that answers it."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_full(self, "t2v-object")
+
+
+class MomentSeekerTI2VObjectLevelFullVideoRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MomentSeekerTI2VObjectLevelFullVideoRetrieval",
+        description=(
+            _FULL_DESCRIPTION
+            + "Queries combine a text question with a reference image. This subtask covers object-level moments (Object Recognition, Object Location, Attribute Recognition, OCR)."
+        ),
+        reference=_REFERENCE,
+        dataset={"path": _FULL_DATASET_PATH, "revision": _FULL_DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="it2v",
+        modalities=["image", "text", "video"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map_at_5",
+        date=("2025-01-01", "2025-12-01"),
+        domains=["Scene", "Entertainment", "Egocentric"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Given the question and the reference image, retrieve the video that answers it."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_full(self, "ti2v-object")
+
+
+class MomentSeekerTV2VObjectLevelFullVideoRetrieval(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="MomentSeekerTV2VObjectLevelFullVideoRetrieval",
+        description=(
+            _FULL_DESCRIPTION
+            + "Queries combine a text question with a reference video clip. This subtask covers object-level moments (Object Recognition, Object Location, Attribute Recognition, OCR)."
+        ),
+        reference=_REFERENCE,
+        dataset={"path": _FULL_DATASET_PATH, "revision": _FULL_DATASET_REVISION},
+        type="Any2AnyRetrieval",
+        category="vt2v",
+        modalities=["video", "text"],
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="map_at_5",
+        date=("2025-01-01", "2025-12-01"),
+        domains=["Scene", "Entertainment", "Egocentric"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="cc-by-nc-sa-4.0",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Given the question and the reference clip, retrieve the video that answers it."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_full(self, "tv2v-object")

@@ -603,6 +603,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "MedrxivClusteringS2S.v2",
         "MindSmallReranking",  # num_documents is a flattened per-query candidate pool; the same article legitimately appears across many queries
         "MintakaRetrieval",
+        "MomentSeekerT2VEventLevelFullVideoRetrieval",  # MomentSeeker same question text asked about different target videos
+        "MomentSeekerT2VEventLevelReranking",  # MomentSeeker same question text asked about different target videos
+        "MomentSeekerTV2VEventLevelFullVideoRetrieval",  # MomentSeeker same question text asked about different target videos
+        "MomentSeekerTV2VEventLevelReranking",  # MomentSeeker same question text asked about different target videos
         "Moroco",
         "MrTidyRetrieval",
         "MultiSWEbenchRR",
@@ -951,6 +955,12 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "LLaVAIT2TRetrieval",
         "MVLSIBSent2Img",  # all languages share the same 70 images
         "MMLongBenchDocRetrieval",  # official corpus contains repeated rendered pages; preserve IDs to match qrels
+        "MomentSeekerTI2VEventLevelFullVideoRetrieval",  # MomentSeeker same reference image reused for different questions
+        "MomentSeekerTI2VEventLevelReranking",  # MomentSeeker same reference image reused for different questions
+        "MomentSeekerTI2VGlobalLevelFullVideoRetrieval",  # MomentSeeker same reference image reused for different questions
+        "MomentSeekerTI2VGlobalLevelReranking",  # MomentSeeker same reference image reused for different questions
+        "MomentSeekerTI2VObjectLevelFullVideoRetrieval",  # MomentSeeker same reference image reused for different questions
+        "MomentSeekerTI2VObjectLevelReranking",  # MomentSeeker same reference image reused for different questions
         "MomentSeekerTI2VRetrieval",
         "Multi30kI2TRetrieval",  # same 1k images are shared across the four language subsets by design
         "Multi30kT2IRetrieval",  # same 1k images are shared across the four language subsets by design
@@ -1078,6 +1088,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DenseWebVidCoVRVT2VRetrieval",  # multiple rows have same video with different instruction
         "InsAVE80KVT2VRetrieval",  # reverse couples re-release the same clip under two names
         "MMVUVideoCentricQA",
+        "MomentSeekerTV2VEventLevelFullVideoRetrieval",  # MomentSeeker same reference clip reused for different questions
+        "MomentSeekerTV2VEventLevelReranking",  # MomentSeeker same reference clip reused for different questions
+        "MomentSeekerTV2VGlobalLevelFullVideoRetrieval",  # MomentSeeker same reference clip reused for different questions
+        "MomentSeekerTV2VGlobalLevelReranking",  # MomentSeeker same reference clip reused for different questions
         "MomentSeekerTV2VRetrieval",
         "StanfordI2VRetrieval",  # official 3,401-ID manifest contains 3,325 unique video contents
         "StanfordI2VVisualRetrieval",  # same official manifest as StanfordI2VRetrieval
@@ -1149,6 +1163,15 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SciDocsDecontaminated",  # retain 71 source queries with only zero-score judgments to reproduce the published evaluation
         "NeuCLIR2023Retrieval",  # 4 queries (2 fas, 1 rus, 1 zho) only have score-0 judgments in the original qrels
         "TwitterHjerneRetrieval",
+        "MomentSeekerT2VEventLevelReranking",  # paper protocol: queries with no IoU>=0.3 10 s chunk are kept and score 0
+        "MomentSeekerT2VGlobalLevelReranking",  # paper protocol: queries with no IoU>=0.3 10 s chunk are kept and score 0
+        "MomentSeekerT2VObjectLevelReranking",  # paper protocol: queries with no IoU>=0.3 10 s chunk are kept and score 0
+        "MomentSeekerTI2VEventLevelReranking",  # paper protocol: queries with no IoU>=0.3 10 s chunk are kept and score 0
+        "MomentSeekerTI2VGlobalLevelReranking",  # paper protocol: queries with no IoU>=0.3 10 s chunk are kept and score 0
+        "MomentSeekerTI2VObjectLevelReranking",  # paper protocol: queries with no IoU>=0.3 10 s chunk are kept and score 0
+        "MomentSeekerTV2VEventLevelReranking",  # paper protocol: queries with no IoU>=0.3 10 s chunk are kept and score 0
+        "MomentSeekerTV2VGlobalLevelReranking",  # paper protocol: queries with no IoU>=0.3 10 s chunk are kept and score 0
+        "MomentSeekerTV2VObjectLevelReranking",  # paper protocol: queries with no IoU>=0.3 10 s chunk are kept and score 0
     ],
     "impossible_unique_count": [
         # ImageTextPairClassification / vision-language compositionality
