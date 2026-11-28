@@ -46,12 +46,13 @@ from collections import Counter
 from pathlib import Path
 from typing import TYPE_CHECKING
 
-from refaudit import Cache, Checker, Verdict, default_resolvers, parse_string
+from refaudit import Cache, Checker, Verdict, default_resolvers
 
 import mteb
+from scripts.tools.citation_utils import parse_string
 
 if TYPE_CHECKING:
-    from refaudit import Entry
+    from scripts.tools.citation_utils import Entry
 
 CACHE_PATH = Path(__file__).parent / "citation_cache.json"
 ALLOWLIST_PATH = Path(__file__).parent / "citation_allowlist.json"
