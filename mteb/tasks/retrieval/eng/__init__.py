@@ -274,6 +274,7 @@ from .incompe_bench_retrieval import (
 from .info_seek_it2it_retrieval import InfoSeekIT2ITRetrieval
 from .info_seek_it2t_retrieval import InfoSeekIT2TRetrieval
 from .insave_vt2v_retrieval import InsAVE80KVT2VRetrieval
+from .inspire_expresso_retrieval import INSPIREExpressoAT2ARetrieval
 from .irpapers_t2i_retrieval import IRPapersT2IRetrieval
 from .irpapers_t2it_retrieval import IRPapersT2ITRetrieval
 from .jl_corpus import JLCorpusA2TRetrieval, JLCorpusT2ARetrieval
@@ -826,6 +827,7 @@ __all__ = [
     "HotpotQA",
     "HotpotQAHardNegatives",
     "HotpotQAHardNegativesV2",
+    "INSPIREExpressoAT2ARetrieval",
     "IRPapersT2IRetrieval",
     "IRPapersT2ITRetrieval",
     "ImageCoDeT2IRetrieval",

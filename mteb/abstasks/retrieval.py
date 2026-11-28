@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 import logging
 from collections import defaultdict
+from heapq import nlargest
+from math import isfinite
 from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal
 
@@ -76,6 +78,29 @@ def _filter_queries_without_positives(
     return _relevant_docs, queries
 
 
+def _filter_full_corpus_results(
+    results: RetrievalOutputType, data_split: RetrievalSplitData, top_k: int
+) -> RetrievalOutputType:
+    """Apply label-dependent candidate lists after verifying exhaustive search results."""
+    candidates = data_split["top_ranked"]
+    if candidates is None:
+        raise ValueError("This task requires its official per-query candidate lists.")
+    if results.keys() != set(data_split["queries"]["id"]):
+        raise ValueError("Full-corpus search must return scores for every query.")
+
+    corpus_ids = set(data_split["corpus"]["id"])
+    filtered = {}
+    for qid, scores in results.items():
+        if scores.keys() != corpus_ids or not all(map(isfinite, scores.values())):
+            raise ValueError(
+                f"Full-corpus search must return a finite score for every corpus document for query {qid!r}."
+            )
+        # Match trec_eval's descending document-ID tie break.
+        kept = nlargest(top_k, candidates[qid], key=lambda doc: (scores[doc], doc))
+        filtered[qid] = {doc: scores[doc] for doc in kept}
+    return filtered
+
+
 class AbsTaskRetrieval(AbsTask):
     """The class which retrieval tasks inherit from.
 
@@ -90,6 +115,8 @@ class AbsTaskRetrieval(AbsTask):
         ignore_identical_ids: If True, identical IDs in queries and corpus are ignored during evaluation.
         k_values: A sequence of integers representing the k values for evaluation metrics.
         skip_first_result: If True, the first result is skipped during evaluation
+        filter_candidates_after_search: For small corpora with label-dependent candidate
+            lists, score the full corpus and apply the lists inside the evaluator.
         abstask_prompt: Prompt to use for the task for instruction model if not prompt is provided in TaskMetadata.prompt.
     """
 
@@ -101,6 +128,7 @@ class AbsTaskRetrieval(AbsTask):
     _support_search: bool = True
     _previous_results_model_meta: dict[str, Any] | None = None
     skip_first_result: bool = False
+    filter_candidates_after_search: bool = False
 
     def __init__(self, *args: Any, **kwargs: Any) -> None:
         super().__init__(*args, **kwargs)
@@ -364,16 +392,21 @@ class AbsTaskRetrieval(AbsTask):
                 data_split["relevant_docs"], data_split["queries"]
             )
         )
+        # Account for the extra result removed by the identical-ID filter at evaluation.
+        top_k = self._top_k + int(self.ignore_identical_ids)
+        search_top_k = (
+            len(data_split["corpus"]) if self.filter_candidates_after_search else top_k
+        )
         retriever = RetrievalEvaluator(
             corpus=data_split["corpus"],
             queries=data_split["queries"],
             task_metadata=self.metadata,
             hf_split=hf_split,
             hf_subset=hf_subset,
-            top_ranked=data_split["top_ranked"],
-            # Search one extra document when the query's own document is dropped
-            # at evaluation, so each query still has `top_k` results after that.
-            top_k=self._top_k + 1 if self.ignore_identical_ids else self._top_k,
+            top_ranked=None
+            if self.filter_candidates_after_search
+            else data_split["top_ranked"],
+            top_k=search_top_k,
             timer=timer,
             **kwargs,
         )
@@ -396,6 +429,9 @@ class AbsTaskRetrieval(AbsTask):
             encode_kwargs=encode_kwargs,
             num_proc=num_proc,
         )
+
+        if self.filter_candidates_after_search:
+            results = _filter_full_corpus_results(results, data_split, top_k)
 
         if prediction_folder:
             self._save_task_predictions(
@@ -750,8 +786,12 @@ class AbsTaskRetrieval(AbsTask):
 
         Raises:
             FileNotFoundError: If the specified path does not exist.
-            ValueError: If the loaded top ranked results are not in the expected format.
+            ValueError: If the task requires full-corpus scoring or the results have an invalid format.
         """
+        if self.filter_candidates_after_search:
+            raise ValueError(
+                "This task requires the full corpus and its official candidate lists."
+            )
         self._top_k = top_k
 
         top_ranked_path = Path(top_ranked_path)
