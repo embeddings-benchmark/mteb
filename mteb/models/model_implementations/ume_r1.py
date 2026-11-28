@@ -7,7 +7,6 @@ from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -40,12 +39,11 @@ class UMER1Wrapper(AbsEncoder):
         model: str,
         revision: str | None = None,
         device: str | None = None,
-        # fps=2: qwen-vl-utils FPS=2.0
-        # https://github.com/QwenLM/Qwen2.5-VL/blob/main/qwen-vl-utils/src/qwen_vl_utils/vision_process.py
-        fps: float | None = 2.0,
-        # 64 is an mteb cap; upstream ships FPS_MAX_FRAMES=768
-        max_frames: int | None = 64,
-        num_frames: int | None = None,
+        fps: float | None = None,
+        max_frames: int | None = None,
+        # 8 frames: num_frames in the official video eval config
+        # https://github.com/XMUDeepLIT/UME-R1/blob/ab4fc06667df63791e21efefc3fbfd2fac0faf0b/src/eval/VLM2Vec/experiments/public/eval/video.yaml
+        num_frames: int | None = 8,
         **kwargs: Any,
     ) -> None:
         import torch
@@ -343,7 +341,6 @@ ume_r1_2b = ModelMeta(
     embed_dim=1536,
     reference="https://huggingface.co/zhibinlan/UME-R1-2B",
     **_UME_R1_BASE_KWARGS,
-    output_dtypes=OutputDType.BF16,
 )
 
 ume_r1_7b = ModelMeta(
@@ -356,5 +353,4 @@ ume_r1_7b = ModelMeta(
     embed_dim=3584,
     reference="https://huggingface.co/zhibinlan/UME-R1-7B",
     **_UME_R1_BASE_KWARGS,
-    output_dtypes=OutputDType.BF16,
 )

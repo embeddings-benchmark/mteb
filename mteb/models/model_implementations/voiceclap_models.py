@@ -10,7 +10,6 @@ from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, seconds_to_samples
 from mteb.models.model_meta import ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     from torch.utils.data import DataLoader
@@ -95,11 +94,13 @@ class VoiceCLAPSmallWrapper(AbsEncoder):
     ) -> np.ndarray:
         import torch
 
+        # the audio encoder needs at least 480 samples (30 ms at 16 kHz)
         inputs.collate_fn = AudioCollator(
             target_sampling_rate=self.sampling_rate,
             max_samples=seconds_to_samples(
                 self.max_audio_length_seconds, self.sampling_rate
             ),
+            min_samples=480,
         )
 
         all_features = []
@@ -170,7 +171,6 @@ voiceclap_large = ModelMeta(
     training_datasets=None,
     adapted_from="LCO-Embedding/LCO-Embedding-Omni-7B",
     extra_requirements_groups=["multimodal-sbert"],
-    output_dtypes=OutputDType.BF16,
 )
 
 voiceclap_small = ModelMeta(

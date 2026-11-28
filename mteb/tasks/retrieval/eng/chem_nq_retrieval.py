@@ -1,5 +1,6 @@
 from mteb.abstasks.retrieval import AbsTaskRetrieval
 from mteb.abstasks.task_metadata import TaskMetadata
+from mteb.tasks.retrieval.eng.nq_retrieval import NQ_CITATION
 
 
 class ChemNQRetrieval(AbsTaskRetrieval):
@@ -10,7 +11,7 @@ class ChemNQRetrieval(AbsTaskRetrieval):
             "revision": "5d958fb6b31055495347724d46431ba41309b03a",
         },
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         type="Retrieval",
         category="t2t",
         modalities=["text"],
@@ -24,21 +25,16 @@ class ChemNQRetrieval(AbsTaskRetrieval):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""
-@article{47761,
-  author = {Tom Kwiatkowski and Jennimaria Palomaki and Olivia Redfield and Michael Collins and Ankur Parikh
-and Chris Alberti and Danielle Epstein and Illia Polosukhin and Matthew Kelcey and Jacob Devlin and Kenton Lee
-and Kristina N. Toutanova and Llion Jones and Ming-Wei Chang and Andrew Dai and Jakob Uszkoreit and Quoc Le
-and Slav Petrov},
-  journal = {Transactions of the Association of Computational Linguistics},
-  title = {Natural Questions: a Benchmark for Question Answering Research},
-  year = {2019},
-}
-
-@article{kasmaee2024chemteb,
-  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
-  journal = {arXiv preprint arXiv:2412.00532},
-  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+        bibtex_citation=NQ_CITATION
+        + r"""
+@inproceedings{kasmaee2024chemteb,
+  archiveprefix = {arXiv},
+  author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
+  booktitle = {ENLSP},
+  eprint = {2412.00532},
+  pages = {512-531},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance & Efficiency on a Specific Domain},
+  url = {https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html},
   year = {2024},
 }
 """,

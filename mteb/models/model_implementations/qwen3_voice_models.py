@@ -63,8 +63,11 @@ class Qwen3VoiceEmbeddingWrapper(AbsEncoder):
         max_samples = seconds_to_samples(
             self.max_audio_length_seconds, self.sampling_rate
         )
+        # the audio encoder needs at least 1280 samples (5 mel hops at 24 kHz)
         inputs.collate_fn = AudioCollator(
-            target_sampling_rate=self.sampling_rate, max_samples=max_samples
+            target_sampling_rate=self.sampling_rate,
+            max_samples=max_samples,
+            min_samples=1280,
         )
         all_embeddings = []
 

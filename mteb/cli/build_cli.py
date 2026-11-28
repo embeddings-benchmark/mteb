@@ -26,6 +26,17 @@ if TYPE_CHECKING:
 logger = logging.getLogger(__name__)
 
 
+def _parse_run_device(value: str) -> str:
+    """Parse ``mteb run --device``.
+
+    Loaders expect a device string such as ``cpu`` or ``cuda:1``. A bare GPU
+    index is the historical form of this flag and selects ``cuda:<index>``.
+    """
+    if value.isdigit():
+        return f"cuda:{int(value)}"
+    return value
+
+
 def run(args: argparse.Namespace) -> None:
     """Run a model on a set of tasks."""
     # set logging based on verbosity level
@@ -106,6 +117,7 @@ def run(args: argparse.Namespace) -> None:
         overwrite_strategy=overwrite_strategy,
         encode_kwargs=encode_kwargs,
         prediction_folder=prediction_folder,
+        num_proc=args.num_proc,
     )
 
 
@@ -204,7 +216,13 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
     _add_benchmark_selection_args(parser)
 
     parser.add_argument(
-        "--device", type=int, default=None, help="Device to use for computation."
+        "--device",
+        type=_parse_run_device,
+        default=None,
+        help=(
+            "Device to use for computation, for example 'cpu', 'cuda', or 'cuda:1'. "
+            "A bare GPU index such as '0' is read as 'cuda:0'."
+        ),
     )
     parser.add_argument(
         "--output-folder",
@@ -252,6 +270,13 @@ def _add_run_parser(subparsers: argparse._SubParsersAction[Any]) -> None:
         type=int,
         default=None,
         help="Batch size of the encode. Will be passed to the MTEB as `mteb.evaluate(model, task, encode_kwargs={'batch_size': value})`.",
+    )
+    parser.add_argument(
+        "--num-proc",
+        "--num_proc",  # for consistency with the other underscore aliases
+        type=int,
+        default=None,
+        help="Number of processes to use during data loading and transformation. Will be passed to the MTEB as `mteb.evaluate(model, task, num_proc=value)`.",
     )
     # for backward compatibility
     parser.add_argument(
@@ -653,8 +678,13 @@ def build_cli() -> argparse.ArgumentParser:
     )
 
     subparsers = parser.add_subparsers(
-        title="subcommands", description="valid subcommands", help="additional help"
+        title="subcommands",
+        description="valid subcommands",
+        help="additional help",
+        dest="command",
     )
+    # Without this, `mteb` with no subcommand parses and then crashes on args.func.
+    subparsers.required = True
 
     _add_run_parser(subparsers)
     _add_available_tasks_parser(subparsers)

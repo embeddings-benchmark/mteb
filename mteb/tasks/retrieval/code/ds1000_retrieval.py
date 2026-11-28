@@ -25,11 +25,15 @@ class DS1000Retrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{lai2022ds,
-  author = {Lai, Yuhang and Li, Chengxi and Wang, Yiming and Zhang, Tianyi and Zhong, Ruiqi and Zettlemoyer, Luke and Yih, Wen-tau and Fried, Daniel and Wang, Sida and Yu, Tao},
-  journal = {arXiv preprint arXiv:2211.11501},
+@inproceedings{lai2022ds,
+  archiveprefix = {arXiv},
+  author = {Yuhang Lai and Chengxi Li and Yiming Wang and Tianyi Zhang and Ruiqi Zhong and Luke Zettlemoyer and Wen-Tau Yih and Daniel Fried and Sida I. Wang and Tao Yu},
+  booktitle = {ICML},
+  eprint = {2211.11501},
+  pages = {18319-18345},
   title = {DS-1000: A Natural and Reliable Benchmark for Data Science Code Generation},
-  year = {2022},
+  url = {https://proceedings.mlr.press/v202/lai23b.html},
+  year = {2023},
 }
 """,
     )

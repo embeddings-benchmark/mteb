@@ -24,6 +24,11 @@ from mteb.models.sentence_transformer_wrapper import (
     SentenceTransformerEncoderWrapper,
     SparseEncoderWrapper,
 )
+from mteb.models.video_wrappers.video2images_wrapper import (
+    _has_mixed_video_input,
+    is_video2images_meta,
+    video2images_hint,
+)
 from mteb.results import ModelResult, TaskResult
 from mteb.results.task_result import TaskError
 from mteb.timing import TimingStack
@@ -335,7 +340,12 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
                         date=datetime.datetime.now(tz=datetime.UTC),
                         evaluation_phases=timer.phases if timer.phases else None,
                     )
-                    cache.save_to_cache(new_result, model_meta)
+                    cache.save_to_cache(
+                        new_result,
+                        model_meta,
+                        encode_kwargs=encode_kwargs,
+                        evaluated_splits={split: list(res)},
+                    )
 
         duration = general_timer.phases[0]["end"] - general_timer.phases[0]["start"]
 
@@ -366,6 +376,16 @@ def _evaluate_task(  # noqa: PLR0913, PLR0914
     return result
 
 
+def _has_non_text_task(tasks: AbsTask | Benchmark | Iterable[AbsTask]) -> bool:
+    """Check whether any of the tasks uses a modality other than text."""
+    if isinstance(tasks, AbsTask):
+        tasks = [tasks]
+    return any(
+        any(modality != "text" for modality in task.metadata.modalities)
+        for task in tasks
+    )
+
+
 def _check_model_modalities(
     model: ModelMeta,
     tasks: AbsTask | Iterable[AbsTask],
@@ -394,6 +414,13 @@ def _check_model_modalities(
     warnings, errors = [], []
 
     for task in check_tasks:
+        if is_video2images_meta(model) and _has_mixed_video_input(task):
+            errors.append(
+                f"Model {model.name} only supports video-only inputs, but task "
+                f"{task.metadata.name} mixes video with other modalities in one input."
+            )
+            continue
+        video_hint = video2images_hint(model, task)
         # only retrieval tasks have different modalities for query and document and can be run with partial overlaps
         if isinstance(task, AbsTaskRetrieval):
             query_mods = set(task.metadata.get_modalities(PromptType.query))
@@ -418,6 +445,7 @@ def _check_model_modalities(
                 errors.append(
                     f"Model {model.name} supports {model.modalities}, but none overlap with "
                     f"task {task.metadata.name} query={sorted(query_mods)}, document={sorted(doc_mods)}."
+                    + video_hint
                 )
         else:
             task_mods = set(task.metadata.modalities)
@@ -427,6 +455,7 @@ def _check_model_modalities(
             errors.append(
                 f"Model {model.name} supports {model.modalities}, but none overlap with "
                 f"task {task.metadata.name} modalities={task.metadata.modalities}."
+                + video_hint
             )
 
     if errors:
@@ -563,7 +592,7 @@ def evaluate(  # noqa: PLR0913
         show_progress_bar: Whether to show a progress bar when running the evaluation. Default is True. Setting this to False will also set the
             `encode_kwargs['show_progress_bar']` to False if encode_kwargs is unspecified.
         public_only: Run only public tasks. If None, it will attempt to run the private task.
-        num_proc: Number of processes to use during data loading and transformation. Defaults to 1.
+        num_proc: Number of processes to use during data loading and transformation. Defaults to None (single process).
         timer: A context manager that tracks the timing of evaluation phases.
 
     Returns:
@@ -598,6 +627,12 @@ def evaluate(  # noqa: PLR0913
         encode_kwargs["batch_size"] = 32
         logger.info(
             "No batch size defined in encode_kwargs. Setting `encode_kwargs['batch_size'] = 32`. Explicitly set the batch size to silence this message."
+        )
+
+    if num_proc is None and _has_non_text_task(tasks):
+        logger.info(
+            "`num_proc` is not set, so data loading runs in a single process. Consider setting `num_proc` (e.g. `mteb.evaluate(..., num_proc=4)`) to speed up data loading. "
+            "Explicitly set `num_proc` to silence this message."
         )
 
     # encoding runs through torch dataloaders, so check before doing any work
@@ -663,7 +698,7 @@ def _evaluate_resolved(  # noqa: PLR0913
             return ModelResult(
                 model_name=model_name,
                 model_revision=model_revision,
-                task_results=[existing_results],
+                task_results=[existing_results.validate_and_filter_scores(tasks)],
             )
 
         results = _evaluate_resolved(
@@ -685,15 +720,21 @@ def _evaluate_resolved(  # noqa: PLR0913
         )
         combined_results = tasks.combine_task_results(results.task_results)
 
-        if existing_results:
-            combined_results = existing_results.merge(combined_results)
+        # without all subtasks there is no score, so don't save it as a finished result
+        if not results.exceptions:
+            if existing_results:
+                combined_results = existing_results.merge(combined_results)
 
-        if cache:
-            cache.save_to_cache(
-                combined_results,
-                meta,
-                encode_kwargs=encode_kwargs,
-            )
+            if cache:
+                cache.save_to_cache(
+                    combined_results,
+                    meta,
+                    encode_kwargs=encode_kwargs,
+                )
+
+            if existing_results:
+                # the cache may hold more splits/subsets than the task asks for
+                combined_results = combined_results.validate_and_filter_scores(tasks)
 
         return ModelResult(
             model_name=results.model_name,
@@ -735,8 +776,8 @@ def _evaluate_resolved(  # noqa: PLR0913
             if _res.exceptions:
                 exceptions.extend(_res.exceptions)
         return ModelResult(
-            model_name=_res.model_name,
-            model_revision=_res.model_revision,
+            model_name=model_name,
+            model_revision=model_revision,
             task_results=evaluate_results,
             exceptions=exceptions,
         )
@@ -755,22 +796,22 @@ def _evaluate_resolved(  # noqa: PLR0913
         return ModelResult(
             model_name=model_name,
             model_revision=model_revision,
-            task_results=[existing_results],
+            task_results=[existing_results.validate_and_filter_scores(task)],
         )
     if existing_results:
         logger.info(
             f"Found existing results for {task.metadata.name}, only running missing splits (subsets): {missing_eval}"
         )
 
-    if isinstance(model, ModelMeta):
-        logger.info(
-            f"Loading model {model_name} with revision {model_revision} from ModelMeta."
-        )
-        model = model.load_model()
-        logger.info("✓ Model loaded")
-
     if raise_error is False:
         try:
+            if isinstance(model, ModelMeta):
+                logger.info(
+                    f"Loading model {model_name} with revision {model_revision} from ModelMeta."
+                )
+                model = model.load_model()
+                logger.info("✓ Model loaded")
+
             result = _evaluate_task(
                 model=model,
                 splits=missing_eval,
@@ -790,6 +831,13 @@ def _evaluate_resolved(  # noqa: PLR0913
             )
             result = TaskError(task_name=task.metadata.name, exception=str(e))
     else:
+        if isinstance(model, ModelMeta):
+            logger.info(
+                f"Loading model {model_name} with revision {model_revision} from ModelMeta."
+            )
+            model = model.load_model()
+            logger.info("✓ Model loaded")
+
         result = _evaluate_task(
             model=model,
             splits=missing_eval,
@@ -814,11 +862,17 @@ def _evaluate_resolved(  # noqa: PLR0913
         )
 
     if cache:
+        # Intermediate saves already recorded settings for every evaluated subset.
         cache.save_to_cache(
             result,
             meta,
             encode_kwargs=encode_kwargs,
+            evaluated_splits={},
         )
+
+    if existing_results:
+        # the cache may hold more splits/subsets than the task asks for
+        result = result.validate_and_filter_scores(task)
 
     return ModelResult(
         model_name=model_name,

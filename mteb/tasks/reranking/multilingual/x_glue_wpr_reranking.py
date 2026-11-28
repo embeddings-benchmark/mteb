@@ -42,12 +42,18 @@ in Natural Language Processing},
   year = {2018},
 }
 
-@article{lewis2019mlqa,
+@inproceedings{lewis2019mlqa,
+  address = {Online},
   author = {Lewis, Patrick and Oguz, Barlas and Rinott, Ruty and Riedel, Sebastian and Schwenk, Holger},
-  eid = {arXiv: 1910.07475},
-  journal = {arXiv preprint arXiv:1910.07475},
-  title = {MLQA: Evaluating Cross-lingual Extractive Question Answering},
-  year = {2019},
+  booktitle = {Proceedings of the 58th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics},
+  doi = {10.18653/v1/2020.acl-main.653},
+  editor = {Jurafsky, Dan and Chai, Joyce and Schluter, Natalie and Tetreault, Joel},
+  month = {jul},
+  pages = {7315--7330},
+  publisher = {Association for Computational Linguistics},
+  title = {{MLQA}: Evaluating Cross-lingual Extractive Question Answering},
+  url = {https://aclanthology.org/2020.acl-main.653/},
+  year = {2020},
 }
 
 @article{Liang2020XGLUEAN,
@@ -74,12 +80,14 @@ in Natural Language Processing},
   year = {2003},
 }
 
-@misc{yang2019pawsx,
-  archiveprefix = {arXiv},
-  author = {Yinfei Yang and Yuan Zhang and Chris Tar and Jason Baldridge},
-  eprint = {1908.11828},
-  primaryclass = {cs.CL},
+@inproceedings{yang2019pawsx,
+  author = {Yang, Yinfei and Zhang, Yuan and Tar, Chris and Baldridge, Jason},
+  booktitle = {Proceedings of the 2019 Conference on Empirical Methods in Natural Language Processing and the 9th International Joint Conference on Natural Language Processing (EMNLP-IJCNLP)},
+  doi = {10.18653/v1/d19-1382},
+  pages = {3685–3690},
+  publisher = {Association for Computational Linguistics},
   title = {PAWS-X: A Cross-lingual Adversarial Dataset for Paraphrase Identification},
+  url = {https://doi.org/10.18653/v1/d19-1382},
   year = {2019},
 }
 """

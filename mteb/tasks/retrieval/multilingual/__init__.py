@@ -23,7 +23,12 @@ from .fleurs import (
     FleursT2ARetrievalV2,
 )
 from .glami_1m_retrieval import GLAMI1MI2TRetrieval, GLAMI1MT2IRetrieval
-from .google_svq import GoogleSVQA2TRetrieval, GoogleSVQT2ARetrieval
+from .google_svq import (
+    GoogleSVQA2TRetrieval,
+    GoogleSVQA2TRetrievalV2,
+    GoogleSVQT2ARetrieval,
+    GoogleSVQT2ARetrievalV2,
+)
 from .indic_qa_retrieval import IndicQARetrieval
 from .jam_alt import (
     JamAltArtistA2ARetrieval,
@@ -88,6 +93,10 @@ from .mmarco_retrieval import MMarcoRetrievalMultilingual
 from .mr_tidy_retrieval import MrTidyRetrieval
 from .multi30k_retrieval import Multi30kI2TRetrieval, Multi30kT2IRetrieval
 from .multi_long_doc_retrieval import MultiLongDocRetrieval
+from .multivent2_retrieval import (
+    MultiVENT2MiniT2VARetrieval,
+    MultiVENT2MiniT2VRetrieval,
+)
 from .mupler_retrieval import MuPLeRRetrieval
 from .nanobeir_multilingual import (
     MultilingualNanoArguAnaRetrieval,
@@ -200,7 +209,9 @@ __all__ = [
     "GLAMI1MT2IRetrieval",
     "GlobalNewsRetrieval",
     "GoogleSVQA2TRetrieval",
+    "GoogleSVQA2TRetrievalV2",
     "GoogleSVQT2ARetrieval",
+    "GoogleSVQT2ARetrievalV2",
     "IndicQARetrieval",
     "JamAltArtistA2ARetrieval",
     "JamAltLyricA2TRetrieval",
@@ -261,6 +272,8 @@ __all__ = [
     "Multi30kI2TRetrieval",
     "Multi30kT2IRetrieval",
     "MultiLongDocRetrieval",
+    "MultiVENT2MiniT2VARetrieval",
+    "MultiVENT2MiniT2VRetrieval",
     "MultilingualNanoArguAnaRetrieval",
     "MultilingualNanoClimateFeverRetrieval",
     "MultilingualNanoDBPediaRetrieval",

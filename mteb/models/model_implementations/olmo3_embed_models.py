@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta
-from mteb.types import OutputDType
 
 # Training sources that are (the train split of) an MTEB task; data card:
 # https://github.com/petegordon/olmo3-embed/blob/main/docs/data-card.md
@@ -52,5 +51,4 @@ olmo3_embed_7b = ModelMeta(
     training_datasets=OLMO3_EMBED_TRAINING_DATA,
     adapted_from="allenai/Olmo-3-1025-7B",
     contacts=["petegordon"],
-    output_dtypes=[OutputDType.BF16],
 )

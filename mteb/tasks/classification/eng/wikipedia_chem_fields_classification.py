@@ -6,7 +6,7 @@ class WikipediaChemFieldsClassification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaChemFieldsClassification",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data.",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "BASF-AI/WikipediaEZ10Classification",
             "revision": "a75fae77759acc115f015f2b856baa47776d733d",
@@ -25,10 +25,14 @@ class WikipediaChemFieldsClassification(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{kasmaee2024chemteb,
-  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
-  journal = {arXiv preprint arXiv:2412.00532},
-  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+@inproceedings{kasmaee2024chemteb,
+  archiveprefix = {arXiv},
+  author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
+  booktitle = {ENLSP},
+  eprint = {2412.00532},
+  pages = {512-531},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance & Efficiency on a Specific Domain},
+  url = {https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html},
   year = {2024},
 }
 """,
@@ -40,7 +44,7 @@ class WikipediaChemFieldsClassificationV2(AbsTaskClassification):
     metadata = TaskMetadata(
         name="WikipediaChemFieldsClassification.v2",
         description="ChemTEB evaluates the performance of text embedding models on chemical domain data. This version corrects errors found in the original data. For details, see [pull request](https://github.com/embeddings-benchmark/mteb/pull/2900)",
-        reference="https://arxiv.org/abs/2412.00532",
+        reference="https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html",
         dataset={
             "path": "mteb/wikipedia_chem_fields",
             "revision": "70ff36ec5157fcc54c59f3b85d2b1fb232f8feec",
@@ -59,10 +63,14 @@ class WikipediaChemFieldsClassificationV2(AbsTaskClassification):
         dialect=[],
         sample_creation="created",
         bibtex_citation=r"""
-@article{kasmaee2024chemteb,
-  author = {Kasmaee, Ali Shiraee and Khodadad, Mohammad and Saloot, Mohammad Arshi and Sherck, Nick and Dokas, Stephen and Mahyar, Hamidreza and Samiee, Soheila},
-  journal = {arXiv preprint arXiv:2412.00532},
-  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance \& Efficiency on a Specific Domain},
+@inproceedings{kasmaee2024chemteb,
+  archiveprefix = {arXiv},
+  author = {Ali Shiraee Kasmaee and Mohammad Khodadad and Mohammad Arshi Saloot and Nick Sherck and Stephen Dokas and Hamidreza Mahyar and Soheila Samiee},
+  booktitle = {ENLSP},
+  eprint = {2412.00532},
+  pages = {512-531},
+  title = {ChemTEB: Chemical Text Embedding Benchmark, an Overview of Embedding Models Performance & Efficiency on a Specific Domain},
+  url = {https://proceedings.mlr.press/v262/shiraee-kasmaee24a.html},
   year = {2024},
 }
 """,

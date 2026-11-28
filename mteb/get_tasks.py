@@ -15,6 +15,7 @@ from mteb.abstasks import (
     AbsTask,
 )
 from mteb.filter_tasks import filter_tasks
+from mteb.languages import LanguageScripts
 
 if TYPE_CHECKING:
     from collections.abc import Iterable, Sequence
@@ -200,12 +201,13 @@ class MTEBTasks(tuple[AbsTask]):
         Returns:
             string with a LaTeX table.
         """
+        df = self.to_dataframe(properties)
         if include_citation_in_name and "name" in properties:
-            df = self.to_dataframe(tuple(properties) + ("intext_citation",))
-            df["name"] = df["name"] + " " + df["intext_citation"]
-            df = df.drop(columns=["intext_citation"])
-        else:
-            df = self.to_dataframe(properties)
+            # `intext_citation` is a method, so it is called for each task instead of read as a property
+            citations = pd.Series(
+                [task.metadata.intext_citation() for task in self], index=df.index
+            )
+            df["name"] = df["name"] + " " + citations
 
         if limit_n_entries and df.shape[0]:  # ensure that there are entries
             for col in df.columns:
@@ -221,7 +223,12 @@ class MTEBTasks(tuple[AbsTask]):
                     df[col] = _col
 
         if group_indices:
-            df = df.set_index(group_indices)
+            keys = (
+                [group_indices]
+                if isinstance(group_indices, str)
+                else list(group_indices)
+            )
+            df = df.set_index(keys)
 
         return df.to_latex()
 
@@ -277,6 +284,9 @@ def get_tasks(  # noqa: PLR0913, PLR0917
         >>> get_tasks(languages=["eng"], tasks=["WikipediaRetrievalMultilingual"], eval_splits=["test"])
         >>> get_tasks(tasks=["STS22"], languages=["eng"], exclusive_language_filter=True) # don't include multilingual subsets containing English
     """
+    # validate up front so the error is not swallowed as a skipped task below
+    LanguageScripts.from_languages_and_scripts(languages, script)
+
     if tasks:
         if domains or task_types or categories:
             logger.warning(
@@ -295,10 +305,8 @@ def get_tasks(  # noqa: PLR0913, PLR0917
                         exclusive_language_filter=exclusive_language_filter,
                     )
                 )
-            except ValueError:
-                log_once.warning(
-                    f"Skipping task '{task}': no subsets match the language filter {languages}."
-                )
+            except ValueError as e:
+                log_once.warning(f"Skipping task '{task}': {e}")
         return MTEBTasks(_tasks)
 
     tasks_: Sequence[type[AbsTask]] = filter_tasks(
@@ -315,12 +323,18 @@ def get_tasks(  # noqa: PLR0913, PLR0917
         exclude_private=exclude_private,
         exclude_beta=exclude_beta,
     )
-    return MTEBTasks(
-        [
-            cls().filter_languages(languages, script).filter_eval_splits(eval_splits)
-            for cls in tasks_
-        ]
-    )
+    _tasks = []
+    for cls in tasks_:
+        try:
+            filtered = cls().filter_languages(
+                languages,
+                script,
+                exclusive_language_filter=exclusive_language_filter,
+            )
+            _tasks.append(filtered.filter_eval_splits(eval_splits))
+        except ValueError as e:
+            log_once.warning(f"Skipping task '{cls.metadata.name}': {e}")
+    return MTEBTasks(_tasks)
 
 
 _TASK_RENAMES = {"PersianTextTone": "SynPerTextToneClassification"}
@@ -358,6 +372,7 @@ def get_task(
         msg = f"The task with the given name '{task_name}' has been renamed to '{_task_name}'. To prevent this warning use the new name."
         logger.warning(msg)
         warnings.warn(msg, stacklevel=2)
+        task_name = _task_name
 
     if task_name not in _TASKS_REGISTRY:
         close_matches = difflib.get_close_matches(task_name, _TASKS_REGISTRY.keys())

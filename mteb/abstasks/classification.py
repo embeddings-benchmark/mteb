@@ -470,10 +470,16 @@ class AbsTaskClassification(AbsTask):
         )
 
         # if binary classification
-        if len(np.unique(y_test)) == 2:
-            scores["ap"] = average_precision_score(y_test, y_pred, average="macro")
+        classes = np.unique(y_test)
+        if len(classes) == 2:
+            # the larger label is the positive class (1 for the usual labels 0 and 1)
+            positive_label = classes[1]
+            y_score = np.asarray(y_pred) == positive_label
+            scores["ap"] = average_precision_score(
+                y_test, y_score, average="macro", pos_label=positive_label
+            )
             scores["ap_weighted"] = average_precision_score(
-                y_test, y_pred, average="weighted"
+                y_test, y_score, average="weighted", pos_label=positive_label
             )
         return scores
 

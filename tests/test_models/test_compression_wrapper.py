@@ -102,6 +102,41 @@ def test_uint_compression(level: OutputDType, bits: int):
     assert torch.min(embeddings) >= 0
 
 
+@pytest.mark.parametrize(
+    "level",
+    [OutputDType.INT8, OutputDType.UINT8, OutputDType.INT4, OutputDType.UINT4],
+)
+def test_integer_compression_single_input(level: OutputDType):
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    wrapper = CompressionWrapper(model, level)
+    inputs = DataLoader(Dataset.from_dict({"text": ["hello world"]}))
+
+    with pytest.warns(UserWarning, match="Parameters are likely unstable"):
+        embeddings = wrapper.encode(
+            inputs,
+            task_metadata=task_metadata,
+            hf_split="test",
+            hf_subset="test",
+        )
+
+    assert torch.isfinite(embeddings).all()
+
+
+@pytest.mark.parametrize(
+    "level",
+    [OutputDType.INT8, OutputDType.UINT8, OutputDType.INT4, OutputDType.UINT4],
+)
+def test_integer_compression_constant_dimension(level: OutputDType):
+    model = mteb.get_model("mteb/baseline-random-encoder")
+    wrapper = CompressionWrapper(model, level)
+    embeddings = torch.tensor([[0.0, 0.5], [1.0, 0.5]])
+
+    with pytest.warns(UserWarning, match="Parameters are likely unstable"):
+        quantized = wrapper._quantize_embeddings(embeddings)
+
+    assert torch.isfinite(quantized[:, 1]).all()
+
+
 def test_binary_compression():
     model = mteb.get_model("mteb/baseline-random-encoder")
     wrapper = CompressionWrapper(model, OutputDType.BINARY)

@@ -1,10 +1,18 @@
 """Implementation of Sentence Transformers model validated in MTEB."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import numpy as np
 
+from mteb.models.instruct_wrapper import InstructSentenceTransformerModel
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
 from mteb.types import OutputDType
+
+if TYPE_CHECKING:
+    from mteb.types import PromptType
 
 paraphrase_langs = [
     "ara-Arab",
@@ -276,15 +284,19 @@ labse = ModelMeta(
     ),
     # scraped and mined webdata including CC, wiki, see section 3.1 https://aclanthology.org/2022.acl-long.62.pdf
     public_training_code="https://www.kaggle.com/models/google/labse/tensorFlow2/labse/2?tfhub-redirect=true",
-    citation="""@misc{feng2022languageagnosticbertsentenceembedding,
-      title={Language-agnostic BERT Sentence Embedding},
-      author={Fangxiaoyu Feng and Yinfei Yang and Daniel Cer and Naveen Arivazhagan and Wei Wang},
-      year={2022},
-      eprint={2007.01852},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2007.01852},
-    }""",
+    citation="""@inproceedings{feng2022languageagnosticbertsentenceembedding,
+  address = {Dublin, Ireland},
+  author = {Feng, Fangxiaoyu and Yang, Yinfei and Cer, Daniel and Arivazhagan, Naveen and Wang, Wei},
+  booktitle = {Proceedings of the 60th Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2022.acl-long.62},
+  editor = {Muresan, Smaranda and Nakov, Preslav and Villavicencio, Aline},
+  month = {may},
+  pages = {878--891},
+  publisher = {Association for Computational Linguistics},
+  title = {Language-agnostic {BERT} Sentence Embedding},
+  url = {https://aclanthology.org/2022.acl-long.62/},
+  year = {2022},
+}""",
     public_training_data=None,
 )
 
@@ -484,13 +496,17 @@ contriever = ModelMeta(
     framework=["Sentence Transformers", "PyTorch", "Transformers"],
     use_instructions=False,
     citation="""
-    @misc{izacard2021contriever,
-      title={Unsupervised Dense Information Retrieval with Contrastive Learning},
-      author={Gautier Izacard and Mathilde Caron and Lucas Hosseini and Sebastian Riedel and Piotr Bojanowski and Armand Joulin and Edouard Grave},
-      year={2021},
-      url = {https://arxiv.org/abs/2112.09118},
-      doi = {10.48550/ARXIV.2112.09118},
-    }""",
+    @article{izacard2021contriever,
+  archiveprefix = {arXiv},
+  author = {Gautier Izacard and Mathilde Caron and Lucas Hosseini and Sebastian Riedel and Piotr Bojanowski and Armand Joulin and Edouard Grave},
+  eprint = {2112.09118},
+  issn = {2835-8856},
+  journal = {Transactions on Machine Learning Research},
+  note = {},
+  title = {Unsupervised Dense Information Retrieval with Contrastive Learning},
+  url = {https://openreview.net/forum?id=jKN1pXi7b0},
+  year = {2022},
+}""",
     public_training_code=None,
     public_training_data=None,
     training_datasets=None,
@@ -533,14 +549,18 @@ microllama_text_embedding = ModelMeta(
 )
 
 SENTENCE_T5_CITATION = """
-@misc{ni2021sentencet5scalablesentenceencoders,
-      title={Sentence-T5: Scalable Sentence Encoders from Pre-trained Text-to-Text Models},
-      author={Jianmo Ni and Gustavo Hernández Ábrego and Noah Constant and Ji Ma and Keith B. Hall and Daniel Cer and Yinfei Yang},
-      year={2021},
-      eprint={2108.08877},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2108.08877},
+@inproceedings{ni2021sentencet5scalablesentenceencoders,
+  address = {Dublin, Ireland},
+  author = {Ni, Jianmo and Hernandez Abrego, Gustavo and Constant, Noah and Ma, Ji and Hall, Keith and Cer, Daniel and Yang, Yinfei},
+  booktitle = {Findings of the {A}ssociation for {C}omputational {L}inguistics: {ACL} 2022},
+  doi = {10.18653/v1/2022.findings-acl.146},
+  editor = {Muresan, Smaranda and Nakov, Preslav and Villavicencio, Aline},
+  month = {may},
+  pages = {1864--1874},
+  publisher = {Association for Computational Linguistics},
+  title = {{S}entence-{T}5: Scalable Sentence Encoders from Pre-trained Text-to-Text Models},
+  url = {https://aclanthology.org/2022.findings-acl.146/},
+  year = {2022},
 }
 """
 sentence_t5_base = ModelMeta(
@@ -643,14 +663,18 @@ sentence_t5_xxl = ModelMeta(
     output_dtypes=OutputDType.FLOAT16,
 )
 GTR_CITATION = """
-@misc{ni2021largedualencodersgeneralizable,
-      title={Large Dual Encoders Are Generalizable Retrievers},
-      author={Jianmo Ni and Chen Qu and Jing Lu and Zhuyun Dai and Gustavo Hernández Ábrego and Ji Ma and Vincent Y. Zhao and Yi Luan and Keith B. Hall and Ming-Wei Chang and Yinfei Yang},
-      year={2021},
-      eprint={2112.07899},
-      archivePrefix={arXiv},
-      primaryClass={cs.IR},
-      url={https://arxiv.org/abs/2112.07899},
+@inproceedings{ni2021largedualencodersgeneralizable,
+  address = {Abu Dhabi, United Arab Emirates},
+  author = {Ni, Jianmo and Qu, Chen and Lu, Jing and Dai, Zhuyun and Hernandez Abrego, Gustavo and Ma, Ji and Zhao, Vincent and Luan, Yi and Hall, Keith and Chang, Ming-Wei and Yang, Yinfei},
+  booktitle = {Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/v1/2022.emnlp-main.669},
+  editor = {Goldberg, Yoav and Kozareva, Zornitsa and Zhang, Yue},
+  month = {dec},
+  pages = {9844--9855},
+  publisher = {Association for Computational Linguistics},
+  title = {Large Dual Encoders Are Generalizable Retrievers},
+  url = {https://aclanthology.org/2022.emnlp-main.669/},
+  year = {2022},
 }
 """
 gtr_t5_large = ModelMeta(
@@ -917,7 +941,6 @@ qwen_indic_v1 = ModelMeta(
     model_type=["dense"],
     public_training_code=None,
     public_training_data=None,
-    output_dtypes=OutputDType.BF16,
 )
 
 FlowVec_v1 = ModelMeta(
@@ -968,6 +991,131 @@ FlowVec_v1 = ModelMeta(
         "XNLI",
     },
     adapted_from="Qwen/Qwen3-Embedding-8B",
+    superseded_by=None,
+    modalities=["text"],
+    model_type=["dense"],
+    public_training_code=None,
+    public_training_data=None,
+)
+
+FLOWVEC_V2_NO_INSTRUCTION = "<no instruction>"
+
+FLOWVEC_V2_PROMPTS = {
+    "BelebeleRetrieval": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "document": "<no instruction>",
+        "default": "<no instruction>",
+    },
+    "BengaliSentimentAnalysis": "Classify the sentiment or emotional tone of the given text",
+    "GujaratiNewsClassification": "Classify the given text into its category",
+    "HindiDiscourseClassification": "Classify the discourse mode of this Hindi sentence: argumentative, descriptive, dialogue, informative or narrative",
+    "IN22ConvBitextMining": "Retrieve parallel sentences.",
+    "IN22GenBitextMining": "Retrieve parallel sentences.",
+    "IndicCrosslingualSTS": "Retrieve sentences with the same meaning in another language.",
+    "MTOPIntentClassification": "Identify the intent expressed in the given utterance",
+    "MalayalamNewsClassification": "Classify this Malayalam news text into one of: business, sports, entertainment",
+    "MultiHateClassification": "Classify the sentiment or emotional tone of the given text",
+    "NepaliNewsClassification": "Represent this text for classification by its label",
+    "PunjabiNewsClassification": "Represent this text for classification by its label",
+    "SIB200ClusteringS2S": "Classify the topic of this sentence into one of: science/technology, travel, politics, sports, health, entertainment, geography",
+    "SanskritShlokasClassification": "Identify the author of this Sanskrit verse (for example Chanakya or Vidura) or whether it is a Sanskrit slogan",
+    "SentimentAnalysisHindi": "Classify the sentiment or emotional tone of the given text",
+    "TweetSentimentClassification": "Classify the sentiment of this tweet as positive, negative or neutral",
+    "UrduRomanSentimentClassification": "Classify the sentiment of this Roman Urdu text as positive, negative or neutral",
+    "WikipediaRerankingMultilingual": "<no instruction>",
+    "XNLI": "Given a premise, retrieve a hypothesis that is entailed by it",
+    "XQuADRetrieval": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "document": "<no instruction>",
+        "default": "<no instruction>",
+    },
+    "Any2AnyRetrieval": "<no instruction>",
+    "BitextMining": "Retrieve semantically similar text.",
+    "Classification": "Represent this text for classification by its label",
+    "Clustering": "Classify the topic of this sentence into one of: science/technology, travel, politics, sports, health, entertainment, geography",
+    "InstructionReranking": "<no instruction>",
+    "InstructionRetrieval": "<no instruction>",
+    "MultilabelClassification": "<no instruction>",
+    "PairClassification": "Given a premise, retrieve a hypothesis that is entailed by it",
+    "Regression": "<no instruction>",
+    "Reranking": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "document": "<no instruction>",
+        "default": "<no instruction>",
+    },
+    "Retrieval": {
+        "query": "Given a web search query, retrieve relevant passages that answer the query",
+        "document": "<no instruction>",
+        "default": "<no instruction>",
+    },
+    "STS": "Retrieve semantically similar text.",
+    "Summarization": "<no instruction>",
+}
+
+
+def flowvec_instruction_template(
+    instruction: str | dict[str, str], prompt_type: PromptType | None = None
+) -> str:
+    if isinstance(instruction, dict):  # symmetric tasks receive the whole entry
+        instruction = instruction["default"]
+    if instruction == FLOWVEC_V2_NO_INSTRUCTION:
+        return ""
+    return f"Instruct: {instruction}\nQuery: "
+
+
+FlowVec_v2 = ModelMeta(
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template=flowvec_instruction_template,
+        apply_instruction_to_passages=False,
+        prompts_dict=FLOWVEC_V2_PROMPTS,
+    ),
+    name="LingoIITGN/FlowVec-v2",
+    revision="4f21e229d0c926a3904f3dd62bd6e377138feda6",
+    release_date="2026-11-11",
+    languages=[
+        "asm-Beng",
+        "ben-Beng",
+        "brx-Deva",
+        "doi-Deva",
+        "guj-Gujr",
+        "hin-Deva",
+        "kan-Knda",
+        "kas-Deva",
+        "mai-Deva",
+        "mal-Mlym",
+        "mar-Deva",
+        "mni-Beng",
+        "nep-Deva",
+        "ori-Orya",
+        "pan-Guru",
+        "san-Deva",
+        "sat-Olck",
+        "snd-Arab",
+        "tam-Taml",
+        "tel-Telu",
+        "urd-Arab",
+    ],
+    n_parameters=7567295488,
+    n_embedding_parameters=621219840,
+    memory_usage_mb=14433,
+    max_tokens=40960,
+    embed_dim=4096,
+    license="apache-2.0",
+    open_weights=True,
+    framework=["Sentence Transformers", "safetensors", "PyTorch"],
+    reference="https://huggingface.co/LingoIITGN/FlowVec-v2",
+    similarity_fn_name=ScoringFunction.COSINE,
+    use_instructions=True,
+    training_datasets={
+        "Samanantar",
+        "IndicXNLI",
+        "MassiveIntentClassification",
+        "IndicGLUE",
+        "SIB200ClusteringS2S",
+        "XNLI",
+    },
+    adapted_from="LingoIITGN/FlowVec-v1",
     superseded_by=None,
     modalities=["text"],
     model_type=["dense"],

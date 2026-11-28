@@ -36,7 +36,7 @@ class SKQuadRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
+        bibtex_citation=None,
     )
 
     def load_data(self, eval_splits: list[str] | None = None, **kwargs: Any) -> None:

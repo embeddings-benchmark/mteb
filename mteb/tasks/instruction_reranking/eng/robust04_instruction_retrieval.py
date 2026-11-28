@@ -9,7 +9,7 @@ class Robust04InstructionRetrieval(AbsTaskRetrieval):
     metadata = TaskMetadata(
         name="Robust04InstructionRetrieval",
         description="Measuring retrieval instruction following ability on Robust04 narratives for the FollowIR benchmark.",
-        reference="https://arxiv.org/abs/2403.15246",
+        reference="https://aclanthology.org/2025.naacl-long.597/",
         dataset={
             "path": "mteb/Robust04InstructionRetrieval",
             "revision": "0495a5cb69aa8fa5bca81bd56ac248911c19eeb6",
@@ -28,13 +28,19 @@ class Robust04InstructionRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@misc{weller2024followir,
-  archiveprefix = {arXiv},
-  author = {Orion Weller and Benjamin Chang and Sean MacAvaney and Kyle Lo and Arman Cohan and Benjamin Van Durme and Dawn Lawrie and Luca Soldaini},
-  eprint = {2403.15246},
-  primaryclass = {cs.IR},
-  title = {FollowIR: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
-  year = {2024},
+@inproceedings{weller2024followir,
+  address = {Albuquerque, New Mexico},
+  author = {Weller, Orion and Chang, Benjamin and MacAvaney, Sean and Lo, Kyle and Cohan, Arman and Van Durme, Benjamin and Lawrie, Dawn and Soldaini, Luca},
+  booktitle = {Proceedings of the 2025 Conference of the Nations of the {A}mericas Chapter of the {A}ssociation for {C}omputational {L}inguistics: Human Language Technologies (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2025.naacl-long.597},
+  editor = {Chiruzzo, Luis and Ritter, Alan and Wang, Lu},
+  isbn = {979-8-89176-189-6},
+  month = {apr},
+  pages = {11926--11942},
+  publisher = {Association for Computational Linguistics},
+  title = {{F}ollow{IR}: Evaluating and Teaching Information Retrieval Models to Follow Instructions},
+  url = {https://aclanthology.org/2025.naacl-long.597/},
+  year = {2025},
 }
 """,
     )

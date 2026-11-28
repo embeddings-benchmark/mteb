@@ -32,10 +32,14 @@ class HellaSwag(AbsTaskRetrieval):
   year = {2024},
 }
 
-@article{zellers2019hellaswag,
+@inproceedings{zellers2019hellaswag,
   author = {Zellers, Rowan and Holtzman, Ari and Bisk, Yonatan and Farhadi, Ali and Choi, Yejin},
-  journal = {arXiv preprint arXiv:1905.07830},
-  title = {Hellaswag: Can a machine really finish your sentence?},
+  booktitle = {Proceedings of the 57th Annual Meeting of the Association for Computational Linguistics},
+  doi = {10.18653/v1/p19-1472},
+  pages = {4791–4800},
+  publisher = {Association for Computational Linguistics},
+  title = {HellaSwag: Can a Machine Really Finish Your Sentence?},
+  url = {https://doi.org/10.18653/v1/p19-1472},
   year = {2019},
 }
 """,

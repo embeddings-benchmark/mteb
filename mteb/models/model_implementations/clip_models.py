@@ -127,11 +127,18 @@ class CLIPModel(AbsEncoder):
 
 
 CLIP_CITATION = """
-@article{radford2021learning,
-  title={Learning Transferable Visual Models From Natural Language Supervision},
-  author={Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and Krueger, Gretchen and Sutskever, Ilya},
-  journal={arXiv preprint arXiv:2103.00020},
-  year={2021}
+@inproceedings{radford2021learning,
+  archiveprefix = {arXiv},
+  author = {Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and others},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning},
+  eprint = {2103.00020},
+  pages = {8748--8763},
+  publisher = {PMLR},
+  series = {Proceedings of Machine Learning Research},
+  title = {Learning Transferable Visual Models From Natural Language Supervision},
+  url = {https://proceedings.mlr.press/v139/radford21a.html},
+  volume = {139},
+  year = {2021},
 }"""
 
 

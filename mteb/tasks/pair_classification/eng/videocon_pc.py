@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import ClassVar
+
 from mteb.abstasks import AbsTaskPairClassification
 from mteb.abstasks.task_metadata import TaskMetadata
 
@@ -14,7 +16,7 @@ class VideoConPairClassification(AbsTaskPairClassification):
             "(e.g. entity/action/attribute swaps, event order flips). "
             "Tests video-language alignment robustness."
         ),
-        reference="https://arxiv.org/abs/2311.10111",
+        reference="https://doi.org/10.1109/cvpr52733.2024.01321",
         dataset={
             "path": "zachz/VideoCon-PC",
             "revision": "b0cb7112a3edfccf8ae697602442a828712b056b",
@@ -34,15 +36,20 @@ class VideoConPairClassification(AbsTaskPairClassification):
         sample_creation="LM-generated and verified",
         is_beta=True,
         bibtex_citation=r"""
-@article{bansal2023videocon,
+@inproceedings{bansal2023videocon,
   author = {Bansal, Hritik and Bitton, Yonatan and Szpektor, Idan and Chang, Kai-Wei and Grover, Aditya},
-  journal = {arXiv preprint arXiv:2311.10111},
+  booktitle = {2024 IEEE/CVF Conference on Computer Vision and Pattern Recognition (CVPR)},
+  doi = {10.1109/cvpr52733.2024.01321},
+  month = {June},
+  pages = {13927–13937},
+  publisher = {IEEE},
   title = {VideoCon: Robust Video-Language Alignment via Contrast Captions},
-  year = {2023},
+  url = {https://doi.org/10.1109/cvpr52733.2024.01321},
+  year = {2024},
 }
 """,
     )
 
-    input1_column_name = ({"video": "video"},)
-    input2_column_name = ({"text": "text"},)
+    input1_column_name: ClassVar[dict[str, str]] = {"video": "video"}
+    input2_column_name: ClassVar[dict[str, str]] = {"text": "text"}
     label_column_name: str = "label"

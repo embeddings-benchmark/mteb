@@ -32,9 +32,9 @@ class MedrxivClusteringP2PFast(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="",
         prompt="Identify the main category of Medrxiv papers based on the titles and abstracts",
         adapted_from=["MedrxivClusteringP2P"],
+        bibtex_citation=None,
     )
 
     def dataset_transform(
@@ -74,7 +74,7 @@ class MedrxivClusteringP2P(AbsTaskClusteringLegacy):
         annotations_creators="derived",
         dialect=[],
         sample_creation="created",
-        bibtex_citation="",
         prompt="Identify the main category of Medrxiv papers based on the titles and abstracts",
         superseded_by="MedrxivClusteringP2P.v2",
+        bibtex_citation=None,
     )

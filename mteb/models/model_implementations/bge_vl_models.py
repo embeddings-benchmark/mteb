@@ -6,11 +6,19 @@ from mteb.models.sentence_transformer_wrapper import (
 )
 from mteb.types import OutputDType
 
-MEGAPAIRS_CITATION = """@article{zhou2024megapairs,
-  title={MegaPairs: Massive Data Synthesis For Universal Multimodal Retrieval},
-  author={Zhou, Junjie and Liu, Zheng and Liu, Ze and Xiao, Shitao and Wang, Yueze and Zhao, Bo and Zhang, Chen Jason and Lian, Defu and Xiong, Yongping},
-  journal={arXiv preprint arXiv:2412.14475},
-  year={2024}
+MEGAPAIRS_CITATION = """@inproceedings{zhou2024megapairs,
+  address = {Vienna, Austria},
+  author = {Zhou, Junjie and Xiong, Yongping and Liu, Zheng and Liu, Ze and Xiao, Shitao and Wang, Yueze and Zhao, Bo and Zhang, Chen Jason and Lian, Defu},
+  booktitle = {Proceedings of the 63rd Annual Meeting of the {A}ssociation for {C}omputational {L}inguistics (Volume 1: Long Papers)},
+  doi = {10.18653/v1/2025.acl-long.935},
+  editor = {Che, Wanxiang and Nabende, Joyce and Shutova, Ekaterina and Pilehvar, Mohammad Taher},
+  isbn = {979-8-89176-251-0},
+  month = {jul},
+  pages = {19076--19095},
+  publisher = {Association for Computational Linguistics},
+  title = {{M}ega{P}airs: Massive Data Synthesis for Universal Multimodal Retrieval},
+  url = {https://aclanthology.org/2025.acl-long.935/},
+  year = {2025},
 }"""
 
 BGE_VL_TRAINING_DATASETS = {"MegaPairs"}
@@ -39,7 +47,6 @@ bge_vl_base = ModelMeta(
     use_instructions=True,
     training_datasets=BGE_VL_TRAINING_DATASETS,
     citation=MEGAPAIRS_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
 
 bge_vl_large = ModelMeta(
@@ -66,7 +73,6 @@ bge_vl_large = ModelMeta(
     use_instructions=True,
     training_datasets=BGE_VL_TRAINING_DATASETS,
     citation=MEGAPAIRS_CITATION,
-    output_dtypes=OutputDType.BF16,
 )
 
 bge_vl_mllm_s1 = ModelMeta(

@@ -26,6 +26,6 @@ class DutchNewsArticlesClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt="Classificeer het gegeven nieuwsartikel in het juiste onderwerp of thema",
+        bibtex_citation=None,
     )

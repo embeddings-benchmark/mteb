@@ -1,6 +1,5 @@
 from mteb.models.model_meta import ModelMeta, ScoringFunction
 from mteb.models.sentence_transformer_wrapper import SentenceTransformerEncoderWrapper
-from mteb.types import OutputDType
 
 nano_em1_0_6b_v2 = ModelMeta(
     loader=SentenceTransformerEncoderWrapper,
@@ -61,7 +60,6 @@ nano_em1_0_6b_v2 = ModelMeta(
         "MedrxivClusteringS2S",
         "SprintDuplicateQuestions",
     },
-    output_dtypes=OutputDType.BF16,
 )
 
 nano_em1_0_6b_v2_1 = ModelMeta(
@@ -98,5 +96,4 @@ nano_em1_0_6b_v2_1 = ModelMeta(
         "AmazonReviews",
         "Arxiv",
     },
-    output_dtypes=OutputDType.BF16,
 )

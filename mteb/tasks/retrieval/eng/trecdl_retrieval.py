@@ -108,14 +108,16 @@ class TRECDL2020(AbsTaskRetrieval):
   year = {2018},
 }
 
-@misc{craswell2021overviewtrec2020deep,
+@inproceedings{craswell2021overviewtrec2020deep,
   archiveprefix = {arXiv},
   author = {Nick Craswell and Bhaskar Mitra and Emine Yilmaz and Daniel Campos},
+  booktitle = {Proceedings of the Twenty-Ninth Text REtrieval Conference, {TREC} 2020},
   eprint = {2102.07662},
   primaryclass = {cs.IR},
+  publisher = {National Institute of Standards and Technology (NIST)},
   title = {Overview of the TREC 2020 deep learning track},
-  url = {https://arxiv.org/abs/2102.07662},
-  year = {2021},
+  url = {https://trec.nist.gov/pubs/trec29/papers/OVERVIEW.DL.pdf},
+  year = {2020},
 }
 """,
         prompt={

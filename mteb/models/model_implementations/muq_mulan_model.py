@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from functools import partial
 from typing import TYPE_CHECKING, Any
 
 import numpy as np
@@ -51,6 +52,10 @@ class MuQMuLanWrapper(AbsEncoder):
             .to(self.device)
         )
         self.model.eval()
+        # MuQ calls its tokenizer without truncation, but the text encoder only has
+        # 512 positions, so longer texts would crash
+        text_model = self.model.mulan_module.text
+        text_model._tokenizer = partial(text_model.tokenizer, truncation=True)
 
     def get_audio_embeddings(
         self,
@@ -151,8 +156,8 @@ class MuQMuLanWrapper(AbsEncoder):
         """Calculate similarity between audio and text embeddings."""
         import torch
 
-        embeddings1 = torch.from_numpy(embeddings1).to(self.device)
-        embeddings2 = torch.from_numpy(embeddings2).to(self.device)
+        embeddings1 = torch.as_tensor(embeddings1).to(self.device)
+        embeddings2 = torch.as_tensor(embeddings2).to(self.device)
 
         with torch.no_grad():
             similarity = self.model.calc_similarity(embeddings1, embeddings2)
@@ -184,14 +189,17 @@ muq_mulan_large = ModelMeta(
         # Million Song Dataset (not in MTEB)
     ),
     citation="""
-@misc{zhu2025muqselfsupervisedmusicrepresentation,
-  title={MuQ: Self-Supervised Music Representation Learning with Mel Residual Vector Quantization},
-  author={Haina Zhu and Yizhi Zhou and Hangting Chen and Jianwei Yu and Ziyang Ma and Rongzhi Gu and Yi Luo and Wei Tan and Xie Chen},
-  year={2025},
-  eprint={2501.01108},
-  archivePrefix={arXiv},
-  primaryClass={cs.SD},
-  url={https://arxiv.org/abs/2501.01108},
+@article{zhu2025muqselfsupervisedmusicrepresentation,
+  author = {Zhu, Haina and Zhou, Yizhi and Chen, Hangting and Yu, Jianwei and Ma, Ziyang and Gu, Rongzhi and Luo, Yi and Tan, Wei and Chen, Xie},
+  doi = {10.1109/taslpro.2025.3602320},
+  issn = {2998-4173},
+  journal = {IEEE Transactions on Audio, Speech and Language Processing},
+  pages = {3653–3664},
+  publisher = {Institute of Electrical and Electronics Engineers (IEEE)},
+  title = {MuQ: Self-Supervised Music Representation Learning With Mel Residual Vector Quantization},
+  url = {https://doi.org/10.1109/taslpro.2025.3602320},
+  volume = {33},
+  year = {2025},
 }""",
     # the muq package fails on transformers 5 (EasyDict has no _attn_implementation)
     extra_requirements_groups=["muq", "transformers-v4"],

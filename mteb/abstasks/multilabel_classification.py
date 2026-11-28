@@ -18,6 +18,7 @@ from mteb._create_dataloaders import create_dataloader
 from mteb._evaluators.classification_metrics import hamming_score
 from mteb.models import EncoderProtocol
 
+from .abstask import _multilabel_subsampling
 from .classification import AbsTaskClassification
 
 if TYPE_CHECKING:
@@ -79,12 +80,14 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         input_column_name: Name of the column containing the input text.
         label_column_name: Name of the column containing the labels.
         samples_per_label: Number of samples to use pr. label. These samples are embedded and a classifier is fit using the labels and samples.
+        max_eval_samples: Evaluation splits with more rows than this are cut to this many rows with iterative stratification over the labels. `None` scores the whole split.
         evaluator_model: Classifier to use for evaluation. Must implement the SklearnModelProtocol.
     """
 
     evaluator_model: SklearnModelProtocol = KNeighborsClassifier(n_neighbors=5)
     input_column_name: str = "text"
     label_column_name: str = "label"
+    max_eval_samples: int | None = 3000
 
     @override
     def _evaluate_subset(  # type: ignore[override]  # noqa: PLR0914
@@ -153,16 +156,18 @@ class AbsTaskMultilabelClassification(AbsTaskClassification):
         unique_train_embeddings = dict(
             zip(unique_train_indices, _unique_train_embeddings, strict=True)
         )
-        # Stratified subsampling of test set to 2000 examples.
         test_dataset = eval_split
-        try:
-            if len(test_dataset) > 2000:
-                split_dataset = eval_split.train_test_split(
-                    test_size=2000, seed=42, stratify_by_column="label"
-                )
-                test_dataset = split_dataset["test"]
-        except ValueError:
-            logger.warning("Couldn't subsample, continuing with the entire test set.")
+        if (
+            self.max_eval_samples is not None
+            and len(eval_split) > self.max_eval_samples
+        ):
+            test_dataset = _multilabel_subsampling(
+                DatasetDict({hf_split: eval_split}),
+                seed=self.seed,
+                splits=[hf_split],
+                label=self.label_column_name,
+                n_samples=self.max_eval_samples,
+            )[hf_split]
 
         dataloader_test = create_dataloader(
             test_dataset.select_columns(self.input_column_name),

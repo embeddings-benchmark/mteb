@@ -45,15 +45,7 @@ class MSClapWrapper(AbsEncoder):
         self.model_name = model_name
         self.device = device
 
-        if "2022" in self.model_name:
-            self.version = "2022"
-            self.text_length = 100
-        elif "2023" in self.model_name:
-            self.version = "2023"
-            self.text_length = 77
-        else:
-            self.version = "2023"
-            self.text_length = 77
+        self.version = "2022" if "2022" in self.model_name else "2023"
 
         self.use_cuda = device == "cuda"
         # msclap downloads its weights from microsoft/msclap at main; fetch them
@@ -150,12 +142,16 @@ class MSClapWrapper(AbsEncoder):
             if "gpt" in self.model.args.text_model:
                 texts = [text + " <|endoftext|>" for text in texts]
 
+            # msclap pads to text_len but does not truncate, so long captions keep
+            # their end-of-text token; cut only at the encoder's position limit.
+            # Padding length does not matter: pads are id 0 and the GPT-2 encoder
+            # pools at the last non-zero id (BERT, 2022, uses CLS).
             features = self.tokenizer(
                 texts,
                 return_tensors="pt",
-                padding="max_length",
+                padding="longest",
                 truncation=True,
-                max_length=self.text_length,
+                max_length=self.tokenizer.model_max_length,
             )
             features = {k: v.to(self.device) for k, v in features.items()}
 
@@ -266,14 +262,16 @@ ms_clap_2023 = ModelMeta(
         "AudioCapsA2TRetrieval",
     },
     citation="""
-@misc{CLAP2023,
-      title={Natural Language Supervision for General-Purpose Audio Representations},
-      author={Benjamin Elizalde and Soham Deshmukh and Huaming Wang},
-      year={2023},
-      eprint={2309.05767},
-      archivePrefix={arXiv},
-      primaryClass={cs.SD},
-      url={https://arxiv.org/abs/2309.05767}
+@inproceedings{CLAP2023,
+  author = {Elizalde, Benjamin and Deshmukh, Soham and Wang, Huaming},
+  booktitle = {ICASSP 2024 - 2024 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)},
+  doi = {10.1109/icassp48485.2024.10448504},
+  month = {Apr},
+  pages = {336–340},
+  publisher = {IEEE},
+  title = {Natural Language Supervision For General-Purpose Audio Representations},
+  url = {https://doi.org/10.1109/icassp48485.2024.10448504},
+  year = {2024},
 }
 """,
     extra_requirements_groups=["msclap"],

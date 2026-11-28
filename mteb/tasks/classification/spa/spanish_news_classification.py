@@ -24,8 +24,8 @@ class SpanishNewsClassification(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         superseded_by="SpanishNewsClassification.v2",
+        bibtex_citation=None,
     )
 
 
@@ -51,9 +51,8 @@ class SpanishNewsClassificationV2(AbsTaskClassification):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="""
-        """,
         adapted_from=["SpanishNewsClassification"],
+        bibtex_citation=None,
     )
 
     def dataset_transform(

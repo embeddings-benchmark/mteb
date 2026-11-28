@@ -30,8 +30,8 @@ class TenKGnadClusteringS2S(AbsTaskClusteringLegacy):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",  # none found
         superseded_by="TenKGnadClusteringS2S.v2",
+        bibtex_citation=None,
     )
 
 
@@ -63,8 +63,8 @@ class TenKGnadClusteringS2SFast(AbsTaskClustering):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",  # none found
         adapted_from=["TenKGnadClusteringS2S"],
+        bibtex_citation=None,
     )
 
     def dataset_transform(self, num_proc: int | None = None, **kwargs: Any) -> None:

@@ -9,9 +9,12 @@ from typing import TYPE_CHECKING, Any
 from tqdm.auto import tqdm
 
 from mteb.models.abs_encoder import AbsEncoder
-from mteb.models.modality_collators import VideoCollator, single_clip_dataloader
+from mteb.models.modality_collators import (
+    VideoCollator,
+    sampled_frame_rate,
+    single_clip_dataloader,
+)
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -21,7 +24,7 @@ if TYPE_CHECKING:
 
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
-    from mteb.types._encoder_io import AudioInputItem
+    from mteb.types._encoder_io import AudioInputItem, VideoMetadata
 
 
 class OmniVinciWrapper(AbsEncoder):
@@ -86,15 +89,31 @@ class OmniVinciWrapper(AbsEncoder):
         self.processor.config.load_audio_in_video = False
 
     @staticmethod
-    def _save_frames_as_video(frames: torch.Tensor) -> str:
-        """Write a ``(T, C, H, W)`` uint8 tensor to a temporary MP4 file."""
-        import torchvision
+    def _save_frames_as_video(
+        frames: torch.Tensor, video_metadata: VideoMetadata
+    ) -> str:
+        """Write sampled frames to a temporary MP4 that plays at their real spacing.
 
+        OmniVinci's loader times each frame as index / container fps and feeds
+        these times to its time embeddings (it was a fixed 24 fps).
+        """
+        from fractions import Fraction
+
+        import torchvision
+        from torch.nn import functional as F
+
+        # H.264 (yuv420p) needs even dimensions, e.g. NExT-QA has 500x375 clips
+        pad_h, pad_w = frames.shape[2] % 2, frames.shape[3] % 2
+        if pad_h or pad_w:
+            frames = F.pad(frames, (0, pad_w, 0, pad_h), mode="replicate")
         fd, path = tempfile.mkstemp(suffix=".mp4")
         os.close(fd)
         # torchvision.io.write_video expects (T, H, W, C) uint8
         torchvision.io.write_video(
-            path, frames.permute(0, 2, 3, 1).contiguous(), fps=24
+            path,
+            frames.permute(0, 2, 3, 1).contiguous(),
+            # a Fraction: torchvision rounds float rates to integers
+            fps=Fraction(sampled_frame_rate(video_metadata)).limit_denominator(1000),
         )
         return path
 
@@ -152,7 +171,7 @@ class OmniVinciWrapper(AbsEncoder):
             content: list[dict[str, Any]] = []
 
             if i < len(videos) and videos[i] is not None:
-                path = self._save_frames_as_video(videos[i])
+                path = self._save_frames_as_video(videos[i], batch["video_metadata"][i])
                 temp_files.append(path)
                 content.append({"type": "video", "video": path})
 
@@ -223,11 +242,13 @@ class OmniVinciWrapper(AbsEncoder):
                     num_frames=self.num_frames,
                     max_samples=self.max_audio_samples,
                 )
-                if has_audio:
-                    inputs = single_clip_dataloader(
-                        inputs,
-                        "batched audio embeddings change with their batch-mates",
-                    )
+            # the remote processor's pad_fn cuts the padding to the sequence's own
+            # length, so a batch with a sequence under half the longest crashes
+            # ("Sizes of tensors must match"); batched audio embeddings also change
+            # with their batch-mates
+            inputs = single_clip_dataloader(
+                inputs, "OmniVinci encodes one item at a time"
+            )
 
             all_embeddings: list[torch.Tensor] = []
             for batch in tqdm(inputs, desc="Encoding"):
@@ -275,5 +296,4 @@ omnivinci = ModelMeta(
     # (openai-whisper, kaldiio, decord, s2wrapper from git); see the model card
     # https://huggingface.co/nvidia/omnivinci
     extra_requirements_groups=["audio", "video", "transformers-v4"],
-    output_dtypes=OutputDType.FLOAT16,
 )

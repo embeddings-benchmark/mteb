@@ -7,7 +7,7 @@ _terra_metadata = dict(
         "path": "mteb/TERRa",
         "revision": "48312c334eb916d88481dc4a41bd0d8b2fa0d576",
     },
-    reference="https://arxiv.org/pdf/2010.15925",
+    reference="https://aclanthology.org/2020.emnlp-main.381/",
     type="PairClassification",
     category="t2t",
     modalities=["text"],
@@ -22,19 +22,17 @@ _terra_metadata = dict(
     dialect=[],
     sample_creation="found",
     bibtex_citation=r"""
-@article{shavrina2020russiansuperglue,
-  author = {Shavrina, Tatiana
-and Fenogenova, Alena
-and Emelyanov, Anton
-and Shevelev, Denis
-and Artemova, Ekaterina
-and Malykh, Valentin
-and Mikhailov, Vladislav
-and Tikhonova, Maria
-and Chertok, Andrey
-and Evlampiev, Andrey},
-  journal = {arXiv preprint arXiv:2010.15925},
-  title = {RussianSuperGLUE: A Russian Language Understanding Evaluation Benchmark},
+@inproceedings{shavrina2020russiansuperglue,
+  address = {Online},
+  author = {Shavrina, Tatiana and Fenogenova, Alena and Anton, Emelyanov and Shevelev, Denis and Artemova, Ekaterina and Malykh, Valentin and Mikhailov, Vladislav and Tikhonova, Maria and Chertok, Andrey and Evlampiev, Andrey},
+  booktitle = {Proceedings of the 2020 Conference on Empirical Methods in Natural Language Processing ({EMNLP})},
+  doi = {10.18653/v1/2020.emnlp-main.381},
+  editor = {Webber, Bonnie and Cohn, Trevor and He, Yulan and Liu, Yang},
+  month = {nov},
+  pages = {4717--4726},
+  publisher = {Association for Computational Linguistics},
+  title = {{R}ussian{SuperGLUE}: A {R}ussian Language Understanding Evaluation Benchmark},
+  url = {https://aclanthology.org/2020.emnlp-main.381/},
   year = {2020},
 }
 """,

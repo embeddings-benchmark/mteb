@@ -14,7 +14,7 @@ class Country211Classification(AbsTaskClassification):
         reference="https://huggingface.co/datasets/clip-benchmark/wds_country211",
         dataset={
             "path": "mteb/wds_country211",
-            "revision": "c3875324cab4803fa6d3afcd5947a97c84fad4c6",
+            "revision": "c909965b14b8ce3d117da2b2fd40f6134e542b09",
         },
         type="ImageClassification",
         category="i2c",
@@ -33,10 +33,17 @@ class Country211Classification(AbsTaskClassification):
         modalities=["image"],
         sample_creation="created",
         bibtex_citation=r"""
-@article{radford2021learning,
+@inproceedings{radford2021learning,
+  archiveprefix = {arXiv},
   author = {Radford, Alec and Kim, Jong Wook and Hallacy, Chris and Ramesh, Aditya and Goh, Gabriel and Agarwal, Sandhini and Sastry, Girish and Askell, Amanda and Mishkin, Pamela and Clark, Jack and others},
-  journal = {arXiv preprint arXiv:2103.00020},
+  booktitle = {Proceedings of the 38th International Conference on Machine Learning},
+  eprint = {2103.00020},
+  pages = {8748--8763},
+  publisher = {PMLR},
+  series = {Proceedings of Machine Learning Research},
   title = {Learning Transferable Visual Models From Natural Language Supervision},
+  url = {https://proceedings.mlr.press/v139/radford21a.html},
+  volume = {139},
   year = {2021},
 }
 """,

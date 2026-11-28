@@ -8,6 +8,7 @@ from .pair_classification import AbsTaskPairClassification
 from .regression import AbsTaskRegression
 from .retrieval import AbsTaskRetrieval
 from .sts import AbsTaskSTS
+from .task_metadata import NoBibtexSpecified
 from .text.bitext_mining import AbsTaskBitextMining
 from .text.reranking import AbsTaskReranking
 from .text.summarization import AbsTaskSummarization
@@ -28,4 +29,5 @@ __all__ = [
     "AbsTaskSTS",
     "AbsTaskSummarization",
     "AbsTaskZeroShotClassification",
+    "NoBibtexSpecified",
 ]

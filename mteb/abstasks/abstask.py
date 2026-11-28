@@ -14,7 +14,7 @@ from typing import TYPE_CHECKING, Any, Literal, cast
 import huggingface_hub
 import numpy as np
 import yaml
-from datasets import ClassLabel, Dataset, DatasetDict, load_dataset
+from datasets import ClassLabel, Dataset, DatasetDict, Value, load_dataset
 from sklearn.preprocessing import MultiLabelBinarizer
 from tqdm.auto import tqdm
 
@@ -38,7 +38,15 @@ if TYPE_CHECKING:
     from mteb.models import (
         MTEBModels,
     )
-    from mteb.types import EncodeKwargs, HFSubset, Modalities, ScoresDict
+    from mteb.types import (
+        EncodeKwargs,
+        HFSubset,
+        ISOLanguage,
+        ISOLanguageScript,
+        ISOScript,
+        Modalities,
+        ScoresDict,
+    )
     from mteb.types.statistics import DescriptiveStatistics, SplitDescriptiveStatistics
 
 
@@ -75,7 +83,7 @@ def _multilabel_subsampling(
         _, test_idx = _iterative_train_test_split(
             x_np, labels_np, test_size=n_samples / n_split, random_state=seed
         )
-        dataset_dict.update({split: Dataset.from_dict(dataset_dict[split][test_idx])})
+        dataset_dict.update({split: dataset_dict[split].select(test_idx)})
     return dataset_dict
 
 
@@ -346,14 +354,26 @@ class AbsTask(ABC):  # noqa: PLR0904
         """
         # Can only do this if the label column is of ClassLabel.
         if not isinstance(dataset_dict[splits[0]].features[label], ClassLabel):
-            try:
-                dataset_dict = dataset_dict.class_encode_column(label)
-            except ValueError as e:
-                if isinstance(dataset_dict[splits[0]][label][0], Sequence):
-                    return _multilabel_subsampling(
-                        dataset_dict, seed, splits, label, n_samples
-                    )
-                raise e
+            first = dataset_dict[splits[0]][label][0]
+            if isinstance(first, Sequence) and not isinstance(first, str):
+                return _multilabel_subsampling(
+                    dataset_dict, seed, splits, label, n_samples
+                )
+            # Encode all splits with one label set. DatasetDict.class_encode_column
+            # encodes each split on its own, so a label missing from one split
+            # shifts the ids of the labels after it. Names are sorted as strings,
+            # like class_encode_column, so unaffected tasks keep the same ids.
+            names = sorted(
+                {
+                    str(x)
+                    for ds in dataset_dict.values()
+                    for x in ds[label]
+                    if x is not None
+                }
+            )
+            dataset_dict = dataset_dict.cast_column(label, Value("string")).cast_column(
+                label, ClassLabel(names=names)
+            )
 
         for split in splits:
             if n_samples >= len(dataset_dict[split]):
@@ -538,37 +558,57 @@ class AbsTask(ABC):  # noqa: PLR0904
         raise NotImplementedError
 
     @property
-    def languages(self) -> list[str]:
+    def languages(self) -> list[ISOLanguage]:
         """The languages of the task."""
+        return sorted({code.split("-")[0] for code in self.bcp47_codes})
+
+    @property
+    def bcp47_codes(self) -> list[ISOLanguageScript]:
+        """The language scripts of the task."""
         if self.hf_subsets:
             eval_langs = self.metadata.hf_subsets_to_langscripts
             languages = []
 
             for lang in self.hf_subsets:
                 for langscript in eval_langs[lang]:
-                    iso_lang, script = langscript.split("-")
-                    languages.append(iso_lang)
+                    languages.append(langscript)
 
             return sorted(set(languages))
 
-        return self.metadata.languages
+        return self.metadata.bcp47_codes
 
     def filter_eval_splits(self, eval_splits: Sequence[str] | None) -> Self:
         """Filter the evaluation splits of the task.
 
         Args:
-            eval_splits: A list of evaluation splits to keep. If None, all splits are kept.
+            eval_splits: A list of evaluation splits to keep. Splits that are not evaluation splits of the task are
+                ignored. If None, all splits are kept.
 
         Returns:
             The filtered task
+
+        Raises:
+            ValueError: If none of the splits are evaluation splits of the task.
         """
-        self._eval_splits = eval_splits
+        if not eval_splits:
+            self._eval_splits = None
+            return self
+
+        splits_to_keep = [
+            split for split in eval_splits if split in self.metadata.eval_splits
+        ]
+        if not splits_to_keep:
+            raise ValueError(
+                f"None of the splits {list(eval_splits)} are evaluation splits of {self.metadata.name} "
+                f"({list(self.metadata.eval_splits)})."
+            )
+        self._eval_splits = splits_to_keep
         return self
 
     def filter_languages(
         self,
-        languages: Sequence[str] | None,
-        script: Sequence[str] | None = None,
+        languages: Sequence[ISOLanguage | ISOLanguageScript] | None,
+        script: Sequence[ISOScript] | None = None,
         hf_subsets: Sequence[HFSubset] | None = None,
         exclusive_language_filter: bool = False,
     ) -> Self:
@@ -577,8 +617,8 @@ class AbsTask(ABC):  # noqa: PLR0904
         Args:
             languages: list of languages to filter the task by can be either a 3-letter language code (e.g. "eng") or also include the script
                 (e.g. "eng-Latn")
-            script: A list of scripts to filter the task by. Will be ignored if language code specified the script. If None, all scripts are included.
-                If the language code does not specify the script the intersection of the language and script will be used.
+            script: A list of scripts to filter the task by. Cannot be combined with a language code that includes a script (e.g. "eng-Latn").
+                If None, all scripts are included, otherwise the intersection of the language and script will be used.
             hf_subsets: A list of huggingface subsets to filter on. This is useful if a dataset have multiple subsets containing the desired language,
                 but you only want to test on one. An example is STS22 which e.g. have both "en" and "de-en" which both contains English.
             exclusive_language_filter: Some datasets contains more than one language e.g. for STS22 the subset "de-en" contain eng and deu. If
@@ -588,6 +628,14 @@ class AbsTask(ABC):  # noqa: PLR0904
         Returns:
             The filtered task
         """
+        if exclusive_language_filter and not languages:
+            warnings.warn(
+                "`exclusive_language_filter` has no effect without `languages` and will be ignored.",
+                UserWarning,
+                stacklevel=2,
+            )
+            exclusive_language_filter = False
+
         lang_scripts = LanguageScripts.from_languages_and_scripts(languages, script)
 
         subsets_to_keep = []
@@ -597,7 +645,7 @@ class AbsTask(ABC):  # noqa: PLR0904
                 continue
             if exclusive_language_filter is False:
                 for langscript in langs:
-                    if lang_scripts.contains_language(langscript) and (
+                    if lang_scripts.contains_langscript(langscript) and (
                         not script
                         or lang_scripts.contains_langscript_script(langscript)
                     ):
@@ -606,8 +654,7 @@ class AbsTask(ABC):  # noqa: PLR0904
 
             if (
                 exclusive_language_filter is True
-                and languages
-                and lang_scripts.contains_languages(langs)
+                and all(lang_scripts.contains_langscript(ls) for ls in langs)
                 and (
                     not script
                     or all(lang_scripts.contains_langscript_script(ls) for ls in langs)

@@ -28,13 +28,13 @@ class SWEbenchLiteReranking(AbsTaskRetrieval):
             "query": "Given a github issue, identify the code that needs to be changed to fix the issue."
         },
         bibtex_citation=r"""
-@misc{jimenez2024swebenchlanguagemodelsresolve,
+@inproceedings{jimenez2024swebenchlanguagemodelsresolve,
   archiveprefix = {arXiv},
-  author = {Carlos E. Jimenez and John Yang and Alexander Wettig and Shunyu Yao and Kexin Pei and Ofir Press and Karthik Narasimhan},
+  author = {Carlos E Jimenez and John Yang and Alexander Wettig and Shunyu Yao and Kexin Pei and Ofir Press and Karthik R Narasimhan},
+  booktitle = {The Twelfth International Conference on Learning Representations},
   eprint = {2310.06770},
-  primaryclass = {cs.CL},
-  title = {SWE-bench: Can Language Models Resolve Real-World GitHub Issues?},
-  url = {https://arxiv.org/abs/2310.06770},
+  title = {{SWE}-bench: Can Language Models Resolve Real-world Github Issues?},
+  url = {https://openreview.net/forum?id=VTF8yNQM66},
   year = {2024},
 }
 """,

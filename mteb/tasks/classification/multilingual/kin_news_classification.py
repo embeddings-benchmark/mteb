@@ -21,7 +21,7 @@ class KinNewsClassification(AbsTaskClassification):
             "economy, health, entertainment, history, technology, culture, religion, environment, "
             "education, relationship."
         ),
-        reference="https://arxiv.org/abs/2010.12174",
+        reference="https://aclanthology.org/2020.coling-main.480/",
         dataset={
             "path": "mteb/KinNewsClassification",
             "revision": "87c7621def3ed9d06e305037416f82eddb9dceac",
@@ -42,10 +42,17 @@ class KinNewsClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=r"""@article{niyongabo2020kinnews,
-  author = {Niyongabo, Rubungo Andre and Qu, Hong and Kreutzer, Julia and Huang, Li},
-  journal = {arXiv preprint arXiv:2010.12174},
-  title = {KINNEWS and KIRNEWS: Benchmarking Cross-Lingual Text Classification for Kinyarwanda and Kirundi},
+        bibtex_citation=r"""@inproceedings{niyongabo2020kinnews,
+  address = {Barcelona, Spain (Online)},
+  author = {Niyongabo, Rubungo Andre and Hong, Qu and Kreutzer, Julia and Huang, Li},
+  booktitle = {Proceedings of the 28th International Conference on Computational Linguistics},
+  doi = {10.18653/v1/2020.coling-main.480},
+  editor = {Scott, Donia and Bel, Nuria and Zong, Chengqing},
+  month = {dec},
+  pages = {5507--5521},
+  publisher = {International Committee on Computational Linguistics},
+  title = {{KINNEWS} and {KIRNEWS}: Benchmarking Cross-Lingual Text Classification for {K}inyarwanda and {K}irundi},
+  url = {https://aclanthology.org/2020.coling-main.480/},
   year = {2020},
 }
 """,

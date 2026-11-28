@@ -18,7 +18,7 @@ from mteb._hf_integration.eval_result_model import (
     HFEvalResultSource,
 )
 from mteb.benchmarks import Benchmark
-from mteb.models.model_meta import ModelMeta
+from mteb.models.model_meta import ModelMeta, _serialize_experiment_kwargs_to_name
 
 from .task_result import TaskError, TaskResult
 
@@ -550,3 +550,56 @@ class ModelResult(BaseModel):
                 commit_message=f"Add evaluation results for model {self.model_name} revision {self.model_revision}",
                 create_pr=create_pr,
             )
+
+
+def _join_model_parts(model_results: Iterable[ModelResult]) -> dict[str, ModelResult]:
+    """Combine the parts of each model and experiment into one `ModelResult`.
+
+    `BenchmarkResults.join_revisions` returns one `ModelResult` per revision, so a
+    model whose task results were kept from several revisions comes back in parts.
+
+    Returns:
+        The combined results, keyed by model name for default runs and by
+        `"<model name> (<experiment name>)"` for experiments.
+    """
+    joined: dict[tuple[str, str | None], ModelResult] = {}
+    for part in model_results:
+        key = (part.model_name, part.experiment_name)
+        previous = joined.get(key)
+        joined[key] = (
+            part
+            if previous is None
+            else previous.model_copy(
+                update={"task_results": previous.task_results + part.task_results}
+            )
+        )
+
+    # Reserve default run names before assigning experiment display labels.
+    labeled = {
+        name: result
+        for (name, experiment), result in joined.items()
+        if experiment is None
+    }
+    for (model_name, experiment_name), result in joined.items():
+        if experiment_name is None:
+            continue
+        parameters = experiment_name
+        if result.model_meta is not None:
+            parameters = (
+                _serialize_experiment_kwargs_to_name(
+                    result.model_meta.experiment_kwargs,
+                    value_field_separator="=",
+                    kwargs_separator=", ",
+                )
+                or experiment_name
+            )
+        name = f"{model_name} ({parameters})"
+        if name in labeled:
+            base = f"{model_name} ({experiment_name})"
+            name = base
+            suffix = 2
+            while name in labeled:
+                name = f"{base} [{suffix}]"
+                suffix += 1
+        labeled[name] = result
+    return labeled

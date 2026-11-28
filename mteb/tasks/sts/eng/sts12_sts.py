@@ -1,6 +1,29 @@
 from mteb.abstasks.sts import AbsTaskSTS
 from mteb.abstasks.task_metadata import TaskMetadata
 
+STS12_CITATION = r"""
+@inproceedings{agirre-etal-2012-semeval,
+  title = {{S}em{E}val-2012 Task 6: A Pilot on Semantic Textual Similarity},
+  author = {Agirre, Eneko  and
+      Cer, Daniel  and
+      Diab, Mona  and
+      Gonzalez-Agirre, Aitor},
+  editor = {Agirre, Eneko  and
+      Bos, Johan  and
+      Diab, Mona  and
+      Manandhar, Suresh  and
+      Marton, Yuval  and
+      Yuret, Deniz},
+  booktitle = {*{SEM} 2012: The First Joint Conference on Lexical and Computational Semantics {--} Volume 1: Proceedings of the main conference and the shared task, and Volume 2: Proceedings of the Sixth {I}nternational {W}orkshop on {S}emantic {E}valuation ({S}em{E}val 2012)},
+  month = "7-8 " # jun,
+  year = {2012},
+  address = {Montr{\'e}al, Canada},
+  publisher = {Association for Computational Linguistics},
+  url = {https://aclanthology.org/S12-1051/},
+  pages = {385--393},
+}
+"""
+
 
 class STS12STS(AbsTaskSTS):
     min_score = 0
@@ -27,18 +50,5 @@ class STS12STS(AbsTaskSTS):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="created",
-        bibtex_citation=r"""
-@inproceedings{10.5555/2387636.2387697,
-  address = {USA},
-  author = {Agirre, Eneko and Diab, Mona and Cer, Daniel and Gonzalez-Agirre, Aitor},
-  booktitle = {Proceedings of the First Joint Conference on Lexical and Computational Semantics - Volume 1: Proceedings of the Main Conference and the Shared Task, and Volume 2: Proceedings of the Sixth International Workshop on Semantic Evaluation},
-  location = {Montr\'{e}al, Canada},
-  numpages = {9},
-  pages = {385–393},
-  publisher = {Association for Computational Linguistics},
-  series = {SemEval '12},
-  title = {SemEval-2012 task 6: a pilot on semantic textual similarity},
-  year = {2012},
-}
-""",
+        bibtex_citation=STS12_CITATION,
     )

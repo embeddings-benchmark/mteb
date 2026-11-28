@@ -14,11 +14,16 @@ if TYPE_CHECKING:
     from mteb.models.models_protocols import EncoderProtocol
     from mteb.types import Array, BatchedInput, PromptType
 
-MOCOV3_CITATION = """@Article{chen2021mocov3,
-    author  = {Xinlei Chen* and Saining Xie* and Kaiming He},
-    title   = {An Empirical Study of Training Self-Supervised Vision Transformers},
-    journal = {arXiv preprint arXiv:2104.02057},
-    year    = {2021},
+MOCOV3_CITATION = """@inproceedings{chen2021mocov3,
+  author = {Chen, Xinlei and Xie, Saining and He, Kaiming},
+  booktitle = {2021 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv48922.2021.00950},
+  month = {Oct},
+  pages = {9620–9629},
+  publisher = {IEEE},
+  title = {An Empirical Study of Training Self-Supervised Vision Transformers},
+  url = {https://doi.org/10.1109/iccv48922.2021.00950},
+  year = {2021},
 }"""
 
 
@@ -54,7 +59,7 @@ def mocov3_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
                 pretrained_cfg_overlay={"hf_hub_id": model_name},
             )
 
-            self.model = model.eval()
+            self.model = model.eval().to(device)
 
             # get model specific transforms (normalization, resize)
             data_config = timm.data.resolve_model_data_config(self.model)
@@ -79,22 +84,17 @@ def mocov3_loader(model_name: str, **kwargs: Any) -> EncoderProtocol:
         ) -> Array:
             all_image_embeddings = []
 
-            import torchvision.transforms.functional as F
-
             with torch.no_grad():
                 for batch in tqdm(
                     images, disable=not show_progress_bar, desc="Image Encoding"
                 ):
-                    inputs = torch.vstack(
-                        [
-                            self.processor(F.to_pil_image(b.to("cpu"))).unsqueeze(0)
-                            for b in batch["image"]
-                        ]
-                    )
+                    inputs = torch.stack(
+                        [self.processor(image) for image in batch["image"]]
+                    ).to(self.device)
                     output = self.model(
                         inputs
                     )  # output is (batch_size, num_features) shaped tensor
-                    all_image_embeddings.append(output)
+                    all_image_embeddings.append(output.cpu())
             all_image_embeddings = torch.cat(all_image_embeddings, dim=0)
             return all_image_embeddings
 

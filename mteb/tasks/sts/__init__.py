@@ -1,3 +1,4 @@
+from .dan import *
 from .deu import *
 from .eng import *
 from .fao import *
@@ -6,6 +7,7 @@ from .fin import *
 from .fra import *
 from .jpn import *
 from .kor import *
+from .lug import *
 from .multilingual import *
 from .nld import *
 from .pol import *

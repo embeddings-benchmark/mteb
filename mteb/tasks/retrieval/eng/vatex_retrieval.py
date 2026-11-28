@@ -9,6 +9,7 @@ from mteb.abstasks.retrieval_dataset_loaders import RetrievalSplitData
 from mteb.abstasks.task_metadata import TaskMetadata
 
 _DATASET_PATH = "mteb/VATEX_test_1k"
+_DATASET_REVISION_V2 = "b7ec075d006c825f6ec497318d93ce225880a07e"
 _DATASET_REVISION = "0d2e86e6d36927f4676ee6127c4e38e3867ce0ce"
 _BIBTEX = r"""
 @inproceedings{wang2019vatex,
@@ -76,6 +77,7 @@ class VATEXV2TRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="VATEXV2TRetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the caption that describes the following video."},
         is_beta=True,
@@ -108,6 +110,7 @@ class VATEXT2VRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="VATEXT2VRetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video clip that matches the given caption."},
     )
@@ -139,6 +142,7 @@ class VATEXVA2TRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="VATEXVA2TRetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the caption that describes the following video."},
     )
@@ -170,6 +174,7 @@ class VATEXT2VARetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="VATEXT2VARetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video clip that matches the given caption."},
         is_beta=True,
@@ -202,6 +207,7 @@ class VATEXV2ARetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="VATEXV2ARetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the audio that corresponds to the following video."},
     )
@@ -233,6 +239,7 @@ class VATEXA2VRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="VATEXA2VRetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={"query": "Find the video that corresponds to the following audio."},
         is_beta=True,
@@ -265,6 +272,7 @@ class VATEXVT2ARetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="VATEXVT2ARetrieval.v2",
         bibtex_citation=_BIBTEX,
         prompt={
             "query": "Find the audio that corresponds to the following video and its description."
@@ -299,6 +307,272 @@ class VATEXAT2VRetrieval(AbsTaskRetrieval):
         annotations_creators="human-annotated",
         dialect=[],
         sample_creation="found",
+        superseded_by="VATEXAT2VRetrieval.v2",
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Find the video that corresponds to the following audio and its description."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_vatex(self, query_columns=["audio", "caption"], corpus_columns=["video"])
+
+
+class VATEXV2TRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VATEXV2TRetrieval.v2",
+        description=(
+            "Retrieve the English caption that describes a given video clip (video "
+            "only) from VATEX, a large-scale multilingual video description dataset."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
+        ),
+        reference="https://arxiv.org/abs/1904.03493",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="v2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["video", "text"],
+        date=("2019-01-01", "2019-12-31"),
+        domains=["Activity", "Web"],
+        task_subtypes=["Caption Pairing"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["VATEXV2TRetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the caption that describes the following video."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_vatex(self, query_columns=["video"], corpus_columns=["caption"])
+
+
+class VATEXT2VRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VATEXT2VRetrieval.v2",
+        description=(
+            "Retrieve the video clip (video only) that matches a given English "
+            "caption from VATEX, a large-scale multilingual video description dataset."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
+        ),
+        reference="https://arxiv.org/abs/1904.03493",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="t2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["text", "video"],
+        date=("2019-01-01", "2019-12-31"),
+        domains=["Activity", "Web"],
+        task_subtypes=["Caption Pairing"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["VATEXT2VRetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video clip that matches the given caption."},
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_vatex(self, query_columns=["caption"], corpus_columns=["video"])
+
+
+class VATEXVA2TRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VATEXVA2TRetrieval.v2",
+        description=(
+            "Retrieve the English caption that describes a given video clip from "
+            "VATEX, a large-scale multilingual video description dataset."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
+        ),
+        reference="https://arxiv.org/abs/1904.03493",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="va2t",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["audio", "video", "text"],
+        date=("2019-01-01", "2019-12-31"),
+        domains=["Activity", "Web"],
+        task_subtypes=["Caption Pairing"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["VATEXVA2TRetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the caption that describes the following video."},
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_vatex(self, query_columns=["video", "audio"], corpus_columns=["caption"])
+
+
+class VATEXT2VARetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VATEXT2VARetrieval.v2",
+        description=(
+            "Retrieve the video clip that matches a given English caption from "
+            "VATEX, a large-scale multilingual video description dataset."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
+        ),
+        reference="https://arxiv.org/abs/1904.03493",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="t2va",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["text", "audio", "video"],
+        date=("2019-01-01", "2019-12-31"),
+        domains=["Activity", "Web"],
+        task_subtypes=["Caption Pairing"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["VATEXT2VARetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video clip that matches the given caption."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_vatex(self, query_columns=["caption"], corpus_columns=["video", "audio"])
+
+
+class VATEXV2ARetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VATEXV2ARetrieval.v2",
+        description=(
+            "Retrieve the audio track that matches a given video clip from the "
+            "VATEX dataset. Tests cross-modal alignment between video frames and audio."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
+        ),
+        reference="https://arxiv.org/abs/1904.03493",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="v2a",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["video", "audio"],
+        date=("2019-01-01", "2019-12-31"),
+        domains=["Activity", "Web"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["VATEXV2ARetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the audio that corresponds to the following video."},
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_vatex(self, query_columns=["video"], corpus_columns=["audio"])
+
+
+class VATEXA2VRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VATEXA2VRetrieval.v2",
+        description=(
+            "Retrieve the video clip that matches a given audio track from the "
+            "VATEX dataset. Tests cross-modal alignment between audio and video frames."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
+        ),
+        reference="https://arxiv.org/abs/1904.03493",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="a2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["audio", "video"],
+        date=("2019-01-01", "2019-12-31"),
+        domains=["Activity", "Web"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["VATEXA2VRetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={"query": "Find the video that corresponds to the following audio."},
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_vatex(self, query_columns=["audio"], corpus_columns=["video"])
+
+
+class VATEXVT2ARetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VATEXVT2ARetrieval.v2",
+        description=(
+            "Retrieve the audio track that matches a given video clip and its English "
+            "caption from VATEX, a large-scale multilingual video description dataset."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
+        ),
+        reference="https://arxiv.org/abs/1904.03493",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="vt2a",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["video", "text", "audio"],
+        date=("2019-01-01", "2019-12-31"),
+        domains=["Activity", "Web"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["VATEXVT2ARetrieval"],
+        bibtex_citation=_BIBTEX,
+        prompt={
+            "query": "Find the audio that corresponds to the following video and its description."
+        },
+        is_beta=True,
+    )
+
+    def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:
+        _load_vatex(self, query_columns=["video", "caption"], corpus_columns=["audio"])
+
+
+class VATEXAT2VRetrievalV2(AbsTaskRetrieval):
+    metadata = TaskMetadata(
+        name="VATEXAT2VRetrieval.v2",
+        description=(
+            "Retrieve the video clip that matches a given audio track and its English "
+            "caption from VATEX, a large-scale multilingual video description dataset."
+            " Version 2 cuts each video to the 10 s clip its caption describes and drops clips with missing or silent audio."
+        ),
+        reference="https://arxiv.org/abs/1904.03493",
+        dataset={"path": _DATASET_PATH, "revision": _DATASET_REVISION_V2},
+        type="Any2AnyRetrieval",
+        category="at2v",
+        eval_splits=["test"],
+        eval_langs=["eng-Latn"],
+        main_score="ndcg_at_10",
+        modalities=["audio", "text", "video"],
+        date=("2019-01-01", "2019-12-31"),
+        domains=["Activity", "Web"],
+        task_subtypes=["Cross-Modal Retrieval"],
+        license="not specified",
+        annotations_creators="human-annotated",
+        dialect=[],
+        sample_creation="found",
+        adapted_from=["VATEXAT2VRetrieval"],
         bibtex_citation=_BIBTEX,
         prompt={
             "query": "Find the video that corresponds to the following audio and its description."

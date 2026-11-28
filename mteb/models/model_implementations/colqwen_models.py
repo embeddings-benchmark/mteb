@@ -8,6 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import AudioCollator, VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
+from mteb.models.sentence_transformer_wrapper import MultiVectorWrapper
 from mteb.types import OutputDType
 
 if TYPE_CHECKING:
@@ -337,6 +338,13 @@ class ColQwen3Wrapper(AbsEncoder):
         return self.processor.score_multi_vector(a, b, device=self.device)
 
 
+# colpali-engine's ColQwen2_5OmniProcessor.process_videos system prompt
+_COLQWEN_OMNI_SYSTEM_PROMPT = (
+    "You are Qwen, a virtual human developed by the Qwen Team, Alibaba Group, capable "
+    "of perceiving auditory and visual inputs, as well as generating text and speech."
+)
+
+
 class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
     """Wrapper for ColQwen-Omni: late interaction over text, image, audio and video."""
 
@@ -460,11 +468,43 @@ class ColQwen2_5OmniWrapper(ColPaliEngineWrapper):  # noqa: N801
 
         return self._encode_batches(audios, "audio", _process, "Encoding audio")
 
+    def similarity(self, a: Array, b: Array) -> Array:
+        # a video document has thousands of vectors; colpali's default scoring
+        # batch of 128 documents needs ~70 GiB on DiDeMo
+        return self.processor.score(a, b, device=self.device, batch_size=16)
+
     def get_video_embeddings(
         self, videos: DataLoader[BatchedInput], batch_size: int = 32, **kwargs: Any
     ) -> Array:
         def _process(clip: torch.Tensor) -> Mapping[str, torch.Tensor]:
-            return self.processor.process_videos([clip])
+            # colpali's process_videos, plus the checkpoint's video size: the
+            # Qwen2.5-Omni processor defaults (up to 602112 px per frame) would
+            # override its 200704 px, and long clips then run out of memory
+            # https://huggingface.co/vidore/colqwen-omni-v0.1/blob/61e78ef2f9c826cac588a01e44df51672ce957bd/video_preprocessor_config.json
+            conversation = [
+                {
+                    "role": "system",
+                    "content": [{"type": "text", "text": _COLQWEN_OMNI_SYSTEM_PROMPT}],
+                },
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "video", "path": clip},
+                        {"type": "text", "text": "Describe the content."},
+                    ],
+                },
+            ]
+            return self.processor.apply_chat_template(
+                [conversation],
+                load_audio_from_video=False,
+                add_generation_prompt=True,
+                tokenize=True,
+                return_dict=True,
+                return_tensors="pt",
+                padding=True,
+                use_audio_in_video=False,
+                videos_kwargs={"size": dict(self.processor.video_processor.size)},
+            )
 
         return self._encode_batches(videos, "video", _process, "Encoding video")
 
@@ -496,7 +536,6 @@ colqwen2 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 colqwen2_5 = ModelMeta(
@@ -526,7 +565,6 @@ colqwen2_5 = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 TOMORO_TRAINING_DATA = {
@@ -563,7 +601,6 @@ colqwen3_8b = ModelMeta(
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
     extra_requirements_groups=["colqwen3"],
-    output_dtypes=OutputDType.BF16,
 )
 
 colqwen3_4b = ModelMeta(
@@ -589,7 +626,6 @@ colqwen3_4b = ModelMeta(
     use_instructions=True,
     training_datasets=TOMORO_TRAINING_DATA,
     extra_requirements_groups=["colqwen3"],
-    output_dtypes=OutputDType.BF16,
 )
 
 
@@ -628,7 +664,6 @@ colnomic_3b = ModelMeta(
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 colnomic_7b = ModelMeta(
@@ -656,7 +691,6 @@ colnomic_7b = ModelMeta(
     use_instructions=True,
     training_datasets=COLNOMIC_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -696,7 +730,6 @@ evoqwen25_vl_retriever_3b_v1 = ModelMeta(
     use_instructions=True,
     training_datasets=EVOQWEN_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 evoqwen25_vl_retriever_7b_v1 = ModelMeta(
@@ -725,7 +758,6 @@ evoqwen25_vl_retriever_7b_v1 = ModelMeta(
     use_instructions=True,
     training_datasets=EVOQWEN_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -760,7 +792,7 @@ colqwen3_5_v3 = ModelMeta(
     n_embedding_parameters=635_699_200,
     memory_usage_mb=8660,
     max_tokens=262144,
-    embed_dim=128,
+    embed_dim=320,
     license="apache-2.0",
     open_weights=True,
     public_training_code=None,
@@ -771,7 +803,56 @@ colqwen3_5_v3 = ModelMeta(
     use_instructions=False,
     training_datasets=COLQWEN35_V3_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
+)
+
+
+COLQWEN35_V4_TRAINING_DATA = {
+    *COLPALI_TRAINING_DATA,
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-Synthetic-data
+    "VisRAG-Ret-Train-Synthetic-data",
+    # from https://huggingface.co/datasets/openbmb/VisRAG-Ret-Train-In-domain-data
+    "VisRAG-Ret-Train-In-domain-data",
+    "VisRAGRetArxivQA",
+    "VisRAGRetChartQA",
+    "VisRAGRetInfoVQA",
+    "VisRAGRetMPDocVQA",
+    "VisRAGRetPlotQA",
+    "VisRAGRetSlideVQA",
+    # from https://huggingface.co/datasets/llamaindex/vdr-multilingual-train
+    "VDRMultilingualRetrieval",
+    # from https://huggingface.co/datasets/Tevatron/docmatix-ir
+    "docmatix-ir",
+    # from https://huggingface.co/datasets/Tevatron/wiki-ss-nq
+    "wiki-ss-nq",
+    "NQ",
+}
+
+colqwen3_5_v4 = ModelMeta(
+    loader=MultiVectorWrapper,
+    name="athrael-soju/ColQwen3.5-4.5B-v4",
+    model_type=["late-interaction"],
+    languages=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn", "ita-Latn", "por-Latn"],
+    revision="39aef25e3d7306f3722283b9ae93dccdcdb6aaee",
+    release_date="2026-11-17",
+    modalities=["image", "text"],
+    n_parameters=4_544_510_464,
+    n_embedding_parameters=635_699_200,
+    memory_usage_mb=8668,
+    max_tokens=262144,
+    embed_dim=[64, 128, 256, 512, 1024, 2048],
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    reference="https://huggingface.co/athrael-soju/ColQwen3.5-4.5B-v4",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=False,
+    training_datasets=COLQWEN35_V4_TRAINING_DATA,
+    adapted_from="Qwen/Qwen3.5-4B",
+    contacts=["athrael-soju"],
     output_dtypes=OutputDType.BF16,
+    extra_requirements_groups=["pplx-embed-v2", "image"],
 )
 
 
@@ -824,7 +905,6 @@ colturk_vdr_4b = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
     adapted_from="Qwen/Qwen3-VL-4B-Instruct",
-    output_dtypes=OutputDType.BF16,
 )
 
 VULTRON_PRIME_8B_TRAINING_DATA = {
@@ -873,7 +953,34 @@ vultron_prime_qwen35_8b = ModelMeta(
     use_instructions=False,
     training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,
     extra_requirements_groups=["colpali_engine"],
+)
+
+vultron_prime_qwen35_8b_v2 = ModelMeta(
+    loader=MultiVectorWrapper,
+    name="vultr/VultronRetrieverPrime-Qwen3.5-8B-v2",
+    model_type=["late-interaction"],
+    languages=["eng-Latn", "fra-Latn", "deu-Latn", "spa-Latn", "ita-Latn", "por-Latn"],
+    revision="0dbad6137ccfcd9f34bb6999671aef6d9335070a",
+    release_date="2026-11-19",
+    modalities=["image", "text"],
+    n_parameters=8_409_476_336,
+    n_embedding_parameters=1_017_118_720,  # vocab 248320 x hidden 4096 (token embedding matrix)
+    memory_usage_mb=16040,
+    max_tokens=262144,
+    embed_dim=4096,
+    license="apache-2.0",
+    open_weights=True,
+    public_training_code=None,
+    public_training_data=None,
+    framework=["Sentence Transformers", "PyTorch", "safetensors"],
+    reference="https://huggingface.co/vultr/VultronRetrieverPrime-Qwen3.5-8B-v2",
+    similarity_fn_name=ScoringFunction.MAX_SIM,
+    use_instructions=False,
+    training_datasets=COLQWEN35_V4_TRAINING_DATA,
+    adapted_from="Qwen/Qwen3.5-9B",
+    contacts=["athrael-soju"],
     output_dtypes=OutputDType.BF16,
+    extra_requirements_groups=["pplx-embed-v2", "image"],
 )
 
 vultron_flash_qwen35_0_8b = ModelMeta(
@@ -902,7 +1009,6 @@ vultron_flash_qwen35_0_8b = ModelMeta(
     use_instructions=False,
     training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,  # 0.8B sibling, same training pool as the 8B Prime
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.BF16,
 )
 
 vultron_core_qwen35_4b = ModelMeta(
@@ -931,7 +1037,6 @@ vultron_core_qwen35_4b = ModelMeta(
     use_instructions=False,
     training_datasets=VULTRON_PRIME_8B_TRAINING_DATA,  # 4B sibling, same training pool as Prime/Flash
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.BF16,
 )
 
 colqwen_omni = ModelMeta(
@@ -963,5 +1068,4 @@ colqwen_omni = ModelMeta(
     training_datasets=COLPALI_TRAINING_DATA,
     citation=COLPALI_CITATION,
     extra_requirements_groups=["colpali_engine"],
-    output_dtypes=OutputDType.BF16,
 )

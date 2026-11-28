@@ -11,7 +11,7 @@ class FER2013ZeroShotClassification(AbsTaskZeroShotClassification):
         reference="https://arxiv.org/abs/1412.6572",
         dataset={
             "path": "mteb/wds_fer2013",
-            "revision": "d9cabab388cb32bc071a1601ef68cb2f70ca0ba7",
+            "revision": "b8098161447ce06fe2c52fe243a8efe6e89ddfa3",
         },
         type="ZeroShotClassification",
         category="i2t",
@@ -30,13 +30,13 @@ class FER2013ZeroShotClassification(AbsTaskZeroShotClassification):
         modalities=["image", "text"],
         sample_creation="created",
         bibtex_citation=r"""
-@misc{goodfellow2015explainingharnessingadversarialexamples,
+@inproceedings{goodfellow2015explainingharnessingadversarialexamples,
   archiveprefix = {arXiv},
   author = {Ian J. Goodfellow and Jonathon Shlens and Christian Szegedy},
+  booktitle = {3rd International Conference on Learning Representations, {ICLR} 2015},
   eprint = {1412.6572},
   primaryclass = {stat.ML},
   title = {Explaining and Harnessing Adversarial Examples},
-  url = {https://arxiv.org/abs/1412.6572},
   year = {2015},
 }
 """,

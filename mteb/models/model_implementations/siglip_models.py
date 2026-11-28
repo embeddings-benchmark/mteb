@@ -13,13 +13,16 @@ if TYPE_CHECKING:
     from mteb.abstasks.task_metadata import TaskMetadata
     from mteb.types import Array, BatchedInput, PromptType
 
-SIGLIP_CITATION = """@misc{zhai2023sigmoid,
-      title={Sigmoid Loss for Language Image Pre-Training},
-      author={Xiaohua Zhai and Basil Mustafa and Alexander Kolesnikov and Lucas Beyer},
-      year={2023},
-      eprint={2303.15343},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV}
+SIGLIP_CITATION = """@inproceedings{zhai2023sigmoid,
+  author = {Zhai, Xiaohua and Mustafa, Basil and Kolesnikov, Alexander and Beyer, Lucas},
+  booktitle = {2023 IEEE/CVF International Conference on Computer Vision (ICCV)},
+  doi = {10.1109/iccv51070.2023.01100},
+  month = {Oct},
+  pages = {11941–11952},
+  publisher = {IEEE},
+  title = {Sigmoid Loss for Language Image Pre-Training},
+  url = {https://doi.org/10.1109/iccv51070.2023.01100},
+  year = {2023},
 }"""
 
 

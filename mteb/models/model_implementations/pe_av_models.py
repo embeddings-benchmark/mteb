@@ -8,7 +8,7 @@ from tqdm.auto import tqdm
 from mteb.models import ModelMeta
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
-from mteb.types import OutputDType, PromptType
+from mteb.types import PromptType
 
 if TYPE_CHECKING:
     import torch
@@ -17,6 +17,18 @@ if TYPE_CHECKING:
     from mteb import TaskMetadata
     from mteb.types import Array, BatchedInput
     from mteb.types._encoder_io import AudioInput, TextInput, VideoInput
+
+
+def _other_side_modalities(
+    task_metadata: TaskMetadata, prompt_type: PromptType | None
+) -> set[str]:
+    """Modalities of the side this input is compared with."""
+    if prompt_type is None:
+        return set(task_metadata.modalities)
+    other_side = (
+        PromptType.document if prompt_type == PromptType.query else PromptType.query
+    )
+    return set(task_metadata.get_modalities(other_side))
 
 
 class PEAudioVisualWrapper(AbsEncoder):
@@ -53,7 +65,11 @@ class PEAudioVisualWrapper(AbsEncoder):
         if device is None:
             device = "cuda" if torch.cuda.is_available() else "cpu"
 
-        from transformers import PeAudioVideoModel, PeAudioVideoProcessor
+        from transformers import (
+            PeAudioVideoConfig,
+            PeAudioVideoModel,
+            PeAudioVideoProcessor,
+        )
 
         self.model_name = model_name
         self.device = device
@@ -61,8 +77,12 @@ class PEAudioVisualWrapper(AbsEncoder):
         self.max_frames = max_frames
         self.num_frames = num_frames
         self.max_samples = max_samples
+        config = PeAudioVideoConfig.from_pretrained(model_name, revision=revision)
+        # Recent transformers leave num_labels at its default of 2 instead of the checkpoint's num_classes
+        vision_config = config.audio_video_config.video_config.vision_config
+        vision_config.num_labels = vision_config.num_classes
         self.model = PeAudioVideoModel.from_pretrained(
-            model_name, revision=revision
+            model_name, revision=revision, config=config
         ).to(self.device)
         self.model.eval()
         # Meta's code pools the CLS token before ModernBERT's final norm
@@ -101,15 +121,7 @@ class PEAudioVisualWrapper(AbsEncoder):
 
         # Meta's eval embeds text with the head of the modality it is compared with
         # (encode_video_text / encode_audio_text / encode_audio_video_text)
-        if prompt_type is None:
-            other = set(task_metadata.modalities) - {"text"}
-        else:
-            other_side = (
-                PromptType.document
-                if prompt_type == PromptType.query
-                else PromptType.query
-            )
-            other = set(task_metadata.get_modalities(other_side)) - {"text"}
+        other = _other_side_modalities(task_metadata, prompt_type) - {"text"}
         if other == {"video"}:
             head = self.model.video_model.text_video_head
         elif other == {"audio"}:
@@ -331,8 +343,15 @@ class PEAudioVisualWrapper(AbsEncoder):
                 inputs, prompt_type=prompt_type, task_metadata=task_metadata, **kwargs
             )
 
-        # video+text -> audio / audio+text -> video queries: the model's fused heads
-        if has_text and has_video != has_audio:
+        # video+text -> audio / audio+text -> video: the fused heads are only
+        # trained against that other modality (PeAudioVideoModel.forward scores
+        # audio_plus_text @ video.T and video_plus_text @ audio.T)
+        fused_target = {"audio"} if has_video else {"video"}
+        if (
+            has_text
+            and has_video != has_audio
+            and _other_side_modalities(task_metadata, prompt_type) == fused_target
+        ):
             return self.get_media_plus_text_embeddings(
                 inputs, use_video=has_video, **kwargs
             )
@@ -455,6 +474,8 @@ _PE_AV_COMMON = dict(
     use_instructions=False,
     training_datasets=_PE_AV_TRAINING,
     citation=_PE_AV_CITATION,
+    # PeAudioVideoModel ships with transformers 5
+    extra_requirements_groups=["transformers-v5"],
 )
 
 
@@ -470,7 +491,6 @@ pe_av_small_16_frame = ModelMeta(
     reference="https://huggingface.co/facebook/pe-av-small-16-frame",
     loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_base_16_frame = ModelMeta(
@@ -485,7 +505,6 @@ pe_av_base_16_frame = ModelMeta(
     reference="https://huggingface.co/facebook/pe-av-base-16-frame",
     loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_large_16_frame = ModelMeta(
@@ -500,7 +519,6 @@ pe_av_large_16_frame = ModelMeta(
     reference="https://huggingface.co/facebook/pe-av-large-16-frame",
     loader_kwargs=dict(fps=None, num_frames=16),
     **_PE_AV_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_small = ModelMeta(
@@ -514,7 +532,6 @@ pe_av_small = ModelMeta(
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-small",
     **_PE_AV_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_base = ModelMeta(
@@ -528,7 +545,6 @@ pe_av_base = ModelMeta(
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-base",
     **_PE_AV_COMMON,
-    output_dtypes=OutputDType.BF16,
 )
 
 pe_av_large = ModelMeta(
@@ -542,5 +558,4 @@ pe_av_large = ModelMeta(
     embed_dim=1024,
     reference="https://huggingface.co/facebook/pe-av-large",
     **_PE_AV_COMMON,
-    output_dtypes=OutputDType.BF16,
 )

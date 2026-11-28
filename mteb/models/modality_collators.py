@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from torchcodec.decoders import VideoDecoder  # type: ignore[attr-defined]
 
     from mteb.types import BatchedInput
+    from mteb.types._encoder_io import VideoMetadata
 
 logger = logging.getLogger(__name__)
 log_once = LogOnce(logger)
@@ -28,8 +29,8 @@ DEFAULT_MIN_FRAMES = 1
 
 # Order of the modality columns in a collated row. Wrappers that build a prompt in
 # row order (e.g. Qwen-Omni based ones) then match the authors' text, image, video,
-# audio order, whatever the dataset's column order.
-_MODALITY_ORDER = ("text", "image", "video", "audio")
+# audio order, whatever the dataset's column order. The frames' timing follows them.
+_MODALITY_ORDER = ("text", "image", "video", "video_metadata", "audio")
 
 
 def _order_modalities(row: dict[str, Any]) -> dict[str, Any]:
@@ -54,15 +55,18 @@ class AudioCollator:
         *,
         target_sampling_rate: int,
         max_samples: int | None = None,
+        min_samples: int | None = None,
     ) -> None:
         """Initialize the collator.
 
         Args:
             target_sampling_rate: The sampling rate to resample the audio to.
             max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+            min_samples: Zero-pad (silence) shorter audio to this many samples, for models whose first layer needs a minimum input length. If None, no padding is applied.
         """
         self.target_sampling_rate = target_sampling_rate
         self.max_samples = max_samples
+        self.min_samples = min_samples
 
     def __call__(self, inputs: list[dict[str, Any]]) -> BatchedInput:
         """Collate a batch of audio inputs by resampling them to the target sampling rate and optionally truncating to a maximum number of samples."""
@@ -70,6 +74,7 @@ class AudioCollator:
             inputs,
             target_sampling_rate=self.target_sampling_rate,
             max_samples=self.max_samples,
+            min_samples=self.min_samples,
         )
 
     @staticmethod
@@ -78,6 +83,7 @@ class AudioCollator:
         *,
         target_sampling_rate: int,
         max_samples: int | None = None,
+        min_samples: int | None = None,
     ) -> BatchedInput:
         """Resample a batch of audio inputs to a target sampling rate and optionally truncate to a maximum number of samples.
 
@@ -85,6 +91,7 @@ class AudioCollator:
             inputs: A list of dictionaries containing audio data under the "audio" key, where each audio is a dictionary with "array" and "sampling_rate" keys.
             target_sampling_rate: The sampling rate to resample the audio to.
             max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+            min_samples: Zero-pad shorter audio to this many samples. If None, no padding is applied.
         """
         collated_inputs = []
         for row in inputs:
@@ -92,6 +99,7 @@ class AudioCollator:
                 row,
                 target_sampling_rate=target_sampling_rate,
                 max_samples=max_samples,
+                min_samples=min_samples,
             )
             row["audio"] = AudioInputItem(
                 array=audio_array, sampling_rate=target_sampling_rate
@@ -108,6 +116,7 @@ class AudioCollator:
         *,
         target_sampling_rate: int,
         max_samples: int | None = None,
+        min_samples: int | None = None,
     ) -> np.typing.NDArray[np.floating]:
         """Resample an audio input to a target sampling rate and optionally truncate to a maximum number of samples.
 
@@ -115,6 +124,7 @@ class AudioCollator:
             audio: A list of dictionaries containing audio data under the "audio" key, where each audio is a dictionary with "array" and "sampling_rate" keys.
             target_sampling_rate: The sampling rate to resample the audio to.
             max_samples: The maximum number of samples to keep for each audio. If None, no truncation is applied.
+            min_samples: Zero-pad shorter audio to this many samples. If None, no padding is applied.
         """
         if max_samples is not None and max_samples <= 0:
             raise ValueError(f"max_samples must be positive, got {max_samples}.")
@@ -148,6 +158,13 @@ class AudioCollator:
                     "(the configured audio cap); only the start of each longer clip is encoded."
                 )
                 audio_array = audio_array[..., :max_samples]
+
+        if min_samples is not None and audio_array.shape[-1] < min_samples:
+            # pad the time axis only, with silence
+            pad = [(0, 0)] * (audio_array.ndim - 1) + [
+                (0, min_samples - audio_array.shape[-1])
+            ]
+            audio_array = np.pad(audio_array, pad)
 
         audio_array = cast(
             "np.ndarray[tuple[Any, ...], np.dtype[np.floating[Any]]]",
@@ -263,13 +280,7 @@ class FramesCollator:
         collated_inputs = []
         for row in inputs:
             # assign in place (no pop) to keep the dataset's column order
-            row["video"] = self.resample_video(
-                row["video"],
-                fps=self.fps,
-                max_frames=self.max_frames,
-                num_frames=self.num_frames,
-                min_frames=self.min_frames,
-            )
+            row["video"], row["video_metadata"] = _sample_video(row["video"], self)
             collated_inputs.append(row)
         return cast(
             "BatchedInput",
@@ -284,7 +295,7 @@ class FramesCollator:
         max_frames: int | None = None,
         num_frames: int | None = None,
         min_frames: int = DEFAULT_MIN_FRAMES,
-    ) -> torch.Tensor:
+    ) -> tuple[torch.Tensor, VideoMetadata]:
         """Resample a video input to a target number of frames.
 
         When both ``fps`` and ``num_frames`` are None, all frames are returned
@@ -298,6 +309,9 @@ class FramesCollator:
             num_frames: If set, select exactly this many frames uniformly
                 (fixed-sample mode).
             min_frames: Minimum number of frames in FPS-based sampling.
+
+        Returns:
+            The sampled frames and their timing.
         """
 
         def _indices(n_source: int) -> list[int]:
@@ -321,22 +335,36 @@ class FramesCollator:
             return frame_indices(n_source, target)
 
         # Retry on the actual call: decrement source count when trailing
-        # frames fail to decode.
+        # frames fail to decode, either missing ("no more frames") or corrupt
+        # ("Invalid data found when processing input").
         n = video.metadata.num_frames
         if n is None:
             raise RuntimeError("video has no frame count metadata")
         original_n = n
         while n > 0:
             try:
-                frames: torch.Tensor = video.get_frames_at(_indices(n)).data
+                indices = _indices(n)
+                frames: torch.Tensor = video.get_frames_at(indices).data
                 if n < original_n:
                     logger.warning(
                         "Dropped %d undecodable trailing frame(s) from video",
                         original_n - n,
                     )
-                return frames
+                duration = video.metadata.end_stream_seconds
+                source_fps = video.metadata.average_fps or (
+                    original_n / duration if duration else None
+                )
+                metadata: VideoMetadata = {
+                    "fps": source_fps,
+                    "total_num_frames": n,
+                    "duration": duration,
+                    "frames_indices": indices,
+                }
+                return frames, metadata
             except RuntimeError as e:
-                if "no more frames" not in str(e):
+                if not any(
+                    msg in str(e) for msg in ("no more frames", "Invalid data found")
+                ):
                     raise
                 n -= 1
         raise RuntimeError("video has no decodable frames")
@@ -380,15 +408,10 @@ class VideoCollator:
         """Collate a batch of inputs containing video and/or audio by resampling videos and audios according to the specified parameters."""
         collated_inputs = []
         for row in inputs:
+            # rows can lack one modality (None) in mixed-modality datasets
             if "video" in row:
-                row["video"] = FramesCollator.resample_video(
-                    row["video"],
-                    fps=self.fps,
-                    max_frames=self.max_frames,
-                    num_frames=self.num_frames,
-                    min_frames=self.min_frames,
-                )
-            if "audio" in row:
+                row["video"], row["video_metadata"] = _sample_video(row["video"], self)
+            if row.get("audio") is not None:
                 audio_array = AudioCollator.resample_audio(
                     row,
                     target_sampling_rate=self.target_sampling_rate,
@@ -402,3 +425,35 @@ class VideoCollator:
             "BatchedInput",
             {key: [row[key] for row in collated_inputs] for key in collated_inputs[0]},
         )
+
+
+def _sample_video(
+    video: VideoDecoder | None, collator: FramesCollator | VideoCollator
+) -> tuple[torch.Tensor | None, VideoMetadata | None]:
+    """Sample a video with a collator's settings; (None, None) when there is none."""
+    if video is None:
+        return None, None
+    return FramesCollator.resample_video(
+        video,
+        fps=collator.fps,
+        max_frames=collator.max_frames,
+        num_frames=collator.num_frames,
+        min_frames=collator.min_frames,
+    )
+
+
+def sampled_frame_rate(metadata: VideoMetadata) -> float:
+    """Frame rate at which sampled frames play back at their real spacing.
+
+    For writing sampled frames to a video file (OmniVinci), so the file lasts as
+    long as the source clip.
+    """
+    from fractions import Fraction
+
+    # 24 fps, a common video rate, when the source rate is unknown
+    fps = metadata["fps"] or 24.0
+    idx = metadata["frames_indices"]
+    span = (idx[-1] - idx[0]) / fps
+    rate = (len(idx) - 1) / span if len(idx) > 1 and span > 0 else fps
+    # a simple fraction: video encoders drop frames at rates like 0.96704408...
+    return float(Fraction(rate).limit_denominator(1000))

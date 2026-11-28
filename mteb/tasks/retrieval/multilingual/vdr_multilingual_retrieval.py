@@ -125,7 +125,7 @@ class VDRMultilingualRetrieval(AbsTaskRetrieval):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
+        bibtex_citation=None,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

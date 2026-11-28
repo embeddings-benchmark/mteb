@@ -26,10 +26,10 @@ class ChatDoctorRetrieval(AbsTaskRetrieval):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         prompt={
             "query": "Given a medical question from a patient, retrieve relevant healthcare information that best answers the question"
         },
+        bibtex_citation=None,
     )
 
     def load_data(self, num_proc: int | None = None, **kwargs: Any) -> None:

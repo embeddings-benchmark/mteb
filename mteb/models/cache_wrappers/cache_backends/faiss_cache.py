@@ -53,12 +53,14 @@ class FaissCache:
             self.index = faiss.IndexFlatL2(self.vector_dim)
 
         start_id = len(self.hash_to_index)
-        vectors_to_add = []
-        for i, (item, vector) in enumerate(zip(items, vectors, strict=True)):
+        vectors_to_add: list[Array] = []
+        for item, vector in zip(items, vectors, strict=True):
             item_hash = hash_item(item)
             if item_hash in self.hash_to_index:
                 continue
-            self.hash_to_index[item_hash] = start_id + i
+            # IDs must follow the order of the vectors actually appended to the
+            # index, so skipped duplicates must not advance the ID.
+            self.hash_to_index[item_hash] = start_id + len(vectors_to_add)
             vectors_to_add.append(vector)
         if len(vectors_to_add) > 0:
             vectors_array = np.vstack(vectors_to_add).astype(np.float32)
@@ -103,6 +105,7 @@ class FaissCache:
         if self.index_file.exists():
             try:
                 self.index = faiss.read_index(str(self.index_file))
+                self.vector_dim = self.index.d
                 logger.info(f"Loaded FAISS index with {self.index.ntotal} vectors")
             except Exception as e:
                 logger.error(f"Failed to load FAISS index: {e}")

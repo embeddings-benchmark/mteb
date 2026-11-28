@@ -234,7 +234,11 @@ class TaskMetaSchema(_CamelModel):
             modalities=metadata.modalities,
             description=metadata.description,
             reference=metadata.reference,
-            citation=metadata.bibtex_citation,
+            citation=(
+                metadata.bibtex_citation
+                if isinstance(metadata.bibtex_citation, str)
+                else None
+            ),
             is_public=metadata.is_public,
             source_dataset=metadata.dataset["path"],
             license=metadata.license,
@@ -374,7 +378,7 @@ class BenchmarkPerLanguageRowSchema(_CamelModel):
 
     One row per (model, experiment variant), matching ``SummaryRowSchema``'s
     granularity. ``experiments`` mirrors ``SummaryRowSchema.experiments`` —
-    match a row here to its ``SummaryRow`` via ``rowId``.
+    match a row to its summary by model name and ``experiments``.
     """
 
     model_name: str
@@ -392,6 +396,7 @@ class BenchmarkPerLanguageSchema(_CamelModel):
 class LeaderModelSchema(_CamelModel):
     """Slim model identity for the leaders endpoint — just name + type for home-tile rendering."""
 
+    experiments: dict[str, Any] | None = None
     name: str
     model_type: MODEL_TYPES
 
@@ -428,6 +433,7 @@ class TaskScoreRowSchema(_CamelModel):
     lets the frontend pivot either way without a second request.
     """
 
+    experiments: dict[str, Any] | None = None
     rank: int
     model: ModelMetaSchema
     score: float | None
@@ -449,6 +455,7 @@ class TaskScoresSchema(_CamelModel):
 class ModelScoreRowSchema(_CamelModel):
     """Per-benchmark score for one model."""
 
+    experiments: dict[str, Any] | None = None
     benchmark_name: str
     benchmark_display_name: str
     rank: int

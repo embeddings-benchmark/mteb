@@ -22,14 +22,14 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger(__name__)
 
-NV_RETRIEVER_CITATION = """@misc{lee2025nvembedimprovedtechniquestraining,
-      title={NV-Embed: Improved Techniques for Training LLMs as Generalist Embedding Models},
-      author={Chankyu Lee and Rajarshi Roy and Mengyao Xu and Jonathan Raiman and Mohammad Shoeybi and Bryan Catanzaro and Wei Ping},
-      year={2025},
-      eprint={2405.17428},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2405.17428},
+NV_RETRIEVER_CITATION = """@inproceedings{lee2025nvembedimprovedtechniquestraining,
+  archiveprefix = {arXiv},
+  author = {Chankyu Lee and Rajarshi Roy and Mengyao Xu and Jonathan Raiman and Mohammad Shoeybi and Bryan Catanzaro and Wei Ping},
+  booktitle = {The Thirteenth International Conference on Learning Representations},
+  eprint = {2405.17428},
+  title = {{NV}-Embed: Improved Techniques for Training {LLM}s as Generalist Embedding Models},
+  url = {https://openreview.net/forum?id=lgsyLSsDRe},
+  year = {2025},
 }"""
 
 LlamaEmbedNemotron_CITATION = """@misc{babakhin2025llamaembednemotron8buniversaltextembedding,
@@ -621,7 +621,6 @@ llama_embed_nemotron_8b = ModelMeta(
     contacts=["ybabakhin"],
     citation=LlamaEmbedNemotron_CITATION,
     extra_requirements_groups=["flash_attention", "llama-embed-nemotron"],
-    output_dtypes=OutputDType.FLOAT16,
 )
 
 
@@ -717,7 +716,6 @@ nemotron_3_embed_1b_bf16 = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
     contacts=["ybabakhin"],
-    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],
 )
 
@@ -748,7 +746,6 @@ nemotron_3_embed_8b_bf16 = ModelMeta(
     modalities=["text"],
     model_type=["dense"],
     contacts=["ybabakhin"],
-    output_dtypes=OutputDType.BF16,
     extra_requirements_groups=["nemotron-3-embed"],
 )
 

@@ -70,7 +70,6 @@ class AggregateTaskMetadata(TaskMetadata):
     eval_langs: Languages = Field(default_factory=list)
     prompt: None = None
     reference: str | None = None
-    bibtex_citation: str | None = None
 
     @model_validator(mode="after")
     def _compute_unfilled_cases(self) -> Self:

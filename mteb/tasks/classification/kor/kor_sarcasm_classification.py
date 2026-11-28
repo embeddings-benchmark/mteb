@@ -24,8 +24,8 @@ class KorSarcasmClassification(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         superseded_by="KorSarcasmClassification.v2",
+        bibtex_citation=None,
     )
 
 
@@ -51,8 +51,8 @@ class KorSarcasmClassificationV2(AbsTaskClassification):
         annotations_creators="expert-annotated",
         dialect=[],
         sample_creation="found",
-        bibtex_citation="",
         adapted_from=["KorSarcasmClassification"],
+        bibtex_citation=None,
     )
 
     def dataset_transform(

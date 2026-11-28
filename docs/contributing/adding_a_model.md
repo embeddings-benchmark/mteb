@@ -52,9 +52,10 @@ Typically, it only requires that you fill in metadata about the model and add it
         public_training_data="https://huggingface.co/datasets/user-or-org/full-dataset",
         training_datasets={"MSMARCO"},  # if you trained on the MSMARCO training set
         output_dtypes=[
+            OutputDType.FLOAT32,
             OutputDType.INT8,
             OutputDType.BINARY,
-        ],  # Alternative output types supported by the model
+        ],
     )
     ```
 
@@ -115,6 +116,35 @@ model = ModelMeta(
            "query": "query: ",
            "passage": "passage: ",
         },
+    ),
+    ...
+)
+```
+
+For instruction models that use `InstructSentenceTransformerModel` (or another wrapper built on `AbsEncoder.get_instruction`), instructions defined in `prompts_dict` are selected in the following order by default:
+
+1. Task name prompt from `prompts_dict` (`PromptSource.CUSTOM_PROMPT`)
+2. Task type prompt from `prompts_dict` (`PromptSource.TASK_TYPE_PROMPT`)
+3. Prompt type (`"query"` or `"document"`) prompt from `prompts_dict` (`PromptSource.ENCODE_TYPE_PROMPT`)
+4. Prompt defined in the task metadata (`PromptSource.DEFAULT_TASK_PROMPT`)
+
+This means that generic task type or prompt type prompts override the prompt defined in the task.
+If you want the prompt from the task metadata to take priority over the generic prompts of the model, change the order with `prompt_priority`:
+
+```python
+from mteb.models.abs_encoder import PromptSource
+
+model = ModelMeta(
+    loader=InstructSentenceTransformerModel,
+    loader_kwargs=dict(
+        instruction_template="Instruct: {instruction}\nQuery: ",
+        prompts_dict={"query": "Given a query, retrieve relevant passages"},
+        prompt_priority=[
+            PromptSource.CUSTOM_PROMPT,
+            PromptSource.DEFAULT_TASK_PROMPT,
+            PromptSource.TASK_TYPE_PROMPT,
+            PromptSource.ENCODE_TYPE_PROMPT,
+        ],
     ),
     ...
 )
@@ -290,7 +320,7 @@ As it is an optional dependency, you can't use top-level dependencies, but will 
 
 ### Local Model Verification using mock tasks
 
-Before submitting your model implementation in a Pull Request, you must verify that the model integrates correctly with the benchmarking pipeline using the local verification helper `mock_run`. Mock tasks run locally, execute very quickly, and do not download large datasets.
+If you want to quickly check that your model supports the tasks compatible with its modalities and protocols and integrates correctly with the benchmarking pipeline, you can use the local verification helper `mock_run`. Mock tasks run locally, execute very quickly, and do not download large datasets.
 
 To run the local verification:
 
@@ -326,7 +356,7 @@ To run the local verification:
     mteb mock-run -m your_model_name
     ```
 
-    This prints a results summary table to the terminal and saves the markdown file `mteb_mock_run_results.md` in the directory you ran the command from. Please commit the resulting file with your PR.
+    This prints a results summary table to the terminal and saves the markdown file `mteb_mock_run_results.md` in the directory you ran the command from.
 
 ### Submitting your model as a PR
 

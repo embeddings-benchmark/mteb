@@ -24,7 +24,7 @@ class Farsick(AbsTaskSTS):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=None,
     )
     min_score = 1
 
@@ -51,7 +51,7 @@ class SynPerSTS(AbsTaskSTS):
         annotations_creators="LM-generated",
         dialect=[],
         sample_creation="LM-generated and verified",
-        bibtex_citation=""" """,
+        bibtex_citation=None,
     )
     min_score = 1
 
@@ -78,7 +78,7 @@ class Query2Query(AbsTaskSTS):
         annotations_creators="derived",
         dialect=[],
         sample_creation="found",
-        bibtex_citation=""" """,
+        bibtex_citation=None,
     )
     min_score = 0
     max_score = 2

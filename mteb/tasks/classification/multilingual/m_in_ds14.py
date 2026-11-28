@@ -21,7 +21,7 @@ class MInDS14Classification(AbsTaskClassification):
     metadata = TaskMetadata(
         name="MInDS14",
         description="MInDS-14 is an evaluation resource for intent detection with spoken data in 14 diverse languages.",
-        reference="https://arxiv.org/abs/2104.08524",
+        reference="https://aclanthology.org/2021.emnlp-main.591/",
         dataset={
             "path": "mteb/minds14-multilingual",
             "revision": "58d73d2cddefab7df4bc0b814aa5c53c5fd4928e",
@@ -40,14 +40,17 @@ class MInDS14Classification(AbsTaskClassification):
         modalities=["audio"],
         sample_creation="found",
         bibtex_citation=r"""
-@article{DBLP:journals/corr/abs-2104-08524,
-  author = {Daniela Gerz and Pei{-}Hao Su and Razvan Kusztos and Avishek Mondal and Michal Lis and Eshan Singhal and Nikola Mrkšić and Tsung{-}Hsien Wen and Ivan Vulic},
-  eprint = {2104.08524},
-  eprinttype = {arXiv},
-  journal = {CoRR},
+@inproceedings{DBLP:journals/corr/abs-2104-08524,
+  address = {Online and Punta Cana, Dominican Republic},
+  author = {Gerz, Daniela and Su, Pei-Hao and Kusztos, Razvan and Mondal, Avishek and Lis, Micha{\l} and Singhal, Eshan and Mrk{\v{s}}i{\'c}, Nikola and Wen, Tsung-Hsien and Vuli{\'c}, Ivan},
+  booktitle = {Proceedings of the 2021 Conference on Empirical Methods in Natural Language Processing},
+  doi = {10.18653/v1/2021.emnlp-main.591},
+  editor = {Moens, Marie-Francine and Huang, Xuanjing and Specia, Lucia and Yih, Scott Wen-tau},
+  month = {nov},
+  pages = {7468--7475},
+  publisher = {Association for Computational Linguistics},
   title = {Multilingual and Cross-Lingual Intent Detection from Spoken Data},
-  url = {https://arxiv.org/abs/2104.08524},
-  volume = {abs/2104.08524},
+  url = {https://aclanthology.org/2021.emnlp-main.591/},
   year = {2021},
 }
 """,

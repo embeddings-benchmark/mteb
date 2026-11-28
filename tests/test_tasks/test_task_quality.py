@@ -121,7 +121,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ESCIReranking",
         "EcomRetrieval",
         "EmitClassification",
-        "EmotionAnalysisPlus",
         "FEVER",
         "FEVER-NL",
         "FEVER-VN",
@@ -153,7 +152,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "HUMEToxicConversationsClassification",
         "HUMETweetSentimentExtractionClassification",
         "HatefulMemesI2TRetrieval",
+        "HatefulMemesI2TRetrieval.v2",
         "HatefulMemesT2IRetrieval",
+        "HatefulMemesT2IRetrieval.v2",
         "HeadlineClassification",
         "HebrewSentimentAnalysis",
         "HellaSwag",
@@ -168,7 +169,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "IWSLT2017BitextMining",
         "IconclassClassification",
         "ImageCoDe",
+        "ImageCoDe.v2",
         "ImageCoDeT2IRetrieval",
+        "ImageCoDeT2IRetrieval.v2",
         "IndicCrosslingualSTS",
         "IndicLangClassification",
         "IndicNLPNewsClassification",
@@ -316,6 +319,10 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "STS22",
         "STSB",
         "STSBenchmarkMultilingualSTS",
+        # full repository snapshots include genuinely tiny files (empty __init__.py, py.typed, "{}" JSON fixtures)
+        "SWEBenchLiveRetrieval",
+        "SWEBenchPlusPlusRetrieval",
+        "SWEPolyBenchRetrieval",
         "SWEbenchCodeRetrieval",
         "SentimentDKSF",
         "SinhalaNewsClassification",
@@ -331,6 +338,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SwedishPatentCPCSubclassClassification",
         "SwedishSentimentClassification",
         "SwednClusteringS2S",
+        "SwingBenchRetrieval",  # repository snapshot with tiny files, as SWEBench*Retrieval above
         "SynPerChatbotRAGTopicsRetrieval",
         "SynPerChatbotTopicsRetrieval",
         "SynPerQARetrieval",
@@ -406,6 +414,12 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "Vidore3IndustrialBGEm3Reranking.v2",
         "Vidore3IndustrialBM25sReranking.v2",
         "Vidore3IndustrialQwen3VLEmbedding2BReranking.v2",
+        "Vidore3ComputerScienceNemotron35Embed8BReranking.v2",
+        "Vidore3EnergyNemotron35Embed8BReranking.v2",
+        "Vidore3FinanceEnNemotron35Embed8BReranking.v2",
+        "Vidore3FinanceFrNemotron35Embed8BReranking.v2",
+        "Vidore3HrNemotron35Embed8BReranking.v2",
+        "Vidore3IndustrialNemotron35Embed8BReranking.v2",
         "VisualNewsI2TRetrieval",
         "VisualNewsT2IRetrieval",
         "VizWizIT2TRetrieval",
@@ -441,6 +455,9 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "BrightProSustainableLivingRetrieval",
     ],
     "duplicate_text": [
+        "GoogleSVQA2TRetrieval.v2",  # unique within a locale; the same sentences recur across locale subsets
+        "GoogleSVQT2ARetrieval.v2",  # unique within a locale; the same sentences recur across locale subsets
+        "HatefulMemesT2IRetrieval.v2",  # memes that share a caption are separate queries with the same answer
         "AfriHateClassification",
         "AfriSentiClassification",
         "AllegroReviews",
@@ -512,7 +529,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "EmitClassification",
         "EmoVDBA2TRetrieval",
         "EmoVDBT2ARetrieval",
-        "EmotionAnalysisPlus",
         "EncyclopediaVQAIT2ITRetrieval",
         "EuroPIRQRetrieval",
         "FEVER",
@@ -642,7 +658,11 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SDSEyeProtectionClassification",
         "SDSGlovesClassification",
         "SIQA",
+        # each example keeps its own full repository snapshot, so files shared across snapshots repeat
+        "SWEBenchLiveRetrieval",
+        "SWEBenchPlusPlusRetrieval",
         "SWEPolyBenchRR",
+        "SWEPolyBenchRetrieval",
         "SWEbenchCodeRetrieval",
         "SWEbenchLiteRR",
         "SWEbenchMultilingualRR",
@@ -672,6 +692,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "SwedishSentimentClassification",
         "SwednClusteringS2S",
         "SwednRetrieval",
+        "SwingBenchRetrieval",  # per-example repository snapshots, as SWEBench*Retrieval above
         "SwissJudgementClassification",
         "SyntecReranking",
         "SyntheticText2SQL",
@@ -794,7 +815,6 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "DutchGovernmentBiasClassification",
         "DutchNewsArticlesClassification",
         "EmitClassification",
-        "EmotionAnalysisPlus",
         "EmotionClassification",
         "EmotionVNClassification",
         "EstonianValenceClassification",
@@ -892,6 +912,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "TweetSentimentExtractionVNClassification",
         "UkrFormalityClassification",
         "VABBMultiLabelClassification",
+        "VABBMultiLabelClassification.v2",
         "VaccinChatNLClassification",
         "WRIMEClassification",
         "Waimai",
@@ -919,10 +940,12 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "FER2013",  # documented to contain duplicate/near-duplicate images
         "FER2013ZeroShot",  # documented to contain duplicate/near-duplicate images
         "FORBI2IRetrieval",  # fingerprint corpus contains near-duplicate captures of the same print
+        "FORBI2IRetrieval.v2",  # same corpus as v1
         "FashionIQIT2IRetrieval",
         "GLAMI1MI2TRetrieval",
         "GLAMI1MT2IRetrieval",  # images recur across language subsets
         "ImageCoDeT2IRetrieval",
+        "ImageCoDeT2IRetrieval.v2",
         "InfoSeekIT2ITRetrieval",
         "InfoSeekIT2TRetrieval",
         "LLaVAIT2TRetrieval",
@@ -1003,6 +1026,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "RUParaPhraserSTS",
         "SICK-R-VN",
         "SICKFr",
+        "StakeholderGrounding",  # statements recur across arrangements
         "STS12",
         "STS14",
         "STS22",
@@ -1023,6 +1047,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "ClothoMomentRetrieval",  # same audio with different instruction
         "CLDAT2ARetrieval",
         "FSD2019Kaggle",
+        "FSD2019Kaggle.v2",
         "GTZANGenre",  # repeated short clips sampled from the same tracks
         "GTZANGenreClustering",  # repeated short clips sampled from the same tracks
         "Kinetics400VA",  # multiple clips can share the same soundtrack/source video
@@ -1137,6 +1162,7 @@ KNOWN_ISSUES: dict[str, list[str]] = {
         "AROVisualAttribution",  # correct + distractor attribution captions per example
         "AROVisualRelation",  # correct + distractor relation captions per example
         "ImageCoDe",  # multiple candidate images per example
+        "ImageCoDe.v2",  # multiple candidate images per example
         "SugarCrepe",  # correct + hard-negative captions per example
         "Winoground",  # exactly 2 texts and 2 images per example (400 samples -> 800 of each)
         # Genuine stats-generation inconsistency: unique_texts exceeds the

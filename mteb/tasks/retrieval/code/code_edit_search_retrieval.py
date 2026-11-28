@@ -46,11 +46,14 @@ class CodeEditSearchRetrieval(AbsTaskRetrieval):
         dialect=[],
         sample_creation="found",
         bibtex_citation=r"""
-@article{muennighoff2023octopack,
-  author = {Niklas Muennighoff and Qian Liu and Armel Zebaze and Qinkai Zheng and Binyuan Hui and Terry Yue Zhuo and Swayam Singh and Xiangru Tang and Leandro von Werra and Shayne Longpre},
-  journal = {arXiv preprint arXiv:2308.07124},
+@inproceedings{muennighoff2023octopack,
+  archiveprefix = {arXiv},
+  author = {Niklas Muennighoff and Qian Liu and Armel Randy Zebaze and Qinkai Zheng and Binyuan Hui and Terry Yue Zhuo and Swayam Singh and Xiangru Tang and Leandro Von Werra and Shayne Longpre},
+  booktitle = {The Twelfth International Conference on Learning Representations},
+  eprint = {2308.07124},
   title = {OctoPack: Instruction Tuning Code Large Language Models},
-  year = {2023},
+  url = {https://openreview.net/forum?id=mw1PWNSWZP},
+  year = {2024},
 }
 """,
     )

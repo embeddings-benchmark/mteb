@@ -8,7 +8,6 @@ from tqdm.autonotebook import tqdm
 from mteb.models.abs_encoder import AbsEncoder
 from mteb.models.modality_collators import VideoCollator
 from mteb.models.model_meta import ModelMeta, ScoringFunction
-from mteb.types import OutputDType
 
 if TYPE_CHECKING:
     import torch
@@ -170,6 +169,10 @@ class UniteWrapper(AbsEncoder):
         if vp is not None:
             size = dict(getattr(vp, "size", None) or {})
             size["longest_edge"] = video_max_pixels
+            # qwen_vl_utils' VIDEO_MIN_PIXELS, which the reference uses (it sets
+            # no video min_pixels)
+            # https://github.com/friedrichor/UNITE/blob/main/inference/inference_demo.py
+            size["shortest_edge"] = 128 * 28 * 28
             vp.size = size
 
     @staticmethod
@@ -297,5 +300,4 @@ unite_base_qwen2vl_2b = ModelMeta(
     adapted_from="Qwen/Qwen2-VL-2B-Instruct",
     citation=UNITE_CITATION,
     extra_requirements_groups=["transformers-v4"],
-    output_dtypes=OutputDType.BF16,
 )
