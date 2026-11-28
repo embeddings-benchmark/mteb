@@ -225,6 +225,14 @@ from .flickr_audio_image_retrieval import (
     FlickrAudioToImageRetrieval,
     FlickrImageToAudioRetrieval,
 )
+from .foleybench_retrieval import (
+    FoleyBenchA2VRetrieval,
+    FoleyBenchLongA2VRetrieval,
+    FoleyBenchLongV2ARetrieval,
+    FoleyBenchLongVT2ARetrieval,
+    FoleyBenchV2ARetrieval,
+    FoleyBenchVT2ARetrieval,
+)
 from .forb_i2i_retrieval import FORBI2I, FORBI2IV2
 from .giga_speech import (
     GigaSpeechA2TRetrieval,
@@ -788,6 +796,12 @@ __all__ = [
     "Flickr30kT2IRetrieval",
     "FlickrAudioToImageRetrieval",
     "FlickrImageToAudioRetrieval",
+    "FoleyBenchA2VRetrieval",
+    "FoleyBenchLongA2VRetrieval",
+    "FoleyBenchLongV2ARetrieval",
+    "FoleyBenchLongVT2ARetrieval",
+    "FoleyBenchV2ARetrieval",
+    "FoleyBenchVT2ARetrieval",
     "GLDv2I2IRetrieval",
     "GLDv2I2TRetrieval",
     "GigaSpeechA2TRetrieval",
